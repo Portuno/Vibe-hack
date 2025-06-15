@@ -79,7 +79,17 @@ export function ProjectForm() {
     setIsSubmitting(true);
     try {
       const { error } = await supabase.from("projects").insert({
-        ...values,
+        name: values.name,
+        description: values.description,
+        problem: values.problem,
+        vertical: values.vertical,
+        highlight_img: values.highlight_img,
+        demo_url: values.demo_url,
+        repo_url: values.repo_url,
+        website_url: values.website_url,
+        open_to_feedback: values.open_to_feedback,
+        wants_to_monetize: values.wants_to_monetize,
+        wants_updates: values.wants_updates,
         creator_id: session.user.id,
       });
 
@@ -143,7 +153,7 @@ export function ProjectForm() {
                       <SelectValue placeholder="Seleccioná el sector principal de tu proyecto" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="bg-crema">
                     <SelectItem value="Tecnología">Tecnología</SelectItem>
                     <SelectItem value="Arte">Arte</SelectItem>
                     <SelectItem value="Legal">Legal</SelectItem>

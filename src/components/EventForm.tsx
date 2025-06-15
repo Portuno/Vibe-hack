@@ -193,7 +193,7 @@ export function EventForm() {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 bg-crema" align="start">
                       <Calendar
                         mode="single"
                         selected={field.value}
@@ -221,7 +221,7 @@ export function EventForm() {
                         <SelectValue placeholder="Seleccioná una categoría" />
                         </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="bg-crema">
                         <SelectItem value="Tecnología">Tecnología</SelectItem>
                         <SelectItem value="Arte">Arte</SelectItem>
                         <SelectItem value="Finanzas">Finanzas</SelectItem>

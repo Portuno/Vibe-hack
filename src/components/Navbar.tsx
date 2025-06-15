@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -64,7 +63,7 @@ export default function Navbar() {
   const { session, profile, signOut } = useAuth();
 
   return (
-    <nav className="sticky top-0 w-full z-30 bg-crema/90 backdrop-blur-md shadow-card px-0 py-2 border-b border-arena">
+    <nav className="sticky top-0 w-full z-30 bg-crema backdrop-blur-md shadow-card px-0 py-2 border-b border-arena">
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-8">
         {/* Logo */}
         <Link
@@ -79,7 +78,7 @@ export default function Navbar() {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena focus:bg-arena text-negro-suave data-[state=open]:bg-arena">Comunidad</NavigationMenuTrigger>
-                <NavigationMenuContent>
+                <NavigationMenuContent className="bg-crema">
                   <ul className="grid grid-cols-1 gap-3 p-4 w-[300px] md:w-[400px]">
                     {comunidadComponents.map((component) => (
                       <ListItem
@@ -95,7 +94,7 @@ export default function Navbar() {
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena focus:bg-arena text-negro-suave data-[state=open]:bg-arena">Recursos</NavigationMenuTrigger>
-                <NavigationMenuContent>
+                <NavigationMenuContent className="bg-crema">
                   <ul className="grid grid-cols-1 gap-3 p-4 w-[300px] md:w-[400px]">
                     {recursosComponents.map((component) => (
                       <ListItem
@@ -144,7 +143,7 @@ export default function Navbar() {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuContent className="w-56 bg-crema" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
