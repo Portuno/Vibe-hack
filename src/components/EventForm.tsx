@@ -293,7 +293,19 @@ export function EventForm() {
             )}
           />
 
-          <FormField control={form.control} name="consent" render={({ field }) => (<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"><FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange}/></FormControl><div className="space-y-1 leading-none"><FormLabel>Acepto que Terreta Hub use esta información para gestionar y mostrar mi evento públicamente.</FormLabel></div><FormMessage /></FormItem>)}/>
+          <FormField control={form.control} name="consent" render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 bg-white/80 shadow">
+              <FormControl>
+                <Checkbox checked={field.value} onCheckedChange={field.onChange}/>
+              </FormControl>
+              <div className="space-y-1 leading-none">
+                <FormLabel className="text-negro-suave font-semibold">
+                  Acepto que Terreta Hub use esta información para gestionar y mostrar mi evento públicamente.
+                </FormLabel>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}/>
           
           <Button type="submit" className="w-full bg-terra-cotta hover:bg-terra-cotta/90 text-white shadow-card hover:shadow-lg" disabled={isSubmitting}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
