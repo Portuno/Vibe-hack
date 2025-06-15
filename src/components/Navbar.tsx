@@ -68,6 +68,7 @@ export default function Navbar() {
   const [search, setSearch] = React.useState("");
   const navigate = useNavigate();
 
+  // --- Hacer que el buscador esté siempre visible en navbar ---
   // Simulación de resultados (en futuro, fetch dinámico)
   const results = [
     {
@@ -166,12 +167,40 @@ export default function Navbar() {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        {/* Botón Busqueda Semántica */}
+        {/* --- Buscador semántico SIEMPRE visible (no solo con botón) --- */}
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="rounded-full border-arena" onClick={() => setOpen(true)} aria-label="Búsqueda global">
-            <Search className="w-5 h-5" />
-            <span className="sr-only">Buscar en Terreta Hub</span>
-          </Button>
+          <div>
+            <Button variant="outline" className="rounded-full border-arena" onClick={() => setOpen(true)} aria-label="Búsqueda global">
+              <Search className="w-5 h-5" />
+              <span className="sr-only">Buscar en Terreta Hub</span>
+            </Button>
+            <CommandDialog open={open} onOpenChange={(o) => { setOpen(o); setSearch(""); }}>
+              <CommandInput
+                autoFocus
+                value={search}
+                onValueChange={setSearch}
+                placeholder="Buscá profesionales, recursos, proyectos, cursos..."
+              />
+              <CommandList>
+                {results.length === 0 && search.length > 0 ? (
+                  <CommandEmpty>No se encontraron coincidencias.</CommandEmpty>
+                ) : (
+                  results.map((item, idx) => (
+                    <CommandItem
+                      key={item.section + item.label + idx}
+                      value={item.value}
+                      onSelect={() => {
+                        setOpen(false);
+                        navigate(item.value);
+                      }}
+                    >
+                      <span className="font-semibold mr-2 text-mediterraneo">{item.section}:</span> {item.label}
+                    </CommandItem>
+                  ))
+                )}
+              </CommandList>
+            </CommandDialog>
+          </div>
           {/* Botón Login/Perfil a la derecha  */}
           {session ? (
             <DropdownMenu>
@@ -225,33 +254,6 @@ export default function Navbar() {
           )}
         </div>
       </div>
-      {/* Command Dialog */}
-      <CommandDialog open={open} onOpenChange={(o) => { setOpen(o); setSearch(""); }}>
-        <CommandInput
-          autoFocus
-          value={search}
-          onValueChange={setSearch}
-          placeholder="Buscá profesionales, recursos, proyectos, cursos..."
-        />
-        <CommandList>
-          {results.length === 0 && search.length > 0 ? (
-            <CommandEmpty>No se encontraron coincidencias.</CommandEmpty>
-          ) : (
-            results.map((item, idx) => (
-              <CommandItem
-                key={item.section + item.label + idx}
-                value={item.value}
-                onSelect={() => {
-                  setOpen(false);
-                  navigate(item.value);
-                }}
-              >
-                <span className="font-semibold mr-2 text-mediterraneo">{item.section}:</span> {item.label}
-              </CommandItem>
-            ))
-          )}
-        </CommandList>
-      </CommandDialog>
     </nav>
   );
 }

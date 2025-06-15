@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -7,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Profile } from "@/types";
 import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useRef } from "react";
 
 interface EditProfileModalProps {
   open: boolean;
@@ -28,6 +29,27 @@ export function EditProfileModal({ open, onOpenChange, profile, onProfileUpdated
   const [skills, setSkills] = useState(profile.skills ? profile.skills.join(", ") : "");
   const [loading, setLoading] = useState(false);
   const [verticalOther, setVerticalOther] = useState(profile.vertical && !VERTICAL_OPTIONS.includes(profile.vertical) ? profile.vertical : "");
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const inputFileRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarUploading(true);
+    const filename = `avatars/${Date.now()}-${file.name}`;
+    const { error } = await supabase.storage.from("avatars").upload(filename, file, { upsert: true });
+    if (error) {
+      toast({ title: "Error", description: "No se pudo subir la foto de perfil.", variant: "destructive" });
+      setAvatarUploading(false);
+      return;
+    }
+    const { data } = supabase.storage.from("avatars").getPublicUrl(filename);
+    const imageUrl = data.publicUrl;
+    setAvatarUploading(false);
+    setDisplayAvatar(imageUrl);
+    // Se actualizará el avatar en el guardar
+  };
+  const [displayAvatar, setDisplayAvatar] = useState(profile.avatar_url ?? "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +63,8 @@ export function EditProfileModal({ open, onOpenChange, profile, onProfileUpdated
       headline,
       bio,
       vertical: vert,
-      skills: skills.split(",").map(s => s.trim()).filter(Boolean)
+      skills: skills.split(",").map(s => s.trim()).filter(Boolean),
+      avatar_url: displayAvatar
     };
     const { error, data } = await supabase
       .from("professional_profiles")
@@ -75,6 +98,29 @@ export function EditProfileModal({ open, onOpenChange, profile, onProfileUpdated
           <DialogTitle>Editar Perfil</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-col items-center gap-2">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={displayAvatar} alt={displayName || profile.name} />
+              <AvatarFallback>{(displayName || profile.name).charAt(0)}</AvatarFallback>
+            </Avatar>
+            <Button
+              size="sm"
+              type="button"
+              variant="outline"
+              onClick={() => inputFileRef.current?.click()}
+              disabled={avatarUploading}
+            >
+              {avatarUploading ? "Cargando..." : "Cambiar foto"}
+            </Button>
+            <input
+              type="file"
+              accept="image/*"
+              ref={inputFileRef}
+              className="hidden"
+              onChange={handleAvatarChange}
+              disabled={avatarUploading}
+            />
+          </div>
           <div>
             <label className="block font-medium mb-1">Nombre visible</label>
             <Input 

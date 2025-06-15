@@ -5,6 +5,7 @@ import { CourseCard } from "@/components/CourseCard";
 import { VerticalFilterBar } from "@/components/VerticalFilterBar";
 import { SearchBar } from "@/components/SearchBar";
 import { Plus } from "lucide-react";
+import { CourseFormDialog } from "@/components/CourseFormDialog";
 
 type Course = {
   id: string;
@@ -104,9 +105,8 @@ export default function Cursos() {
                 className="flex-1 max-w-xl"
                 placeholder="Buscar cursos, talleres, creadores…"
               />
-              <Button className="h-12 text-base font-semibold bg-terra-cotta hover:bg-terra-cotta/80 shadow hover-scale transition" size="lg">
-                <Plus className="mr-2" /> Subir un curso
-              </Button>
+              {/* Modificado: usar CourseFormDialog */}
+              <CourseFormDialog />
             </div>
           </div>
         </div>
