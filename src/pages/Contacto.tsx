@@ -73,70 +73,94 @@ export default function Contacto() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-10 max-w-3xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-display text-terra-cotta mb-2">Contacto</h1>
-          <p className="text-lg text-gris-piedra">Contáctanos para dudas, propuestas o feedback.</p>
+      <div className="container mx-auto my-6 max-w-3xl px-2">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl md:text-3xl font-display text-terra-cotta mb-2">Contacto</h1>
+          <p className="text-base md:text-lg text-gris-piedra">Contáctanos para dudas, propuestas o feedback.</p>
         </div>
-        <div className="bg-white p-8 rounded-2xl shadow-lg border border-arena">
+        <div className="bg-white p-4 md:p-8 rounded-2xl shadow-lg border border-arena">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nombre completo</FormLabel>
-                    <FormControl>
-                      <Input placeholder="¿Cómo te llamás?" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Podés usar un seudónimo si preferís mantener el anonimato.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Correo electrónico</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="tu@correo.com" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Dejanos un mail si querés que te respondamos. No será compartido.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="reason"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Motivo del mensaje</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 md:space-y-5">
+              {/* Grupo: Nombre y Email */}
+              <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                <FormField
+                  control={form.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Nombre completo</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccioná una opción..." />
-                        </SelectTrigger>
+                        <Input placeholder="¿Cómo te llamás?" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        {reasons.map((reason) => (
-                          <SelectItem key={reason} value={reason}>
-                            {reason}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <FormDescription>
+                        Podés usar un seudónimo si preferís mantener el anonimato.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Correo electrónico</FormLabel>
+                      <FormControl>
+                        <Input type="email" placeholder="tu@correo.com" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Dejanos un mail si querés que te respondamos. No será compartido.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {/* Motivo y Adjunto en horizontal en web */}
+              <div className="flex flex-col md:flex-row gap-2 md:gap-4">
+                <FormField
+                  control={form.control}
+                  name="reason"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Motivo del mensaje</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          {/* Forzar fondo blanco ocultando transparencia y alto z-index y drop-shadow para evitar superposiciones */}
+                          <SelectTrigger className="bg-white !bg-opacity-100 z-30 shadow border-arena">
+                            <SelectValue placeholder="Seleccioná una opción..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white !bg-opacity-100 z-50 shadow-lg border-arena">
+                          {reasons.map((reason) => (
+                            <SelectItem key={reason} value={reason}>
+                              {reason}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="attachment"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Adjunto (opcional)</FormLabel>
+                      <FormControl>
+                        <Input type="file" {...form.register('attachment')} />
+                      </FormControl>
+                      <FormDescription>
+                        Formatos aceptados: PDF, PNG, JPG, DOCX, ZIP (máx. 5MB).
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {/* Mensaje textarea */}
               <FormField
                 control={form.control}
                 name="message"
@@ -146,7 +170,7 @@ export default function Contacto() {
                     <FormControl>
                       <Textarea
                         placeholder="Contanos qué tenés en mente. Cuanto más claro, mejor podemos ayudarte."
-                        className="min-h-[120px]"
+                        className="min-h-[120px] bg-white"
                         {...field}
                       />
                     </FormControl>
@@ -154,28 +178,13 @@ export default function Contacto() {
                   </FormItem>
                 )}
               />
+              {/* Consentimiento */}
               <FormField
-                control={form.control}
-                name="attachment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Adjunto (opcional)</FormLabel>
-                    <FormControl>
-                      <Input type="file" {...form.register('attachment')} />
-                    </FormControl>
-                     <FormDescription>
-                      Formatos aceptados: PDF, PNG, JPG, DOCX, ZIP (máx. 5MB).
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
                 control={form.control}
                 name="consent"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                     <FormControl>
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3 md:p-4 bg-arena/40">
+                    <FormControl>
                       <Checkbox
                         checked={field.value}
                         onCheckedChange={field.onChange}
@@ -190,7 +199,11 @@ export default function Contacto() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-terra-cotta hover:bg-terra-cotta/90 text-white shadow-card hover:shadow-lg">
+              {/* Submit */}
+              <Button 
+                type="submit"
+                className="w-full bg-terra-cotta hover:bg-terra-cotta/90 text-white shadow-card hover:shadow-lg min-h-[44px] text-base rounded-xl"
+              >
                 Enviar mensaje
               </Button>
             </form>
@@ -200,4 +213,4 @@ export default function Contacto() {
     </>
   );
 }
-
+// ADVERTENCIA: Este archivo está creciendo demasiado. Te recomiendo pronto refactorizar este formulario en componentes más pequeños y reutilizables.
