@@ -13,6 +13,9 @@ import MiPerfil from "./pages/MiPerfil";
 import Chipi from "./pages/Chipi";
 import Contacto from "./pages/Contacto";
 import Auth from "./pages/Auth";
+import Profesionales from "./pages/Profesionales";
+import Cursos from "./pages/Cursos";
+import Blog from "./pages/Blog";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +34,9 @@ const App = () => (
           <Route path="/mi-perfil" element={<MiPerfil />} />
           <Route path="/chipi" element={<Chipi />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/profesionales" element={<Profesionales />} />
+          <Route path="/cursos" element={<Cursos />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
