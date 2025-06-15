@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import { ProfessionalCard } from "@/components/ProfessionalCard";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -29,6 +28,29 @@ function getChipiProfile(): Profile {
   };
 }
 
+function sanitizeProfile(raw: any): Profile {
+  // Ensure social_links matches type requirements: Record<string, string> | null
+  let social_links: Record<string, string> | null = null;
+  if (
+    raw.social_links &&
+    typeof raw.social_links === "object" &&
+    !Array.isArray(raw.social_links)
+  ) {
+    // Narrow only to string-to-string values, ignoring any bad values from the db
+    const obj = Object.entries(raw.social_links).reduce<Record<string, string>>((acc, [k, v]) => {
+      if (typeof v === "string") acc[k] = v;
+      return acc;
+    }, {});
+    social_links = Object.keys(obj).length > 0 ? obj : null;
+  } else {
+    social_links = null;
+  }
+  return {
+    ...raw,
+    social_links,
+  };
+}
+
 const Index = () => {
   const [profesionales, setProfesionales] = useState<Profile[]>([]);
   const [proyectos, setProyectos] = useState<any[]>([]);
@@ -37,20 +59,17 @@ const Index = () => {
   // Cargar profesionales públicos (máximo 2 random sin Chipi, y añadir siempre a Chipi)
   useEffect(() => {
     async function fetchProfiles() {
-      // Coger solo perfiles públicos y ordenados al azar, 2 máximo.
       const { data, error } = await supabase
         .from("professional_profiles")
         .select("*")
         .eq("is_public", true);
 
-      let profs: Profile[] = data ?? [];
-      // Mezclar aleatoriamente
-      profs = profs
+      let profs: Profile[] = (data ?? [])
         .filter(p => p.name !== "Chipi")
         .sort(() => Math.random() - 0.5)
-        .slice(0, 2);
+        .slice(0, 2)
+        .map(sanitizeProfile);
 
-      // Chipi siempre primero
       setProfesionales([getChipiProfile(), ...profs]);
     }
     fetchProfiles();
