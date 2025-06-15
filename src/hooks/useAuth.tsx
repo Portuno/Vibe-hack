@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
@@ -58,5 +57,8 @@ export const useAuth = () => {
     await supabase.auth.signOut();
   };
 
-  return { session, profile, loading, signOut };
+  // Nuevo: onboardingRequired si el perfil no está completo
+  const onboardingRequired = !!(session && (!profile || !profile.display_name || !profile.headline || !profile.skills || !profile.bio));
+
+  return { session, profile, loading, signOut, onboardingRequired };
 };

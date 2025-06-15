@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,13 +22,15 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { session } = useAuth();
+  const { session, onboardingRequired } = useAuth();
 
   useEffect(() => {
-    if (session) {
+    if (session && onboardingRequired) {
+      navigate("/onboarding");
+    } else if (session) {
       navigate("/");
     }
-  }, [session, navigate]);
+  }, [session, onboardingRequired, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
