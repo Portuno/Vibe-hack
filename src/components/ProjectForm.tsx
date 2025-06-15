@@ -32,6 +32,7 @@ import VerticalField from "./project-form-fields/VerticalField";
 import DescriptionField from "./project-form-fields/DescriptionField";
 import ProblemField from "./project-form-fields/ProblemField";
 import HighlightImageField from "./project-form-fields/HighlightImageField";
+import ProjectImageUploadField from "./project-form-fields/ProjectImageUploadField";
 import ProjectLinksSection from "./project-form-fields/ProjectLinksSection";
 import CollaborationSettingsSection from "./project-form-fields/CollaborationSettingsSection";
 
@@ -135,7 +136,7 @@ export function ProjectForm() {
           <VerticalField control={form.control} />
           <DescriptionField control={form.control} />
           <ProblemField control={form.control} />
-          <HighlightImageField control={form.control} />
+          <ProjectImageUploadField control={form.control} />
           <ProjectLinksSection control={form.control} />
           <CollaborationSettingsSection control={form.control} />
           <Button type="submit" className="w-full bg-terra-cotta hover:bg-terra-cotta/90 text-white shadow-card py-6 text-lg font-semibold" disabled={isSubmitting}>
