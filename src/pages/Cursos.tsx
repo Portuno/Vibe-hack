@@ -18,9 +18,9 @@ const MOCK_COURSES = [
       name: "Marta Gómez",
       avatar_url: "https://randomuser.me/api/portraits/women/65.jpg",
     },
-    level: "Básico",
-    type: "Gratuito",
-    tag: "Nuevo",
+    level: "Básico" as const,
+    type: "Gratuito" as const,
+    tag: "Nuevo" as const,
   },
   {
     id: "2",
@@ -32,9 +32,9 @@ const MOCK_COURSES = [
       name: "Carlos Ruiz",
       avatar_url: "https://randomuser.me/api/portraits/men/88.jpg",
     },
-    level: "Intermedio",
-    type: "Pago",
-    tag: "Destacado",
+    level: "Intermedio" as const,
+    type: "Pago" as const,
+    tag: "Destacado" as const,
   },
   {
     id: "3",
@@ -46,9 +46,9 @@ const MOCK_COURSES = [
       name: "Ana Torres",
       avatar_url: "https://randomuser.me/api/portraits/women/31.jpg",
     },
-    level: "Básico",
-    type: "Gratuito",
-    tag: "",
+    level: "Básico" as const,
+    type: "Gratuito" as const,
+    tag: "" as const,
   },
 ];
 

@@ -1,5 +1,6 @@
+
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import {
   DropdownMenu,
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Search } from "lucide-react";
 import * as React from "react";
 import {
   NavigationMenu,
@@ -22,8 +23,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { CommandDialog, CommandInput, CommandList, CommandItem, CommandEmpty } from "@/components/ui/command";
 
-const comunidadComponents: { title: string; href: string; description: string }[] = [
+const comunidadComponents = [
   {
     title: "Proyectos",
     href: "/proyectos",
@@ -41,7 +43,7 @@ const comunidadComponents: { title: string; href: string; description: string }[
   },
 ];
 
-const recursosComponents: { title: string; href: string; description: string }[] = [
+const recursosComponents = [
   {
     title: "Cursos",
     href: "/cursos",
@@ -61,6 +63,50 @@ const recursosComponents: { title: string; href: string; description: string }[]
 
 export default function Navbar() {
   const { session, profile, signOut } = useAuth();
+
+  // --- Buscador semántico ---
+  const [open, setOpen] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+  const navigate = useNavigate();
+
+  // Simulación de resultados (en futuro, fetch dinámico)
+  const results = [
+    {
+      section: "Proyectos",
+      label: "Plataforma de eventos open source",
+      value: "/proyectos",
+    },
+    {
+      section: "Profesionales",
+      label: "Marta Gómez",
+      value: "/profesionales",
+    },
+    {
+      section: "Recursos",
+      label: "Guía de Notion para emprender",
+      value: "/recursos",
+    },
+    {
+      section: "Cursos",
+      label: "Introducción práctica a la programación web",
+      value: "/cursos",
+    },
+    {
+      section: "Blog",
+      label: "Cómo crear tu primer startup",
+      value: "/blog",
+    },
+    {
+      section: "Eventos",
+      label: "Meetup de innovación legal",
+      value: "/eventos",
+    }
+  ].filter(r =>
+    search.length === 0
+      ? false
+      : r.label.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
+        r.section.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+  );
 
   return (
     <nav className="sticky top-0 w-full z-30 bg-crema backdrop-blur-md shadow-card px-0 py-2 border-b border-arena">
@@ -121,8 +167,13 @@ export default function Navbar() {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        {/* Botón Login/Perfil a la derecha  */}
-        <div className="flex items-center">
+        {/* Botón Busqueda Semántica */}
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className="rounded-full border-arena" onClick={() => setOpen(true)} aria-label="Búsqueda global">
+            <Search className="w-5 h-5" />
+            <span className="sr-only">Buscar en Terreta Hub</span>
+          </Button>
+          {/* Botón Login/Perfil a la derecha  */}
           {session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -175,32 +226,58 @@ export default function Navbar() {
           )}
         </div>
       </div>
+      {/* Command Dialog */}
+      <CommandDialog open={open} onOpenChange={(o) => { setOpen(o); setSearch(""); }}>
+        <CommandInput
+          autoFocus
+          value={search}
+          onValueChange={setSearch}
+          placeholder="Buscá profesionales, recursos, proyectos, cursos..."
+        />
+        <CommandList>
+          {results.length === 0 && search.length > 0 ? (
+            <CommandEmpty>No se encontraron coincidencias.</CommandEmpty>
+          ) : (
+            results.map((item, idx) => (
+              <CommandItem
+                key={item.section + item.label + idx}
+                value={item.value}
+                onSelect={() => {
+                  setOpen(false);
+                  navigate(item.value);
+                }}
+              >
+                <span className="font-semibold mr-2 text-mediterraneo">{item.section}:</span> {item.label}
+              </CommandItem>
+            ))
+          )}
+        </CommandList>
+      </CommandDialog>
     </nav>
   );
 }
 
-const ListItem = React.forwardRef<
-  React.ElementRef<typeof Link>,
-  React.ComponentPropsWithoutRef<typeof Link>
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <Link
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  );
-});
+const ListItem = React.forwardRef(
+  ({ className, title, children, ...props }, ref) => {
+    return (
+      <li>
+        <NavigationMenuLink asChild>
+          <Link
+            ref={ref}
+            className={cn(
+              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+              className
+            )}
+            {...props}
+          >
+            <div className="text-sm font-medium leading-none">{title}</div>
+            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+              {children}
+            </p>
+          </Link>
+        </NavigationMenuLink>
+      </li>
+    );
+  }
+);
 ListItem.displayName = "ListItem";
