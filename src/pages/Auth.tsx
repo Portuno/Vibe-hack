@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,15 +23,32 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { session, onboardingRequired } = useAuth();
+  const { session, onboardingRequired, profile, loading: authLoading } = useAuth();
+
+  // Ref para evitar doble navegación
+  const [hasCheckedOnboarding, setHasCheckedOnboarding] = useState(false);
 
   useEffect(() => {
-    if (session && onboardingRequired) {
-      navigate("/onboarding");
-    } else if (session) {
-      navigate("/");
+    // Si no está cargando el auth y hay sesión
+    if (!authLoading && session && onboardingRequired && !hasCheckedOnboarding) {
+      setHasCheckedOnboarding(true);
+      navigate("/onboarding", { replace: true });
+    } else if (!authLoading && session && !onboardingRequired && !hasCheckedOnboarding) {
+      setHasCheckedOnboarding(true);
+      navigate("/", { replace: true });
     }
-  }, [session, onboardingRequired, navigate]);
+    // Si se destruye el componente (logout, etc), resetea el flag
+    if (!session) {
+      setHasCheckedOnboarding(false);
+    }
+  }, [session, onboardingRequired, authLoading, navigate, hasCheckedOnboarding]);
+
+  // Si el perfil recién se cargó después y no se chequeó aún, chequea de nuevo
+  useEffect(() => {
+    if (session && typeof onboardingRequired === "boolean" && !hasCheckedOnboarding) {
+      setHasCheckedOnboarding(false); // Fuerza el paso anterior a re-evaluarse
+    }
+  }, [profile, session, onboardingRequired]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,7 +68,7 @@ export default function Auth() {
         title: "¡Bienvenido!",
         description: "Has iniciado sesión correctamente.",
       });
-      navigate("/");
+      // No navegamos manualmente, esperar redirección por efecto
     }
     setLoading(false);
   };
@@ -153,3 +171,4 @@ export default function Auth() {
     </>
   );
 }
+
