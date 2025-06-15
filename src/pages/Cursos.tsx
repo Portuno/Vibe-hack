@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,22 @@ import { VerticalFilterBar } from "@/components/VerticalFilterBar";
 import { SearchBar } from "@/components/SearchBar";
 import { Plus } from "lucide-react";
 
-const MOCK_COURSES = [
+type Course = {
+  id: string;
+  title: string;
+  description_short: string;
+  image: string;
+  verticals: string[];
+  creator: {
+    name: string;
+    avatar_url: string;
+  };
+  level: "Básico" | "Intermedio" | "Avanzado";
+  type: "Gratuito" | "Pago";
+  tag?: "Nuevo" | "Destacado";
+};
+
+const MOCK_COURSES: Course[] = [
   {
     id: "1",
     title: "Introducción práctica a la programación web",
@@ -18,9 +32,9 @@ const MOCK_COURSES = [
       name: "Marta Gómez",
       avatar_url: "https://randomuser.me/api/portraits/women/65.jpg",
     },
-    level: "Básico" as const,
-    type: "Gratuito" as const,
-    tag: "Nuevo" as const,
+    level: "Básico",
+    type: "Gratuito",
+    tag: "Nuevo",
   },
   {
     id: "2",
@@ -32,9 +46,9 @@ const MOCK_COURSES = [
       name: "Carlos Ruiz",
       avatar_url: "https://randomuser.me/api/portraits/men/88.jpg",
     },
-    level: "Intermedio" as const,
-    type: "Pago" as const,
-    tag: "Destacado" as const,
+    level: "Intermedio",
+    type: "Pago",
+    tag: "Destacado",
   },
   {
     id: "3",
@@ -46,9 +60,9 @@ const MOCK_COURSES = [
       name: "Ana Torres",
       avatar_url: "https://randomuser.me/api/portraits/women/31.jpg",
     },
-    level: "Básico" as const,
-    type: "Gratuito" as const,
-    tag: "" as const,
+    level: "Básico",
+    type: "Gratuito",
+    // no tag for this course
   },
 ];
 
