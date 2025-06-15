@@ -1,75 +1,56 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import { ResourceCard, Resource } from "@/components/ResourceCard";
 import { SearchBar } from "@/components/SearchBar";
 import { FormatFilterBar } from "@/components/FormatFilterBar";
-
-const MOCK_RESOURCES: Resource[] = [
-  {
-    id: "1",
-    title: "Guía de Notion para emprender",
-    description_short: "Aprende a organizar proyectos y tareas con Notion.",
-    format: "guía",
-    category: "Tecnología",
-    tags: ["productividad", "notion"],
-    url: "#",
-    created_at: "2024-06-01",
-    author: {
-      name: "Ana Torres",
-      avatar_url: "https://randomuser.me/api/portraits/women/47.jpg",
-    },
-  },
-  {
-    id: "2",
-    title: "Podcast: Emprender en comunidad",
-    description_short: "Historias reales de fundadores del hub.",
-    format: "podcast",
-    category: "Negocios",
-    tags: ["emprendimiento", "comunidad"],
-    url: "#",
-    created_at: "2024-06-06",
-    author: {
-      name: "Carlos Ruiz",
-      avatar_url: "https://randomuser.me/api/portraits/men/82.jpg",
-    },
-  },
-  {
-    id: "3",
-    title: "Checklist legal para tu startup",
-    description_short: "Chequea estos puntos legales antes de lanzar tu negocio.",
-    format: "documento",
-    category: "Derecho",
-    tags: ["legal", "startup"],
-    url: "#",
-    created_at: "2024-05-23",
-    author: {
-      name: "Marta Gómez",
-    },
-  },
-  {
-    id: "4",
-    title: "Video: Aprende a usar Figma",
-    description_short: "Diseña como un profesional y lleva tu idea al siguiente nivel.",
-    format: "video",
-    category: "Arte",
-    tags: ["diseño", "figma", "ux"],
-    url: "#",
-    created_at: "2024-06-11",
-    author: {
-      name: "Martin Puig",
-      avatar_url: "https://randomuser.me/api/portraits/men/31.jpg",
-    },
-  },
-];
+import { ResourceForm } from "@/components/ResourceForm";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Recursos() {
+  const [resources, setResources] = useState<Resource[]>([]);
   const [search, setSearch] = useState("");
   const [format, setFormat] = useState("todos");
+  const [openForm, setOpenForm] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = MOCK_RESOURCES.filter(r => {
-    const matchFormat = format === "todos" || r.format.toLowerCase() === format;
-    const searchText = (r.title + " " + r.description_short + " " + r.author.name + " " + r.category).toLowerCase();
+  const reload = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("resources")
+      .select(`
+        id, name, description, description_short, resource_type, category, tags, url, created_at,
+        profiles:creator_id ( name, avatar_url )
+      `)
+      .eq("status", "publicado")
+      .order("created_at", { ascending: false });
+    setLoading(false);
+    if (!error && data) {
+      setResources(
+        data.map((r: any) => ({
+          ...r,
+          author: {
+            name: r.profiles?.name ?? "Sin nombre",
+            avatar_url: r.profiles?.avatar_url ?? undefined
+          }
+        }))
+      );
+    }
+  };
+
+  useEffect(() => {
+    reload();
+  }, []);
+
+  const filtered = resources.filter(r => {
+    const matchFormat = format === "todos" || (r.resource_type ?? "").toLowerCase() === format;
+    const searchText = (
+      r.name +
+      " " + (r.description_short ?? "") +
+      " " + (r.author?.name ?? "") +
+      " " + (r.category ?? "")
+    ).toLowerCase();
     return matchFormat && searchText.includes(search.toLowerCase());
   });
 
@@ -94,6 +75,13 @@ export default function Recursos() {
                 className="flex-1 max-w-xl"
                 placeholder="Buscar recursos, autores, categorías…"
               />
+              <Button
+                className="h-12 text-base font-semibold bg-terra-cotta hover:bg-terra-cotta/80 shadow hover-scale transition"
+                size="lg"
+                onClick={() => setOpenForm(true)}
+              >
+                + Subir recurso
+              </Button>
             </div>
           </div>
         </div>
@@ -104,7 +92,11 @@ export default function Recursos() {
 
       {/* Listado de recursos */}
       <section className="container mx-auto pt-6 pb-12 animate-fade-in-up">
-        {filtered.length === 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center py-16 text-lg text-gris-piedra">
+            Cargando recursos...
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="flex justify-center items-center py-16 text-lg text-gris-piedra">
             No hay recursos con esos filtros…
           </div>
@@ -114,6 +106,12 @@ export default function Recursos() {
           </div>
         )}
       </section>
+
+      {/* Modal para crear recurso */}
+      <ResourceForm open={openForm} onOpenChange={(v) => {
+        setOpenForm(v);
+        if (!v) reload();
+      }} onCreated={reload} />
     </>
   );
 }

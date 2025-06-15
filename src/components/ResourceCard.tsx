@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { UserCircle, BookOpen, Video, Podcast, FileText, FileCode, FileSpreadsheet } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TagList } from "./TagList";
 
 const ICONS: Record<string, JSX.Element> = {
   "video": <Video className="text-mediterraneo" />,
@@ -17,12 +18,13 @@ const ICONS: Record<string, JSX.Element> = {
 
 export type Resource = {
   id: string;
-  title: string;
+  name: string;
+  description?: string;
   description_short: string;
-  format: string;
-  category: string;
-  tags: string[];
-  url: string;
+  resource_type: string;
+  category?: string;
+  tags?: string[];
+  url?: string;
   created_at: string;
   author: {
     name: string;
@@ -32,36 +34,47 @@ export type Resource = {
 
 export function ResourceCard({ resource }: { resource: Resource }) {
   return (
-    <div className="bg-crema p-4 rounded-2xl shadow-card min-h-[210px] flex flex-col group transition-all hover:bg-arena/80 hover:shadow-lg cursor-pointer">
-      <div className="flex items-center gap-3">
-        <div className={cn("rounded-lg bg-arena w-12 h-12 flex items-center justify-center text-xl", !ICONS[resource.format]?.type && "bg-gris-piedra/20")}>
-          {ICONS[resource.format?.toLowerCase()] ?? <BookOpen className="text-mediterraneo" />}
+    <div className="bg-crema rounded-xl shadow-card p-4 flex flex-col min-h-[265px] relative group hover:shadow-lg focus-within:shadow-lg transition-all">
+      <div className="flex items-center gap-4 mb-2">
+        <div className={cn(
+          "rounded-lg bg-arena w-12 h-12 flex items-center justify-center text-xl shrink-0",
+          !ICONS[resource.resource_type?.toLowerCase()]?.type && "bg-gris-piedra/20"
+        )}>
+          {ICONS[resource.resource_type?.toLowerCase()] ?? <BookOpen className="text-mediterraneo" />}
         </div>
-        <div className="flex-1">
-          <div className="text-terra-cotta font-display font-bold text-base truncate">{resource.title}</div>
-          <div className="text-gris-piedra text-xs">{resource.category}</div>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-display font-bold text-base text-terra-cotta truncate" title={resource.name}>{resource.name}</h3>
+          {resource.category && <span className="text-gris-piedra text-xs">{resource.category}</span>}
         </div>
-        <Badge variant="outline" className="ml-auto capitalize border-terra-cotta text-terra-cotta">{resource.format}</Badge>
+        <Badge variant="outline" className="ml-auto capitalize border-terra-cotta text-terra-cotta">{resource.resource_type}</Badge>
       </div>
-      <div className="text-negro-suave line-clamp-2 text-sm my-2">{resource.description_short}</div>
-      <div className="flex flex-wrap gap-1 mb-2">
-        {resource.tags.map(tag => (
-          <Badge key={tag} variant="secondary" className="rounded px-2 py-0.5 text-xs bg-mediterraneo/10 text-mediterraneo">
-            #{tag}
-          </Badge>
-        ))}
+      <div className="text-negro-suave text-sm mb-2">
+        {resource.description_short ?? resource.description}
       </div>
-      <div className="flex items-center mt-auto justify-between pt-2">
-        <div className="flex items-center gap-2 text-xs">
-          {resource.author.avatar_url ? (
-            <img src={resource.author.avatar_url} className="w-6 h-6 rounded-full object-cover" />
-          ) : (
-            <UserCircle className="w-5 h-5 text-gris-piedra" />
-          )}
-          <span>{resource.author.name}</span>
+      {resource.tags && resource.tags.length > 0 && (
+        <TagList tags={resource.tags} />
+      )}
+      <div className="flex items-end gap-2 mt-auto pt-4 w-full justify-between">
+        <div className="flex items-center gap-2 text-xs flex-1 min-w-0">
+          {resource.author?.avatar_url
+            ? <img src={resource.author.avatar_url} className="w-6 h-6 rounded-full object-cover" />
+            : <UserCircle className="w-5 h-5 text-gris-piedra" />
+          }
+          <span className="truncate">{resource.author?.name}</span>
         </div>
-        <span className="text-xs text-gris-piedra">{format(new Date(resource.created_at), "d MMM yy", { locale: es })}</span>
+        <span className="text-xs text-gris-piedra min-w-max">
+          {format(new Date(resource.created_at), "d MMM yy", { locale: es })}
+        </span>
       </div>
+      {/* Overlay for click/focus, future: click -> detail modal */}
+      <a
+        href={resource.url ?? "#"}
+        className="absolute inset-0 rounded-xl z-10 focus:outline-terra-cotta"
+        tabIndex={0}
+        aria-label={`Ver recurso: ${resource.name}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      ></a>
     </div>
   );
 }
