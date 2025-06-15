@@ -1,3 +1,4 @@
+
 import Navbar from "@/components/Navbar";
 import { ProfessionalCard } from "@/components/ProfessionalCard";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -93,34 +94,42 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-crema">
       <Navbar />
-      <header className="mt-3 mb-8 flex flex-col items-center justify-center">
-        <h1 className="text-5xl md:text-7xl font-display font-bold text-terra-cotta drop-shadow-sm leading-tight mb-4 animate-fade-in-up">
+      <header className="mt-2 mb-8 flex flex-col items-center justify-center px-3 sm:px-0">
+        <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-display font-bold text-terra-cotta drop-shadow-sm leading-tight mb-4 animate-fade-in-up text-center">
           Terreta Hub
         </h1>
-        <p className="max-w-xl text-xl md:text-2xl text-mediterraneo font-medium text-center mb-2 animate-fade-in-up">
+        <p className="max-w-xl text-lg sm:text-xl md:text-2xl text-mediterraneo font-medium text-center mb-2 animate-fade-in-up">
           Comunidad colaborativa para creativos, profesionales y makers de Valencia. 
         </p>
-        <p className="max-w-lg text-gris-piedra text-center mb-8 animate-fade-in-up">
+        <p className="max-w-lg text-gris-piedra text-center mb-8 animate-fade-in-up text-base sm:text-lg">
           Comparte proyectos, accede a recursos, conecta con talento interdisciplinar y haz crecer tu ecosistema local.
         </p>
-        <a href="#" className="btn-terra mt-2 px-8 py-3 text-lg shadow-card">
+        <a 
+          href="#" 
+          className="btn-terra mt-2 px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg shadow-card block w-full max-w-xs sm:max-w-fit text-center rounded-xl"
+        >
           Únete a Terreta Hub
         </a>
       </header>
 
       {/* Demo Grid Comunidad */}
-      <section className="container mx-auto mb-12">
-        <h2 className="font-display text-3xl text-negro-suave mb-6 tracking-tight">Profesionales destacados</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7">
+      <section className="container mx-auto mb-12 px-2">
+        <h2 className="font-display text-2xl sm:text-3xl text-negro-suave mb-4 sm:mb-6 tracking-tight text-left sm:text-left">
+          Profesionales destacados
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-7">
           {DEMO_PROFESIONALES.map((prof) => (
             <ProfessionalCard key={prof.name} profile={prof} />
           ))}
         </div>
       </section>
+
       {/* Demo Grid Proyectos */}
-      <section className="container mx-auto pb-16">
-        <h2 className="font-display text-3xl text-negro-suave mb-6 tracking-tight">Proyectos inspiradores</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7">
+      <section className="container mx-auto pb-16 px-2">
+        <h2 className="font-display text-2xl sm:text-3xl text-negro-suave mb-4 sm:mb-6 tracking-tight text-left sm:text-left">
+          Proyectos inspiradores
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-7">
           {DEMO_PROYECTOS.map((proj) => (
             <ProjectCard key={proj.name} {...proj} />
           ))}
@@ -134,3 +143,4 @@ const Index = () => {
 };
 
 export default Index;
+
