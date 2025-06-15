@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -116,7 +117,13 @@ export default function Navbar() {
           to="/"
           className="flex items-center text-2xl font-display font-bold text-terra-cotta tracking-tight gap-2 px-2 py-1"
         >
-          🧭 Terreta Hub
+          <img
+            src="/lovable-uploads/d22d48c9-9c4a-4a8f-8b75-5e286178de8a.png"
+            alt="Logo Terreta"
+            className="w-8 h-8 mr-1 sm:mr-2 rounded-full bg-arena object-contain"
+            style={{ boxShadow: '0 2px 8px 0 rgba(216,108,91,0.15)' }}
+          />
+          Terreta Hub
         </Link>
         {/* Menú central */}
         <div className="flex-1 flex justify-center">
