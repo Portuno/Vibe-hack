@@ -328,6 +328,7 @@ export type Database = {
           created_at: string | null
           creator_id: string
           description: string | null
+          description_short: string | null
           id: string
           name: string
           resource_type: string | null
@@ -339,6 +340,7 @@ export type Database = {
           created_at?: string | null
           creator_id: string
           description?: string | null
+          description_short?: string | null
           id?: string
           name: string
           resource_type?: string | null
@@ -350,6 +352,7 @@ export type Database = {
           created_at?: string | null
           creator_id?: string
           description?: string | null
+          description_short?: string | null
           id?: string
           name?: string
           resource_type?: string | null
