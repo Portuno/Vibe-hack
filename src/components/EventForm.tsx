@@ -271,8 +271,28 @@ export function EventForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8"><FormField control={form.control} name="price" render={({ field }) => (<FormItem><FormLabel>Precio (€)</FormLabel><FormControl><Input type="number" step="0.01" placeholder="25.00" {...field} onChange={e => field.onChange(e.target.valueAsNumber)} /></FormControl><FormMessage /></FormItem>)}/><FormField control={form.control} name="purchase_url" render={({ field }) => (<FormItem><FormLabel>Link de compra</FormLabel><FormControl><Input placeholder="https://eventbrite.com/..." {...field} /></FormControl><FormMessage /></FormItem>)}/></div>
           )}
 
-          <FormField control={form.control} name="highlight_img" render={({ field: { onChange, ...rest }}) => (<FormItem><FormLabel>🖼️ Imagen destacada</FormLabel><FormControl><Input type="file" accept=".jpg, .jpeg, .png, .webp" onChange={(e) => onChange(e.target.files)} {...rest} /></FormControl><FormDescription>Flyer o visual del evento. Recomendado: 1200x630px. Máx 5MB.</FormDescription><FormMessage /></FormItem>)}/>
-          
+          <FormField
+            control={form.control}
+            name="highlight_img"
+            render={({ field: { value, onChange, ...fieldProps } }) => (
+              <FormItem>
+                <FormLabel>🖼️ Imagen destacada</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept=".jpg, .jpeg, .png, .webp"
+                    onChange={e => onChange(e.target.files)}
+                    {...fieldProps}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Flyer o visual del evento. Recomendado: 1200x630px. Máx 5MB.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField control={form.control} name="consent" render={({ field }) => (<FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"><FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange}/></FormControl><div className="space-y-1 leading-none"><FormLabel>Acepto que Terreta Hub use esta información para gestionar y mostrar mi evento públicamente.</FormLabel></div><FormMessage /></FormItem>)}/>
           
           <Button type="submit" className="w-full bg-terra-cotta hover:bg-terra-cotta/90 text-white shadow-card hover:shadow-lg" disabled={isSubmitting}>
