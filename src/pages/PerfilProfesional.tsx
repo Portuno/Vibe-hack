@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -6,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { Badge } from "@/components/Badge";
+import { Profile } from "@/types";
 
 const getProfileById = async (profileId: string) => {
     if (!profileId) return null;
@@ -88,7 +88,7 @@ export default function PerfilProfesional() {
       <Navbar />
       <div className="container mx-auto mt-10 max-w-4xl">
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <ProfileHeader profile={profile} />
+            <ProfileHeader profile={profile as Profile} />
             <div className="p-6">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Verticales de Interés</h2>
                 <div className="flex flex-wrap gap-2">

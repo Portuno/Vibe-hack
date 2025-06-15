@@ -1,35 +1,68 @@
-
 import Navbar from "@/components/Navbar";
 import { ProfessionalCard } from "@/components/ProfessionalCard";
 import { ProjectCard } from "@/components/ProjectCard";
+import { Profile } from "@/types";
 
-const DEMO_PROFESIONALES = [
+const DEMO_PROFESIONALES: Profile[] = [
   {
+    id: 'demo-1',
+    user_id: 'demo-user-1',
     name: "Raquel Ortega",
+    display_name: "Raquel Ortega",
     bio: "Diseñadora UX/UI y community builder. Apasionada por impulsar el talento creativo valenciano. En busca de nuevas colaboraciones tech/art.",
-    avatarUrl: "https://randomuser.me/api/portraits/women/68.jpg",
-    vertical: "Arte" as const,
+    avatar_url: "https://randomuser.me/api/portraits/women/68.jpg",
+    vertical: "Arte",
     skills: ["UX/UI", "Figma", "Comunicación", "Branding"],
-    links: [
-      { label: "Portfolio", url: "https://behance.net/raquelortega" },
-      { label: "LinkedIn", url: "#" },
-    ],
+    social_links: {
+      "Portfolio": "https://behance.net/raquelortega",
+      "LinkedIn": "#"
+    },
+    headline: "Diseñadora UX/UI",
+    location: "Valencia",
+    cover_photo_url: null,
+    interests: null,
+    what_i_am_looking_for: null,
+    notification_preferences: null,
+    is_public: true,
+    created_at: new Date().toISOString()
   },
   {
+    id: 'demo-2',
+    user_id: 'demo-user-2',
     name: "Julián Pérez",
+    display_name: "Julián Pérez",
     bio: "Legaltech y mentor en aceleradoras. Asesoro startups en temas legales y regulatorios. Abierto a nuevos retos colaborativos.",
-    avatarUrl: "https://randomuser.me/api/portraits/men/77.jpg",
-    vertical: "Legal" as const,
+    avatar_url: "https://randomuser.me/api/portraits/men/77.jpg",
+    vertical: "Legal",
     skills: ["Legal", "Mentoría", "Startups"],
-    links: [{ label: "LinkedIn", url: "#" }],
+    social_links: { "LinkedIn": "#" },
+    headline: "Legaltech y mentor",
+    location: "Valencia",
+    cover_photo_url: null,
+    interests: null,
+    what_i_am_looking_for: null,
+    notification_preferences: null,
+    is_public: true,
+    created_at: new Date().toISOString()
   },
   {
+    id: 'demo-3',
+    user_id: 'demo-user-3',
     name: "Lucía Navarro",
+    display_name: "Lucía Navarro",
     bio: "Desarrolladora fullstack y formadora. Me encanta crear soluciones que generan impacto positivo y enseñar programación accesible.",
-    avatarUrl: "https://randomuser.me/api/portraits/women/34.jpg",
-    vertical: "Tecnología" as const,
+    avatar_url: "https://randomuser.me/api/portraits/women/34.jpg",
+    vertical: "Tecnología",
     skills: ["React", "Node.js", "Docencia"],
-    links: [{ label: "GitHub", url: "#" }],
+    social_links: { "GitHub": "#" },
+    headline: "Desarrolladora fullstack",
+    location: "Valencia",
+    cover_photo_url: null,
+    interests: null,
+    what_i_am_looking_for: null,
+    notification_preferences: null,
+    is_public: true,
+    created_at: new Date().toISOString()
   },
 ];
 
@@ -80,7 +113,7 @@ const Index = () => {
         <h2 className="font-display text-3xl text-negro-suave mb-6 tracking-tight">Profesionales destacados</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7">
           {DEMO_PROFESIONALES.map((prof) => (
-            <ProfessionalCard key={prof.name} {...prof} />
+            <ProfessionalCard key={prof.name} profile={prof} />
           ))}
         </div>
       </section>
