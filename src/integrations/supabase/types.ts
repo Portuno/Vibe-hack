@@ -145,35 +145,59 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          cover_photo_url: string | null
           created_at: string | null
+          display_name: string | null
+          headline: string | null
           id: string
           interests: string[] | null
+          is_public: boolean | null
+          location: string | null
           name: string
+          notification_preferences: Json | null
           skills: string[] | null
+          social_links: Json | null
           user_id: string
           vertical: string
+          what_i_am_looking_for: string | null
         }
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          cover_photo_url?: string | null
           created_at?: string | null
+          display_name?: string | null
+          headline?: string | null
           id?: string
           interests?: string[] | null
+          is_public?: boolean | null
+          location?: string | null
           name: string
+          notification_preferences?: Json | null
           skills?: string[] | null
+          social_links?: Json | null
           user_id: string
           vertical: string
+          what_i_am_looking_for?: string | null
         }
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          cover_photo_url?: string | null
           created_at?: string | null
+          display_name?: string | null
+          headline?: string | null
           id?: string
           interests?: string[] | null
+          is_public?: boolean | null
+          location?: string | null
           name?: string
+          notification_preferences?: Json | null
           skills?: string[] | null
+          social_links?: Json | null
           user_id?: string
           vertical?: string
+          what_i_am_looking_for?: string | null
         }
         Relationships: []
       }

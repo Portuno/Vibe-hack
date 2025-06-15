@@ -1,60 +1,59 @@
 
-import { Badge } from "./ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ArrowRight, Calendar, MapPin } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Tables } from "@/integrations/supabase/types";
 
-export function EventCard({ event }: { event: Tables<'events'> }) {
-  const { name, description, event_type, start_date, location, city, category } = event;
-  const highlight_img = (event as any).highlight_img;
+interface EventCardProps {
+  name: string;
+  description: string | null;
+  start_date: string | null;
+  location: string | null;
+  url: string | null;
+  purchase_url: string | null;
+}
 
-  const formattedDate = start_date
-    ? new Date(start_date).toLocaleDateString("es-ES", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
-    : "Fecha por confirmar";
-
+export function EventCard({ name, description, start_date, location, url, purchase_url }: EventCardProps) {
   return (
-    <div className={cn(
-      "bg-white card-fade-in p-5 rounded-2xl shadow-card flex flex-col gap-3 w-full hover:scale-105 transition-all duration-300 hover:shadow-lg border border-arena"
-    )}>
-      {highlight_img && (
-        <div
-          className="w-full h-40 bg-cover bg-center rounded-xl mb-2"
-          style={{
-            backgroundImage: `url(${highlight_img})`,
-          }}
-        />
-      )}
-      <div className="flex items-center flex-wrap gap-2 mb-1">
-        {category && <Badge className="bg-terra-cotta/20 text-terra-cotta hover:bg-terra-cotta/30">{category}</Badge>}
-        {event_type && <Badge variant="outline">{event_type}</Badge>}
-      </div>
-      <div className="font-display text-xl font-bold mb-1 flex-grow">{name}</div>
-      <p className="text-gray-700 text-sm line-clamp-3 mb-2">{description}</p>
-      
-      <div className="text-sm text-gris-piedra flex items-center gap-2 mt-auto pt-2 border-t border-arena-light">
-        <Calendar className="w-4 h-4" />
-        <span>{formattedDate}</span>
-      </div>
-
-      {(location || city) && (
-        <div className="text-sm text-gris-piedra flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            <span>{location}{location && city && ", "}{city}</span>
+    <Card className="flex flex-col h-full">
+      <CardHeader>
+        <CardTitle>{name}</CardTitle>
+        {description && <CardDescription className="line-clamp-3">{description}</CardDescription>}
+      </CardHeader>
+      <CardContent className="flex-grow">
+        <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+            {start_date && (
+                <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    <span>{new Date(start_date).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                </div>
+            )}
+            {location && (
+                <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    <span>{location}</span>
+                </div>
+            )}
         </div>
-      )}
-      
-      <Button variant="link" asChild className="text-terra-cotta p-0 h-auto justify-start mt-2">
-        <a
-            href={`#`} // Assuming a detail page will exist
-            className="flex items-center gap-1"
-        >
-            Ver evento <ArrowRight className="w-4 h-4 ml-0.5" />
-        </a>
-      </Button>
-    </div>
+      </CardContent>
+      <CardFooter className="flex justify-end gap-2 pt-4">
+        {url && (
+          <a href={url} target="_blank" rel="noreferrer">
+            <Button variant="outline">Más info</Button>
+          </a>
+        )}
+        {purchase_url && (
+          <a href={purchase_url} target="_blank" rel="noreferrer">
+            <Button>Comprar tickets <ArrowRight className="ml-2 h-4 w-4" /></Button>
+          </a>
+        )}
+      </CardFooter>
+    </Card>
   );
 }
