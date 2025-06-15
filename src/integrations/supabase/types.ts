@@ -9,7 +9,298 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admin_logs: {
+        Row: {
+          action: string
+          admin_id: string
+          created_at: string | null
+          description: string | null
+          id: string
+          target_id: string | null
+          target_table: string
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          target_id?: string | null
+          target_table: string
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          target_id?: string | null
+          target_table?: string
+        }
+        Relationships: []
+      }
+      courses: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          creator_id: string
+          description: string | null
+          duration: number | null
+          id: string
+          level: string | null
+          name: string
+          status: string | null
+          type: string | null
+          url: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          creator_id: string
+          description?: string | null
+          duration?: number | null
+          id?: string
+          level?: string | null
+          name: string
+          status?: string | null
+          type?: string | null
+          url?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          creator_id?: string
+          description?: string | null
+          duration?: number | null
+          id?: string
+          level?: string | null
+          name?: string
+          status?: string | null
+          type?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          category: string | null
+          city: string | null
+          created_at: string | null
+          creator_id: string
+          description: string | null
+          end_date: string | null
+          event_type: string | null
+          id: string
+          location: string | null
+          name: string
+          start_date: string | null
+          status: string | null
+          url: string | null
+        }
+        Insert: {
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          creator_id: string
+          description?: string | null
+          end_date?: string | null
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          name: string
+          start_date?: string | null
+          status?: string | null
+          url?: string | null
+        }
+        Update: {
+          category?: string | null
+          city?: string | null
+          created_at?: string | null
+          creator_id?: string
+          description?: string | null
+          end_date?: string | null
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          name?: string
+          start_date?: string | null
+          status?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
+      professional_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          id: string
+          interests: string[] | null
+          name: string
+          skills: string[] | null
+          user_id: string
+          vertical: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          interests?: string[] | null
+          name: string
+          skills?: string[] | null
+          user_id: string
+          vertical: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          interests?: string[] | null
+          name?: string
+          skills?: string[] | null
+          user_id?: string
+          vertical?: string
+        }
+        Relationships: []
+      }
+      project_favorites: {
+        Row: {
+          created_at: string | null
+          id: string
+          project_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          project_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          project_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_favorites_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          created_at: string | null
+          creator_id: string
+          demo_url: string | null
+          description: string | null
+          highlight_img: string | null
+          id: string
+          name: string
+          problem: string | null
+          status: string | null
+          updated_at: string | null
+          vertical: string
+        }
+        Insert: {
+          created_at?: string | null
+          creator_id: string
+          demo_url?: string | null
+          description?: string | null
+          highlight_img?: string | null
+          id?: string
+          name: string
+          problem?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vertical: string
+        }
+        Update: {
+          created_at?: string | null
+          creator_id?: string
+          demo_url?: string | null
+          description?: string | null
+          highlight_img?: string | null
+          id?: string
+          name?: string
+          problem?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vertical?: string
+        }
+        Relationships: []
+      }
+      resource_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          resource_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          resource_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          resource_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_likes_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          creator_id: string
+          description: string | null
+          id: string
+          name: string
+          resource_type: string | null
+          status: string | null
+          url: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          creator_id: string
+          description?: string | null
+          id?: string
+          name: string
+          resource_type?: string | null
+          status?: string | null
+          url?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          creator_id?: string
+          description?: string | null
+          id?: string
+          name?: string
+          resource_type?: string | null
+          status?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
