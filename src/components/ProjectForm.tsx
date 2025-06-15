@@ -35,7 +35,7 @@ import HighlightImageField from "./project-form-fields/HighlightImageField";
 import ProjectLinksSection from "./project-form-fields/ProjectLinksSection";
 import CollaborationSettingsSection from "./project-form-fields/CollaborationSettingsSection";
 
-const projectFormSchema = z.object({
+export const projectFormSchema = z.object({
   name: z.string().min(3, {
     message: "El nombre debe tener al menos 3 caracteres.",
   }).max(100, {
@@ -59,7 +59,7 @@ const projectFormSchema = z.object({
   wants_updates: z.boolean().default(false),
 });
 
-type ProjectFormValues = z.infer<typeof projectFormSchema>;
+export type ProjectFormValues = z.infer<typeof projectFormSchema>;
 
 export function ProjectForm() {
   const { session } = useAuth();
