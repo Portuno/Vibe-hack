@@ -104,7 +104,7 @@ export function ResourceForm({ open, onOpenChange, onCreated }: {
           </div>
           <DialogFooter>
             <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>Cancelar</Button>
-            <Button type="submit" loading={loading as any} disabled={loading}>
+            <Button type="submit" disabled={loading}>
               {loading ? "Subiendo..." : "Agregar recurso"}
             </Button>
           </DialogFooter>
