@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   from: "chipi" | "user";
@@ -21,6 +24,18 @@ export default function Chipi() {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Auth and navigation
+  const { session } = useAuth();
+  const navigate = useNavigate();
+
+  // Track not-authenticated message flow
+  const [anonMessageCount, setAnonMessageCount] = useState(0);
+  const [registrationOpen, setRegistrationOpen] = useState(false);
+  const [blocked, setBlocked] = useState(false);
+  const [sentFinalPrompt, setSentFinalPrompt] = useState(false);
+
+  const isAuthenticated = !!session;
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -29,8 +44,31 @@ export default function Chipi() {
     scrollToBottom();
   }, [messages]);
 
+  // On closing modal: if anonymous sends again, Chipi sends last message
+  useEffect(() => {
+    // If registration just closed after hitting anonMessageCount>=3
+    if (!registrationOpen && !isAuthenticated && anonMessageCount >= 3 && sentFinalPrompt === false) {
+      // block sending new messages and send one last Chipi prompt on next attempt
+      setBlocked(true);
+      setSentFinalPrompt(false);
+    }
+  }, [registrationOpen, isAuthenticated, anonMessageCount, sentFinalPrompt]);
+
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
+    if (blocked && !sentFinalPrompt && !isAuthenticated) {
+      // Show one last chipi message when user tries to send after closing registration
+      setMessages((prev) => [
+        ...prev,
+        { from: "chipi", text: "chip chip chip (regístrate)" },
+      ]);
+      setSentFinalPrompt(true);
+      return;
+    }
+    if (blocked && sentFinalPrompt && !isAuthenticated) {
+      // Do nothing, blocked.
+      return;
+    }
     if (input.trim()) {
       setMessages((prev) => [
         ...prev,
@@ -38,6 +76,31 @@ export default function Chipi() {
       ]);
       setInput("");
 
+      // If user is not authenticated, track attempts
+      if (!isAuthenticated) {
+        if (anonMessageCount < 2) {
+          setAnonMessageCount((n) => n + 1);
+
+          setTimeout(() => {
+            setMessages((prev) => [
+              ...prev,
+              {
+                from: "chipi",
+                text:
+                  "¡Gracias por tu mensaje! Pío pío… Estoy en la Terreta investigando tu consulta 🕵️‍♂️. Pronto te respondo aquí.",
+              },
+            ]);
+          }, 1000);
+        } else if (anonMessageCount === 2) {
+          // On the third message, open registration
+          setAnonMessageCount((n) => n + 1);
+          setRegistrationOpen(true);
+        } 
+        // If anonMessageCount >= 3, block handled above.
+        return;
+      }
+
+      // Authenticated users: chipi replies after a delay just as before
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
@@ -49,6 +112,11 @@ export default function Chipi() {
         ]);
       }, 1000);
     }
+  };
+
+  const handleRegisterRedirect = () => {
+    setRegistrationOpen(false);
+    navigate("/auth");
   };
 
   return (
@@ -113,18 +181,39 @@ export default function Chipi() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Escribe tu mensaje…"
               className="flex-1 py-3 bg-arena"
+              disabled={blocked && sentFinalPrompt && !isAuthenticated}
             />
             <Button
               type="submit"
               size="icon"
               className="bg-terra-cotta hover:bg-terra-cotta/90"
               aria-label="Enviar mensaje"
+              disabled={blocked && sentFinalPrompt && !isAuthenticated}
             >
               <Send className="h-4 w-4" />
             </Button>
           </form>
         </div>
       </main>
+      {/* Modal de registro para usuarios no logueados */}
+      <Dialog open={registrationOpen} onOpenChange={setRegistrationOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>¡Regístrate para seguir chateando!</DialogTitle>
+          </DialogHeader>
+          <div className="mb-4 text-sm text-negro-suave">
+            Para continuar conversando con Chipi y acceder a todos los recursos de Terreta Hub, por favor crea una cuenta.
+          </div>
+          <DialogFooter>
+            <Button onClick={handleRegisterRedirect} className="bg-terra-cotta hover:bg-terra-cotta/90 w-full">
+              Ir a registro
+            </Button>
+            <Button variant="outline" onClick={() => setRegistrationOpen(false)} className="w-full">
+              Seguir explorando sin registrarse
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
