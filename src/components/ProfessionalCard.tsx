@@ -1,62 +1,70 @@
 
+import { Profile } from "@/types";
 import { Badge } from "./Badge";
-import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
+import { SocialLinks } from "./SocialLinks";
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 interface Props {
-  name: string;
-  bio: string;
-  avatarUrl?: string;
-  vertical: "Legal" | "Arte" | "Tecnología" | "Educación" | "Ciencia" | "Social";
-  skills: string[];
-  links?: { label: string; url: string }[];
+  profile: Profile;
 }
 
-export function ProfessionalCard({
-  name,
-  bio,
-  avatarUrl,
-  vertical,
-  skills,
-  links,
-}: Props) {
+export function ProfessionalCard({ profile }: Props) {
+  const {
+    id,
+    display_name,
+    name,
+    headline,
+    bio,
+    avatar_url,
+    vertical,
+    skills,
+    social_links,
+    location
+  } = profile;
+
   return (
-    <div className={cn(
-      "card-fade-in bg-card p-6 rounded-2xl card-shadow flex flex-col gap-3 items-start w-full max-w-xs hover:scale-105 transition-all duration-300 hover:shadow-lg",
-      "border border-arena"
-    )}>
-      <div className="flex items-center gap-3 w-full mb-2">
-        <img
-          src={avatarUrl || "https://api.dicebear.com/7.x/avataaars/svg?seed=terreta"}
-          alt={`${name} avatar`}
-          className="w-14 h-14 rounded-full border-4 border-arena object-cover"
-        />
-        <div>
-          <div className="font-display text-xl font-bold">{name}</div>
-          <Badge label={vertical} vertical={vertical} />
+    <Card className="flex flex-col h-full bg-white/50 border-arena-light shadow-sm hover:shadow-card transition-all duration-300">
+      <CardHeader className="flex flex-row items-center gap-4">
+        <Avatar className="h-16 w-16 border-4 border-arena">
+            <AvatarImage src={avatar_url ?? ""} alt={display_name || name} />
+            <AvatarFallback>{(display_name || name).charAt(0)}</AvatarFallback>
+        </Avatar>
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-negro-suave">{display_name || name}</h3>
+          {headline && <p className="text-sm text-gris-piedra">{headline}</p>}
         </div>
-      </div>
-      <p className="text-gray-700 text-sm leading-6 mb-1 line-clamp-3">{bio}</p>
-      <div className="flex flex-wrap gap-2 mt-2">
-        {skills.map((skill) => (
-          <span key={skill} className="bg-arena text-terra-cotta px-3 py-1 rounded-xl text-xs font-semibold">{skill}</span>
-        ))}
-      </div>
-      {links && links.length > 0 && (
-        <div className="flex flex-wrap gap-2 mt-2">
-          {links.map((link) => (
-            <a
-              href={link.url}
-              key={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-sm text-mediterraneo hover:underline font-medium"
-            >
-              {link.label} <ArrowRight className="w-4 h-4 ml-1" />
-            </a>
-          ))}
+      </CardHeader>
+      <CardContent className="flex-grow flex flex-col gap-4">
+        <Badge label={vertical} vertical={vertical as any} />
+        {bio && <p className="text-gris-piedra text-sm leading-6 line-clamp-3">{bio}</p>}
+        {skills && skills.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {skills.slice(0, 5).map((skill) => (
+              <span key={skill} className="bg-arena text-terra-cotta px-3 py-1 rounded-full text-xs font-semibold">{skill}</span>
+            ))}
+          </div>
+        )}
+      </CardContent>
+      <CardFooter className="flex flex-col items-start gap-4 pt-4">
+        <div className="flex justify-between w-full items-center">
+            {location && <div className="flex items-center text-sm text-gris-piedra"><MapPin className="h-4 w-4 mr-1" /> {location}</div>}
+            <SocialLinks links={social_links} />
         </div>
-      )}
-    </div>
+        <Button asChild className="w-full bg-terra-cotta hover:bg-terra-cotta/90 text-white">
+          <Link to={`/profesionales/${id}`}>
+            Ver Perfil <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 }

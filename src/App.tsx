@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 // import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +14,7 @@ import Chipi from "./pages/Chipi";
 import Contacto from "./pages/Contacto";
 import Auth from "./pages/Auth";
 import Profesionales from "./pages/Profesionales";
+import PerfilProfesional from "./pages/PerfilProfesional";
 import Cursos from "./pages/Cursos";
 import Blog from "./pages/Blog";
 import SubirProyecto from "./pages/SubirProyecto";
@@ -38,6 +40,7 @@ const App = () => (
           <Route path="/chipi" element={<Chipi />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/profesionales" element={<Profesionales />} />
+          <Route path="/profesionales/:id" element={<PerfilProfesional />} />
           <Route path="/cursos" element={<Cursos />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="*" element={<NotFound />} />
