@@ -85,14 +85,18 @@ export type Database = {
         Row: {
           category: string | null
           city: string | null
+          cost_type: string | null
           created_at: string | null
           creator_id: string
           description: string | null
           end_date: string | null
           event_type: string | null
+          highlight_img: string | null
           id: string
           location: string | null
           name: string
+          price: number | null
+          purchase_url: string | null
           start_date: string | null
           status: string | null
           url: string | null
@@ -100,14 +104,18 @@ export type Database = {
         Insert: {
           category?: string | null
           city?: string | null
+          cost_type?: string | null
           created_at?: string | null
           creator_id: string
           description?: string | null
           end_date?: string | null
           event_type?: string | null
+          highlight_img?: string | null
           id?: string
           location?: string | null
           name: string
+          price?: number | null
+          purchase_url?: string | null
           start_date?: string | null
           status?: string | null
           url?: string | null
@@ -115,14 +123,18 @@ export type Database = {
         Update: {
           category?: string | null
           city?: string | null
+          cost_type?: string | null
           created_at?: string | null
           creator_id?: string
           description?: string | null
           end_date?: string | null
           event_type?: string | null
+          highlight_img?: string | null
           id?: string
           location?: string | null
           name?: string
+          price?: number | null
+          purchase_url?: string | null
           start_date?: string | null
           status?: string | null
           url?: string | null

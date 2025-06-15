@@ -17,6 +17,7 @@ import Profesionales from "./pages/Profesionales";
 import Cursos from "./pages/Cursos";
 import Blog from "./pages/Blog";
 import SubirProyecto from "./pages/SubirProyecto";
+import CrearEvento from "./pages/CrearEvento";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/proyectos/subir" element={<SubirProyecto />} />
           <Route path="/recursos" element={<Recursos />} />
           <Route path="/eventos" element={<Eventos />} />
+          <Route path="/eventos/crear" element={<CrearEvento />} />
           <Route path="/mi-perfil" element={<MiPerfil />} />
           <Route path="/chipi" element={<Chipi />} />
           <Route path="/contacto" element={<Contacto />} />
