@@ -109,18 +109,14 @@ export default function Navbar() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link to="/chipi" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave")}>
-                    Chipi
-                  </Link>
-                </NavigationMenuLink>
+                <Link to="/chipi" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave")}>
+                  Chipi
+                </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <Link to="/contacto" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave")}>
-                    Contacto
-                  </Link>
-                </NavigationMenuLink>
+                <Link to="/contacto" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave")}>
+                  Contacto
+                </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
@@ -189,6 +185,8 @@ const ListItem = React.forwardRef<
   React.ElementRef<typeof Link>,
   React.ComponentPropsWithoutRef<typeof Link>
 >(({ className, title, children, ...props }, ref) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { legacyBehavior, passHref, ...rest } = props as any;
   return (
     <li>
       <NavigationMenuLink asChild>
@@ -198,7 +196,7 @@ const ListItem = React.forwardRef<
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
             className
           )}
-          {...props}
+          {...rest}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">

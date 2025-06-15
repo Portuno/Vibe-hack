@@ -196,43 +196,64 @@ export type Database = {
       }
       projects: {
         Row: {
+          category: string | null
           created_at: string | null
           creator_id: string
           demo_url: string | null
           description: string | null
+          docs_url: string | null
           highlight_img: string | null
           id: string
           name: string
+          open_to_feedback: boolean | null
           problem: string | null
+          repo_url: string | null
           status: string | null
           updated_at: string | null
           vertical: string
+          wants_to_monetize: boolean | null
+          wants_updates: boolean | null
+          website_url: string | null
         }
         Insert: {
+          category?: string | null
           created_at?: string | null
           creator_id: string
           demo_url?: string | null
           description?: string | null
+          docs_url?: string | null
           highlight_img?: string | null
           id?: string
           name: string
+          open_to_feedback?: boolean | null
           problem?: string | null
+          repo_url?: string | null
           status?: string | null
           updated_at?: string | null
           vertical: string
+          wants_to_monetize?: boolean | null
+          wants_updates?: boolean | null
+          website_url?: string | null
         }
         Update: {
+          category?: string | null
           created_at?: string | null
           creator_id?: string
           demo_url?: string | null
           description?: string | null
+          docs_url?: string | null
           highlight_img?: string | null
           id?: string
           name?: string
+          open_to_feedback?: boolean | null
           problem?: string | null
+          repo_url?: string | null
           status?: string | null
           updated_at?: string | null
           vertical?: string
+          wants_to_monetize?: boolean | null
+          wants_updates?: boolean | null
+          website_url?: string | null
         }
         Relationships: []
       }
