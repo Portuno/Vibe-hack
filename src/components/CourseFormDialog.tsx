@@ -50,9 +50,17 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
     }
 
     // obtener id de usuario actual
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
     const creator_id = user?.id;
 
+    // Si hay error autenticando, mostrarlo
+    if (authError) {
+      toast({ title: "Error de autenticación", description: authError.message, variant: "destructive" });
+      setLoading(false);
+      return;
+    }
+
+    // Insertar curso
     const { error } = await supabase.from("courses").insert({
       name,
       description,
@@ -61,7 +69,6 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
       type,
       creator_id,
       url: imagePublicUrl || null,
-      // Puedes añadir otros campos si tu tabla los requiere
     });
 
     setLoading(false);

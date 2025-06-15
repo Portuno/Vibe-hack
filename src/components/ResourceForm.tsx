@@ -36,15 +36,16 @@ export function ResourceForm({ open, onOpenChange, onCreated }: {
     setLoading(true);
 
     // Procesar tags (separar por coma, quitar espacios etc)
-    let tags = form.tags.split(",").map(t => t.trim()).filter(Boolean);
-    // Demo: insert con usuario ficticio, luego conectar con usuario real
+    // let tags = form.tags.split(",").map(t => t.trim()).filter(Boolean);
+    // Eliminar por completo el uso de tags ya que la tabla no la soporta
+
     const { error } = await supabase.from("resources").insert([{
       name: form.name,
       description: form.description,
       description_short: form.description_short,
       resource_type: form.resource_type,
       category: form.category,
-      tags: tags,
+      // tags: tags, // ELIMINADO: la tabla no soporta esta columna
       url: form.url,
       creator_id: "f2317142-17c1-4b12-817a-853b03645398", // temp id
       status: "publicado"
