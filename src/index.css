@@ -46,7 +46,7 @@ h1, h2, h3, h4 {
 }
 
 .bg-arena {
-  @apply bg-arena;
+  background-color: #E8D9C4;
 }
 
 input, textarea, select {
