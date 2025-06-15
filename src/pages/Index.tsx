@@ -95,7 +95,7 @@ const Index = () => {
     <div className="min-h-screen bg-crema">
       <Navbar />
       <header className="mt-2 mb-8 flex flex-col items-center justify-center px-3 sm:px-0">
-        <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-display font-bold text-terra-cotta drop-shadow-sm leading-tight mb-4 animate-fade-in-up text-center">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-terra-cotta drop-shadow-sm leading-tight mb-4 animate-fade-in-up text-center">
           Terreta Hub
         </h1>
         <p className="max-w-xl text-lg sm:text-xl md:text-2xl text-mediterraneo font-medium text-center mb-2 animate-fade-in-up">
@@ -106,7 +106,7 @@ const Index = () => {
         </p>
         <a 
           href="#" 
-          className="btn-terra mt-2 px-6 py-2 sm:px-8 sm:py-3 text-base sm:text-lg shadow-card block w-full max-w-xs sm:max-w-fit text-center rounded-xl"
+          className="btn-terra mt-2 px-5 py-2 sm:px-8 sm:py-3 text-base sm:text-lg shadow-card block w-full max-w-xs sm:max-w-fit text-center rounded-xl"
         >
           Únete a Terreta Hub
         </a>
@@ -117,7 +117,7 @@ const Index = () => {
         <h2 className="font-display text-2xl sm:text-3xl text-negro-suave mb-4 sm:mb-6 tracking-tight text-left sm:text-left">
           Profesionales destacados
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-7">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-7">
           {DEMO_PROFESIONALES.map((prof) => (
             <ProfessionalCard key={prof.name} profile={prof} />
           ))}
@@ -129,7 +129,7 @@ const Index = () => {
         <h2 className="font-display text-2xl sm:text-3xl text-negro-suave mb-4 sm:mb-6 tracking-tight text-left sm:text-left">
           Proyectos inspiradores
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-7">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-7">
           {DEMO_PROYECTOS.map((proj) => (
             <ProjectCard key={proj.name} {...proj} />
           ))}
