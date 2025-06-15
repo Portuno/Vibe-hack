@@ -16,7 +16,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { useMemo } from "react";
 
+// Separar getEvents: no cambios porque ya filtra por status "publicado"
 const getEvents = async () => {
   const { data, error } = await supabase.from("events").select("*").order('start_date', { ascending: true });
 
@@ -33,6 +35,15 @@ export default function Eventos() {
     queryKey: ["events"],
     queryFn: getEvents,
   });
+
+  // Separar eventos en "próximos" y "pasados"
+  const now = new Date();
+  const [upcoming, past] = useMemo(() => {
+    if (!events) return [[], []];
+    const upcomingE = events.filter(ev => ev.start_date && new Date(ev.start_date) >= now);
+    const pastE = events.filter(ev => ev.start_date && new Date(ev.start_date) < now);
+    return [upcomingE, pastE];
+  }, [events, now]);
 
   return (
     <>
@@ -90,31 +101,53 @@ export default function Eventos() {
             )}
           </div>
 
-          {isLoading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={i} className="h-[450px] w-full rounded-2xl bg-white" />
-              ))}
-            </div>
-          )}
-          {isError && <p className="text-center text-rojo-oxidado">Error al cargar los eventos. Por favor, intentá de nuevo más tarde.</p>}
-          
-          {events && events.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {events.map((event) => (
-                <EventCard key={event.id} {...event} />
-              ))}
-            </div>
-          ) : (
-            !isLoading && (
-              <div className="text-center text-gris-piedra mt-12 bg-white p-8 rounded-xl border border-arena-light">
-                <h3 className="text-xl font-semibold mb-2">No hay eventos próximos</h3>
-                <p>¡Parece que no hay nada en la agenda! Sé el primero en crear un evento y movilizar a la comunidad.</p>
+          {/* Próximos eventos */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-semibold mb-6 text-mediterraneo">Próximos eventos</h2>
+            {isLoading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton key={i} className="h-[450px] w-full rounded-2xl bg-white" />
+                ))}
               </div>
-            )
-          )}
+            )}
+            {isError && <p className="text-center text-rojo-oxidado">Error al cargar los eventos. Por favor, intentá de nuevo más tarde.</p>}
+            {upcoming && upcoming.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {upcoming.map((event) => (
+                  <EventCard key={event.id} {...event} />
+                ))}
+              </div>
+            ) : (
+              !isLoading && (
+                <div className="text-center text-gris-piedra mt-12 bg-white p-8 rounded-xl border border-arena-light">
+                  <h3 className="text-xl font-semibold mb-2">No hay eventos próximos</h3>
+                  <p>¡Parece que no hay nada en la agenda! Sé el primero en crear un evento y movilizar a la comunidad.</p>
+                </div>
+              )
+            )}
+          </section>
+
+          {/* Eventos pasados */}
+          <section>
+            <h2 className="text-2xl font-semibold mb-6 text-arena">Eventos pasados</h2>
+            {past && past.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {past.map((event) => (
+                  <EventCard key={event.id} {...event} />
+                ))}
+              </div>
+            ) : (
+              !isLoading && (
+                <div className="text-center text-gris-piedra mt-4">
+                  <span>No hay eventos pasados.</span>
+                </div>
+              )
+            )}
+          </section>
         </div>
       </div>
     </>
   );
 }
+

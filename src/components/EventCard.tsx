@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight, Calendar, MapPin, Link as LinkIcon } from "lucide-react";
+import { ArrowRight, Calendar, MapPin, Link as LinkIcon, Image as ImageIcon } from "lucide-react";
 import {
   Sheet,
   SheetTrigger,
@@ -50,7 +50,19 @@ export function EventCard({
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <Card className="flex flex-col h-full">
+      <Card className="flex flex-col h-full relative group overflow-hidden">
+        {/* Imagen destacada visible en la card, si existe */}
+        {highlight_img ? (
+          <img
+            src={highlight_img}
+            alt="Imagen destacada del evento"
+            className="block w-full h-44 object-cover object-center border-b border-arena rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-44 flex items-center justify-center bg-arena border-b border-arena rounded-t-lg text-mediterraneo">
+            <ImageIcon className="h-12 w-12 opacity-40" />
+          </div>
+        )}
         <CardHeader>
           <CardTitle>{name}</CardTitle>
           {description && (
@@ -205,3 +217,4 @@ export function EventCard({
     </Sheet>
   );
 }
+
