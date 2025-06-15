@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -77,7 +78,7 @@ export default function Navbar() {
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave data-[state=open]:bg-arena">Comunidad</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena focus:bg-arena text-negro-suave data-[state=open]:bg-arena">Comunidad</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid grid-cols-1 gap-3 p-4 w-[300px] md:w-[400px]">
                     {comunidadComponents.map((component) => (
@@ -93,7 +94,7 @@ export default function Navbar() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave data-[state=open]:bg-arena">Recursos</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena focus:bg-arena text-negro-suave data-[state=open]:bg-arena">Recursos</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid grid-cols-1 gap-3 p-4 w-[300px] md:w-[400px]">
                     {recursosComponents.map((component) => (
@@ -109,12 +110,12 @@ export default function Navbar() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/chipi" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave")}>
+                <Link to="/chipi" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena focus:bg-arena text-negro-suave")}>
                   Chipi
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link to="/contacto" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena/80 focus:bg-arena text-negro-suave")}>
+                <Link to="/contacto" className={cn(navigationMenuTriggerStyle(), "bg-transparent font-semibold px-4 py-2 rounded-xl transition hover:bg-arena focus:bg-arena text-negro-suave")}>
                   Contacto
                 </Link>
               </NavigationMenuItem>

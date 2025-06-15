@@ -1,4 +1,3 @@
-
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -37,7 +36,7 @@ const eventFormSchema = z.object({
   start_date: z.date({
     required_error: "La fecha de inicio es requerida.",
   }),
-  event_type: z.enum(["Presencial", "Online", "Híbrido"], { required_error: "La modalidad es requerida."}),
+  event_type: z.enum(["Presencial", "Online", "Hibrido"], { required_error: "La modalidad es requerida."}),
   location: z.string().optional(),
   city: z.string().optional(),
   url: z.string().url("Debe ser una URL válida.").optional().or(z.literal('')),
@@ -49,7 +48,7 @@ const eventFormSchema = z.object({
   consent: z.boolean().default(false).refine(val => val === true, "Debes aceptar para poder crear el evento."),
 })
 .refine(data => {
-    if (data.event_type === "Presencial" || data.event_type === "Híbrido") {
+    if (data.event_type === "Presencial" || data.event_type === "Hibrido") {
         return !!data.location && !!data.city;
     }
     return true;
@@ -252,7 +251,7 @@ export function EventForm() {
                     >
                         <FormItem className="flex items-center space-x-3 space-y-0"><FormControl><RadioGroupItem value="Presencial" /></FormControl><FormLabel className="font-normal">Presencial</FormLabel></FormItem>
                         <FormItem className="flex items-center space-x-3 space-y-0"><FormControl><RadioGroupItem value="Online" /></FormControl><FormLabel className="font-normal">Online</FormLabel></FormItem>
-                        <FormItem className="flex items-center space-x-3 space-y-0"><FormControl><RadioGroupItem value="Híbrido" /></FormControl><FormLabel className="font-normal">Híbrido</FormLabel></FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0"><FormControl><RadioGroupItem value="Hibrido" /></FormControl><FormLabel className="font-normal">Híbrido</FormLabel></FormItem>
                     </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -260,7 +259,7 @@ export function EventForm() {
             )}
           />
 
-          {(watchEventType === "Presencial" || watchEventType === "Híbrido") && (
+          {(watchEventType === "Presencial" || watchEventType === "Hibrido") && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8"><FormField control={form.control} name="location" render={({ field }) => (<FormItem><FormLabel>🗺️ Ubicación</FormLabel><FormControl><Input placeholder="Ej: Av. Blasco Ibáñez 138" {...field} /></FormControl><FormMessage /></FormItem>)}/><FormField control={form.control} name="city" render={({ field }) => (<FormItem><FormLabel>Ciudad</FormLabel><FormControl><Input placeholder="Ej: Valencia" {...field} /></FormControl><FormMessage /></FormItem>)}/></div>
           )}
 

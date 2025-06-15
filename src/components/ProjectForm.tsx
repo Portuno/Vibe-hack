@@ -1,4 +1,3 @@
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -79,12 +78,10 @@ export function ProjectForm() {
     }
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from("projects").insert([
-        {
-          ...values,
-          creator_id: session.user.id,
-        },
-      ]);
+      const { error } = await supabase.from("projects").insert({
+        ...values,
+        creator_id: session.user.id,
+      });
 
       if (error) {
         throw error;
@@ -319,4 +316,3 @@ export function ProjectForm() {
     </div>
   );
 }
-
