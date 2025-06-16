@@ -39,6 +39,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          attachment_url: string | null
+          consent: boolean
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string
+          reason: string
+        }
+        Insert: {
+          attachment_url?: string | null
+          consent: boolean
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message: string
+          reason: string
+        }
+        Update: {
+          attachment_url?: string | null
+          consent?: boolean
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string
+          reason?: string
+        }
+        Relationships: []
+      }
       courses: {
         Row: {
           category: string | null
