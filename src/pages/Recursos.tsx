@@ -17,19 +17,25 @@ export default function Recursos() {
 
   const reload = async () => {
     setLoading(true);
+    console.log("Cargando recursos...");
     const { data, error } = await supabase
       .from("resources")
       .select(`
-        id, name, description, description_short, resource_type, category, tags, url, created_at,
+        id, name, description, description_short, resource_type, category, url, created_at,
         profiles:creator_id ( name, avatar_url )
       `)
       .eq("status", "publicado")
       .order("created_at", { ascending: false });
+    
+    console.log("Datos de recursos:", data);
+    console.log("Error al cargar recursos:", error);
+    
     setLoading(false);
     if (!error && data) {
       setResources(
         data.map((r: any) => ({
           ...r,
+          tags: [], // Por ahora tags vacío hasta que se agregue la columna
           author: {
             name: r.profiles?.name ?? "Sin nombre",
             avatar_url: r.profiles?.avatar_url ?? undefined
@@ -98,7 +104,7 @@ export default function Recursos() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex justify-center items-center py-16 text-lg text-gris-piedra">
-            No hay recursos con esos filtros…
+            {resources.length === 0 ? "No hay recursos disponibles..." : "No hay recursos con esos filtros…"}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-2">

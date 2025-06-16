@@ -60,6 +60,8 @@ export default function Proyectos() {
               highlightImg={project.highlight_img || undefined}
               problem={project.problem || ''}
               demoUrl={project.demo_url || undefined}
+              websiteUrl={project.website_url || undefined}
+              repoUrl={project.repo_url || undefined}
               creatorName={'Anónimo'}
               creatorAvatar={undefined}
             />

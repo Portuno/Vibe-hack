@@ -1,6 +1,6 @@
 
 import { Badge } from "./Badge";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Github, Globe, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -10,6 +10,8 @@ interface Props {
   highlightImg?: string;
   problem: string;
   demoUrl?: string;
+  websiteUrl?: string;
+  repoUrl?: string;
   creatorName: string;
   creatorAvatar?: string;
 }
@@ -21,6 +23,8 @@ export function ProjectCard({
   highlightImg,
   problem,
   demoUrl,
+  websiteUrl,
+  repoUrl,
   creatorName,
   creatorAvatar,
 }: Props) {
@@ -49,17 +53,44 @@ export function ProjectCard({
       </div>
       <div className="font-display text-lg font-bold mb-1">{name}</div>
       <div className="text-gray-700 text-sm line-clamp-2 mb-2">{description}</div>
-      <div className="text-xs italic text-gris-piedra mb-1">Problema: {problem}</div>
-      {demoUrl && (
-        <a
-          href={demoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-terra mt-2 flex justify-center items-center gap-1 w-fit px-4 py-1 text-sm"
-        >
-          Ver demo <ArrowRight className="w-4 h-4 ml-0.5" />
-        </a>
-      )}
+      <div className="text-xs italic text-gris-piedra mb-3">Problema: {problem}</div>
+      
+      {/* Enlaces del proyecto */}
+      <div className="flex flex-wrap gap-2 mt-auto">
+        {websiteUrl && (
+          <a
+            href={websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-terra flex items-center gap-1 px-3 py-1 text-xs"
+          >
+            <Globe className="w-3 h-3" />
+            Website
+          </a>
+        )}
+        {demoUrl && (
+          <a
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-terra flex items-center gap-1 px-3 py-1 text-xs"
+          >
+            <Play className="w-3 h-3" />
+            Demo
+          </a>
+        )}
+        {repoUrl && (
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-terra flex items-center gap-1 px-3 py-1 text-xs"
+          >
+            <Github className="w-3 h-3" />
+            Repo
+          </a>
+        )}
+      </div>
     </div>
   );
 }
