@@ -54,13 +54,13 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
     const creator_id = user?.id;
 
     // Si hay error autenticando, mostrarlo
-    if (authError) {
-      toast({ title: "Error de autenticación", description: authError.message, variant: "destructive" });
+    if (authError || !creator_id) {
+      toast({ title: "Error de autenticación", description: "Debes estar logueado para crear un curso", variant: "destructive" });
       setLoading(false);
       return;
     }
 
-    // Insertar curso
+    // Insertar curso con los campos correctos
     const { error } = await supabase.from("courses").insert({
       name,
       description,
@@ -69,19 +69,29 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
       type,
       creator_id,
       url: imagePublicUrl || null,
+      category: vertical, // También guardamos en category para consistencia
     });
 
     setLoading(false);
 
     if (error) {
+      console.error("Error al crear curso:", error);
       toast({ title: "Error al crear curso", description: error.message, variant: "destructive" });
       return;
     }
+    
     toast({ title: "¡Curso publicado!", description: "Se ha subido tu curso correctamente." });
     setOpen(false);
     if (onCourseAdded) onCourseAdded();
+    
     // Reset fields
-    setName(""); setDescription(""); setLevel(LEVELS[0]); setVertical(VERTICALS[0]); setType(TYPES[0]); setImageFile(null); setImageUrl("");
+    setName(""); 
+    setDescription(""); 
+    setLevel(LEVELS[0]); 
+    setVertical(VERTICALS[0]); 
+    setType(TYPES[0]); 
+    setImageFile(null); 
+    setImageUrl("");
   };
 
   return (

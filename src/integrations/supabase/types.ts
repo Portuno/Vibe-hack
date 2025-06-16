@@ -85,6 +85,7 @@ export type Database = {
           status: string | null
           type: string | null
           url: string | null
+          vertical: string | null
         }
         Insert: {
           category?: string | null
@@ -98,6 +99,7 @@ export type Database = {
           status?: string | null
           type?: string | null
           url?: string | null
+          vertical?: string | null
         }
         Update: {
           category?: string | null
@@ -111,6 +113,7 @@ export type Database = {
           status?: string | null
           type?: string | null
           url?: string | null
+          vertical?: string | null
         }
         Relationships: []
       }
