@@ -58,7 +58,7 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
         console.error("Error detallado de upload:", uploadError);
         toast({ 
           title: "Error al subir imagen", 
-          description: `${uploadError.message}. Código: ${uploadError.status || 'N/A'}`, 
+          description: uploadError.message, 
           variant: "destructive" 
         });
         setLoading(false);
