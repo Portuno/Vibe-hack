@@ -13,7 +13,7 @@ const getProjects = async () => {
     .from("projects")
     .select(`
       *,
-      professional_profiles!creator_id (
+      professional_profiles!projects_creator_id_fkey (
         display_name,
         avatar_url
       )
