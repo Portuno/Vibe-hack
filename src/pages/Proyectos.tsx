@@ -9,16 +9,7 @@ import { Upload } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const getProjects = async () => {
-  const { data, error } = await supabase
-    .from("projects")
-    .select(`
-      *,
-      professional_profiles!projects_creator_id_fkey (
-        display_name,
-        avatar_url
-      )
-    `)
-    .order('created_at', { ascending: false });
+  const { data, error } = await supabase.from("projects").select("*").order('created_at', { ascending: false });
 
   if (error) {
     console.error("Error fetching projects:", error);
@@ -71,8 +62,8 @@ export default function Proyectos() {
               demoUrl={project.demo_url || undefined}
               websiteUrl={project.website_url || undefined}
               repoUrl={project.repo_url || undefined}
-              creatorName={project.professional_profiles?.display_name || 'Usuario sin perfil'}
-              creatorAvatar={project.professional_profiles?.avatar_url || undefined}
+              creatorName={'Anónimo'}
+              creatorAvatar={undefined}
             />
           ))}
         </div>
