@@ -45,17 +45,22 @@ const getCourses = async (): Promise<Course[]> => {
   if (!coursesData || coursesData.length === 0) return [];
 
   // Obtener los IDs únicos de creadores
-  const creatorIds = [...new Set(coursesData.map(course => course.creator_id))];
+  const creatorIds = [...new Set(coursesData.map(course => course.creator_id))].filter(Boolean);
   
-  // Obtener perfiles profesionales
-  const { data: profilesData, error: profilesError } = await supabase
-    .from("professional_profiles")
-    .select("user_id, name, avatar_url")
-    .in("user_id", creatorIds);
-  
-  if (profilesError) {
-    console.error("Error cargando perfiles:", profilesError);
-    // No lanzar error, usar datos por defecto
+  let profilesData = [];
+  if (creatorIds.length > 0) {
+    // Obtener perfiles profesionales
+    const { data: profiles, error: profilesError } = await supabase
+      .from("professional_profiles")
+      .select("user_id, name, display_name, avatar_url")
+      .in("user_id", creatorIds);
+    
+    if (profilesError) {
+      console.error("Error cargando perfiles:", profilesError);
+      // No lanzar error, usar datos por defecto
+    } else {
+      profilesData = profiles || [];
+    }
   }
 
   // Crear un mapa de perfiles para búsqueda rápida
@@ -64,7 +69,7 @@ const getCourses = async (): Promise<Course[]> => {
   );
 
   console.log("Datos de cursos:", coursesData);
-  console.log("Datos de perfiles:", profilesData);
+      // console.log("Datos de perfiles:", profilesData);
 
   const formattedCourses: Course[] = coursesData.map((course: any) => {
     const profile = profilesMap.get(course.creator_id);
@@ -76,7 +81,7 @@ const getCourses = async (): Promise<Course[]> => {
       image: course.url,
       verticals: course.vertical ? [course.vertical] : ["Tecnología"],
       creator: {
-        name: profile?.name || "Anónimo",
+        name: profile?.display_name || profile?.name || "Anónimo",
         avatar_url: profile?.avatar_url || "https://api.dicebear.com/7.x/avataaars/svg?seed=terreta",
       },
       level: course.level as "Básico" | "Intermedio" | "Avanzado" || "Básico",

@@ -5,6 +5,7 @@ import { es } from "date-fns/locale";
 import { UserCircle, BookOpen, Video, Podcast, FileText, FileCode, FileSpreadsheet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TagList } from "./TagList";
+import { Link } from "react-router-dom";
 
 const ICONS: Record<string, JSX.Element> = {
   "video": <Video className="text-mediterraneo" />,
@@ -26,9 +27,13 @@ export type Resource = {
   tags?: string[];
   url?: string;
   created_at: string;
+  creator_id?: string;
   author: {
     name: string;
     avatar_url?: string;
+    bio?: string;
+    headline?: string;
+    user_id?: string;
   };
 }
 
@@ -57,24 +62,26 @@ export function ResourceCard({ resource }: { resource: Resource }) {
       <div className="flex items-end gap-2 mt-auto pt-4 w-full justify-between">
         <div className="flex items-center gap-2 text-xs flex-1 min-w-0">
           {resource.author?.avatar_url
-            ? <img src={resource.author.avatar_url} className="w-6 h-6 rounded-full object-cover" />
+            ? <img src={resource.author.avatar_url} className="w-6 h-6 rounded-full object-cover" alt={resource.author.name} />
             : <UserCircle className="w-5 h-5 text-gris-piedra" />
           }
-          <span className="truncate">{resource.author?.name}</span>
+          <span className="truncate font-medium text-negro-suave">
+            {resource.author?.name || "Anónimo"}
+          </span>
         </div>
         <span className="text-xs text-gris-piedra min-w-max">
           {format(new Date(resource.created_at), "d MMM yy", { locale: es })}
         </span>
       </div>
-      {/* Overlay for click/focus, future: click -> detail modal */}
-      <a
-        href={resource.url ?? "#"}
-        className="absolute inset-0 rounded-xl z-10 focus:outline-terra-cotta"
-        tabIndex={0}
-        aria-label={`Ver recurso: ${resource.name}`}
+      {/* Overlay for click/focus to navigate to resource detail page */}
+      <Link
+        to={`/recursos/${resource.id}`}
         target="_blank"
         rel="noopener noreferrer"
-      ></a>
+        className="absolute inset-0 rounded-xl z-10 focus:outline-terra-cotta"
+        tabIndex={0}
+        aria-label={`Ver detalles del recurso: ${resource.name}`}
+      ></Link>
     </div>
   );
 }

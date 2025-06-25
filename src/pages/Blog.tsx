@@ -21,12 +21,12 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 const getBlogs = async (filters: BlogFilters = {}) => {
+  console.log("🔍 Obteniendo blogs con filtros:", filters);
+  
+  // Primero obtener los blogs
   let query = supabase
     .from("blogs")
-    .select(`
-      *,
-      author:professional_profiles!author_id(name, display_name, avatar_url)
-    `)
+    .select("*")
     .order("published_at", { ascending: false, nullsFirst: false });
 
   // Filtros de estado
@@ -47,14 +47,46 @@ const getBlogs = async (filters: BlogFilters = {}) => {
     query = query.ilike("title", `%${filters.search}%`);
   }
 
-  const { data, error } = await query;
+  const { data: blogsData, error } = await query;
+
+  console.log("📊 Respuesta de blogs:", { blogsData, error });
 
   if (error) {
-    console.error("Error fetching blogs:", error);
+    console.error("❌ Error fetching blogs:", error);
     throw new Error(error.message);
   }
 
-  return data as unknown as Blog[];
+  if (!blogsData || blogsData.length === 0) {
+    console.log("ℹ️ No se encontraron blogs");
+    return [];
+  }
+
+  console.log("✅ Blogs obtenidos exitosamente:", blogsData.length);
+
+  // Obtener los datos de los autores por separado
+  const authorIds = [...new Set(blogsData.map(blog => blog.author_id))];
+  console.log("👥 Obteniendo datos de autores:", authorIds);
+
+  const { data: authorsData, error: authorsError } = await supabase
+    .from("professional_profiles")
+    .select("user_id, name, display_name, avatar_url")
+    .in("user_id", authorIds);
+
+  if (authorsError) {
+    console.error("⚠️ Error fetching authors (continuando sin datos de autor):", authorsError);
+  } else {
+    console.log("👥 Autores obtenidos:", authorsData?.length || 0);
+  }
+
+  // Combinar los datos
+  const blogsWithAuthors = blogsData.map(blog => ({
+    ...blog,
+    author: authorsData?.find(author => author.user_id === blog.author_id) || null
+  }));
+
+  console.log("🎯 Blogs finales con autores:", blogsWithAuthors.length);
+  
+  return blogsWithAuthors as unknown as Blog[];
 };
 
 export default function Blog() {
@@ -65,7 +97,7 @@ export default function Blog() {
   const { data: blogs, isLoading, isError, refetch } = useQuery({
     queryKey: ["blogs", filters],
     queryFn: () => getBlogs(filters),
-    enabled: false, // Temporalmente deshabilitado hasta ejecutar migraciones
+    enabled: true, // Habilitado para cargar los blogs
   });
 
   // Manejar búsqueda con debounce
@@ -87,16 +119,23 @@ export default function Blog() {
   };
 
   const BlogCard = ({ blog }: { blog: Blog }) => {
-    const author = Array.isArray(blog.author) ? blog.author[0] : blog.author;
+    const author = blog.author;
     
+    const handleCardClick = () => {
+      window.open(`/blog/${blog.slug}`, '_blank', 'noopener,noreferrer');
+    };
+
     return (
-      <article className="bg-white rounded-2xl shadow-card border border-arena p-6 hover:shadow-lg transition-shadow duration-300">
+      <article 
+        className="bg-white rounded-2xl shadow-card border border-arena p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer group"
+        onClick={handleCardClick}
+      >
         {blog.featured_image && (
           <div className="mb-4 rounded-xl overflow-hidden">
             <img
               src={blog.featured_image}
               alt={blog.title}
-              className="w-full h-48 object-cover hover:scale-105 transition-transform duration-300"
+              className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
         )}
@@ -109,8 +148,8 @@ export default function Blog() {
           ))}
         </div>
 
-        <h2 className="text-xl font-display font-bold text-negro-suave mb-2 line-clamp-2 hover:text-terra-cotta transition-colors">
-          <Link to={`/blog/${blog.slug}`}>{blog.title}</Link>
+        <h2 className="text-xl font-display font-bold text-negro-suave mb-2 line-clamp-2 group-hover:text-terra-cotta transition-colors">
+          {blog.title}
         </h2>
 
         {blog.excerpt && (
@@ -161,7 +200,7 @@ export default function Blog() {
 
         {/* Botones de acción para el autor */}
         {session && profile && blog.author_id === session.user.id && (
-          <div className="mt-4 pt-4 border-t border-arena flex gap-2">
+          <div className="mt-4 pt-4 border-t border-arena flex gap-2" onClick={(e) => e.stopPropagation()}>
             <Button asChild size="sm" variant="outline">
               <Link to={`/blog/edit/${blog.id}`}>Editar</Link>
             </Button>

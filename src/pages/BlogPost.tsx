@@ -22,20 +22,56 @@ import { es } from "date-fns/locale";
 import { toast } from "sonner";
 
 const getBlogBySlug = async (slug: string) => {
-  const { data, error } = await supabase
+  console.log("🔍 Obteniendo blog por slug:", slug);
+
+  // Primero obtener el blog
+  const { data: blogData, error } = await supabase
     .from("blogs")
-    .select(`
-      *,
-      author:professional_profiles!author_id(name, display_name, avatar_url, bio, headline)
-    `)
+    .select("*")
     .eq("slug", slug)
     .single();
 
+  console.log("📊 Respuesta del blog:", { blogData, error });
+
   if (error) {
+    console.error("❌ Error fetching blog:", error);
     throw new Error(error.message);
   }
 
-  return data as Blog;
+  if (!blogData) {
+    throw new Error("Blog no encontrado");
+  }
+
+  console.log("✅ Blog obtenido exitosamente");
+
+  // Obtener datos del autor por separado
+  let authorData = null;
+  if (blogData.author_id) {
+    console.log("👤 Obteniendo datos del autor:", blogData.author_id);
+    
+    const { data: author, error: authorError } = await supabase
+      .from("professional_profiles")
+      .select("user_id, name, display_name, avatar_url, bio, headline")
+      .eq("user_id", blogData.author_id)
+      .single();
+
+    if (authorError) {
+      console.error("⚠️ Error fetching author (continuando sin datos de autor):", authorError);
+    } else {
+      console.log("👤 Autor obtenido:", author?.display_name || author?.name);
+      authorData = author;
+    }
+  }
+
+  // Combinar los datos
+  const blogWithAuthor = {
+    ...blogData,
+    author: authorData
+  };
+
+  console.log("🎯 Blog final con autor:", blogWithAuthor.title);
+  
+  return blogWithAuthor as Blog;
 };
 
 const incrementViews = async (blogId: string) => {
@@ -178,7 +214,7 @@ export default function BlogPost() {
     );
   }
 
-  const author = Array.isArray(blog.author) ? blog.author[0] : blog.author;
+  const author = blog.author;
   const isAuthor = session && blog.author_id === session.user.id;
 
   return (

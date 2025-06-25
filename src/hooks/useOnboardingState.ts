@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -23,21 +22,35 @@ export function useOnboardingState() {
   const [otroVertical, setOtroVertical] = useState("");
   const [intereses, setIntereses] = useState<string[]>([]);
   const [bio, setBio] = useState("");
+  const [profileLoaded, setProfileLoaded] = useState(false);
 
+  // Efecto para cargar datos del perfil una sola vez
   useEffect(() => {
-    if (!loading && profile && profile.display_name && profile.headline && profile.vertical && profile.skills && profile.what_i_am_looking_for && profile.bio) {
-      navigate(redirectTo);
-    }
-    if (!loading && !session) {
-      navigate("/auth");
-    }
-    if (profile) {
+    if (profile && !profileLoaded) {
       setNombreVisible(profile.display_name || "");
       setHeadline(profile.headline || "");
       setVerticales(profile.skills || []);
       setBio(profile.bio || "");
+      setProfileLoaded(true);
     }
-  }, [profile, loading, session, navigate, redirectTo]);
+  }, [profile, profileLoaded]);
+
+  // Efecto para navegación
+  useEffect(() => {
+    if (loading) return; // Esperar a que termine de cargar
+
+    // Si no hay sesión, ir al auth
+    if (!session) {
+      navigate("/auth");
+      return;
+    }
+
+    // Si el perfil está completo, redirigir al destino
+    if (profile && profile.display_name && profile.headline && profile.vertical && profile.skills && profile.what_i_am_looking_for && profile.bio) {
+      navigate(redirectTo);
+      return;
+    }
+  }, [session, profile, loading, navigate, redirectTo]);
 
   function slideValidation() {
     // Slide 2 (nombre visible) obligatorio
@@ -70,16 +83,19 @@ export function useOnboardingState() {
     return true;
   }
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (!slideValidation()) return;
     setSlide(slide + 1);
-  };
+  }, [slide, nombreVisible, verticales, otroVertical, bio]);
 
-  const handleFinish = async () => {
+  const handleFinish = useCallback(async () => {
+    if (!session) return;
+
     let finalVerticales = verticales;
     if (verticales.includes("Otro") && otroVertical.trim()) {
       finalVerticales = verticales.filter(v => v !== "Otro").concat([otroVertical]);
     }
+    
     try {
       await supabase
         .from("professional_profiles")
@@ -93,11 +109,13 @@ export function useOnboardingState() {
           bio,
           is_public: true,
         })
-        .eq("user_id", session?.user.id);
+        .eq("user_id", session.user.id);
+      
       toast({
         title: "¡Perfecto!",
         description: "Tu perfil inicial ha sido creado.",
       });
+      
       navigate(redirectTo);
     } catch (error: any) {
       toast({
@@ -106,7 +124,7 @@ export function useOnboardingState() {
         variant: "destructive"
       });
     }
-  };
+  }, [session, nombreVisible, headline, verticales, otroVertical, intereses, bio, navigate, redirectTo]);
 
   return {
     slide,

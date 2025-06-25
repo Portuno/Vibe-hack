@@ -2,8 +2,10 @@
 import { Badge } from "./Badge";
 import { ArrowRight, Github, Globe, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 interface Props {
+  id: string;
   name: string;
   description: string;
   vertical: "Legal" | "Arte" | "Tecnología" | "Educación" | "Ciencia" | "Social";
@@ -17,6 +19,7 @@ interface Props {
 }
 
 export function ProjectCard({
+  id,
   name,
   description,
   vertical,
@@ -28,10 +31,22 @@ export function ProjectCard({
   creatorName,
   creatorAvatar,
 }: Props) {
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Evitar navegación si se hace click en los botones de enlace
+    const target = e.target as HTMLElement;
+    if (target.closest('a')) {
+      return;
+    }
+    window.open(`/proyectos/${id}`, '_blank', 'noopener,noreferrer');
+  };
+
   return (
-    <div className={cn(
-      "bg-arena card-fade-in p-5 rounded-2xl card-shadow flex flex-col gap-3 w-full max-w-sm hover:scale-105 transition-all duration-300 hover:shadow-lg border border-arena"
-    )}>
+    <div 
+      className={cn(
+        "bg-arena card-fade-in p-5 rounded-2xl card-shadow flex flex-col gap-3 w-full max-w-sm hover:scale-105 transition-all duration-300 hover:shadow-lg border border-arena cursor-pointer relative group"
+      )}
+      onClick={handleCardClick}
+    >
       {highlightImg && (
         <div
           className="w-full h-36 bg-cover bg-center rounded-xl mb-2"

@@ -69,7 +69,7 @@ const getBlog = async (id: string) => {
 export default function BlogEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { session, profile } = useAuth();
+  const { session, profile, loading } = useAuth();
   const queryClient = useQueryClient();
   const isEditing = !!id;
 
@@ -109,8 +109,11 @@ export default function BlogEditor() {
     }
   }, [blog, isEditing, form]);
 
-  // Verificar autenticación
+  // Verificar autenticación y onboarding
   useEffect(() => {
+    // No hacer nada mientras se está cargando la autenticación
+    if (loading) return;
+
     if (!session) {
       // Guardar la URL actual para volver después del login
       const currentPath = window.location.pathname;
@@ -124,7 +127,7 @@ export default function BlogEditor() {
       navigate("/blog");
       return;
     }
-  }, [session, blog, isEditing, navigate]);
+  }, [session, blog, isEditing, navigate, loading]);
 
   // Mutación para crear/actualizar blog
   const saveBlogMutation = useMutation({

@@ -9,13 +9,59 @@ import { Upload } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const getProjects = async () => {
-  const { data, error } = await supabase.from("projects").select("*").order('created_at', { ascending: false });
+  console.log("Cargando proyectos...");
+  
+  // Obtener proyectos
+  const { data: projectsData, error: projectsError } = await supabase
+    .from("projects")
+    .select("*")
+    .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error("Error fetching projects:", error);
-    throw new Error(error.message);
+  if (projectsError) {
+    console.error("Error fetching projects:", projectsError);
+    throw new Error(projectsError.message);
   }
-  return data;
+
+  if (!projectsData || projectsData.length === 0) return [];
+
+  // Obtener los IDs únicos de creadores
+  const creatorIds = [...new Set(projectsData.map(project => project.creator_id))].filter(Boolean);
+  
+  let profilesData = [];
+  if (creatorIds.length > 0) {
+    // Obtener perfiles profesionales
+    const { data: profiles, error: profilesError } = await supabase
+      .from("professional_profiles")
+      .select("user_id, name, display_name, avatar_url")
+      .in("user_id", creatorIds);
+    
+    if (profilesError) {
+      console.error("Error cargando perfiles:", profilesError);
+      // No lanzar error, usar datos por defecto
+    } else {
+      profilesData = profiles || [];
+    }
+  }
+
+  // Crear un mapa de perfiles para búsqueda rápida
+  const profilesMap = new Map(
+    profilesData.map(profile => [profile.user_id, profile])
+  );
+
+  console.log("Datos de proyectos:", projectsData);
+  console.log("Datos de perfiles:", profilesData);
+
+  return projectsData.map((project: any) => {
+    const profile = profilesMap.get(project.creator_id);
+    
+    return {
+      ...project,
+      creator: {
+        name: profile?.display_name || profile?.name || "Anónimo",
+        avatar_url: profile?.avatar_url
+      }
+    };
+  });
 };
 
 export default function Proyectos() {
@@ -54,6 +100,7 @@ export default function Proyectos() {
           {projects?.map((project) => (
             <ProjectCard
               key={project.id}
+              id={project.id}
               name={project.name}
               description={project.description || ''}
               vertical={(project.vertical as any) || 'Tecnología'}
@@ -62,8 +109,8 @@ export default function Proyectos() {
               demoUrl={project.demo_url || undefined}
               websiteUrl={project.website_url || undefined}
               repoUrl={project.repo_url || undefined}
-              creatorName={'Anónimo'}
-              creatorAvatar={undefined}
+              creatorName={project.creator?.name || 'Anónimo'}
+              creatorAvatar={project.creator?.avatar_url}
             />
           ))}
         </div>

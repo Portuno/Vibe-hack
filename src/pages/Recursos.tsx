@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { ResourceCard, Resource } from "@/components/ResourceCard";
+// import { ResourceDebugInfo } from "@/components/ResourceDebugInfo"; // Temporalmente comentado
 import { SearchBar } from "@/components/SearchBar";
 import { FormatFilterBar } from "@/components/FormatFilterBar";
 import { ResourceForm } from "@/components/ResourceForm";
@@ -20,6 +21,9 @@ const getResources = async (): Promise<Resource[]> => {
     `)
     .eq("status", "publicado")
     .order("created_at", { ascending: false });
+
+  // console.log("Recursos obtenidos:", resourcesData?.length || 0);
+  // console.log("Recursos con creator_id:", resourcesData?.filter(r => r.creator_id)?.length || 0);
   
   if (resourcesError) {
     console.error("Error cargando recursos:", resourcesError);
@@ -36,7 +40,7 @@ const getResources = async (): Promise<Resource[]> => {
     // Obtener perfiles profesionales
     const { data: profiles, error: profilesError } = await supabase
       .from("professional_profiles")
-      .select("user_id, name, avatar_url")
+      .select("user_id, name, display_name, avatar_url")
       .in("user_id", creatorIds);
     
     if (profilesError) {
@@ -52,17 +56,22 @@ const getResources = async (): Promise<Resource[]> => {
     profilesData.map(profile => [profile.user_id, profile])
   );
 
-  console.log("Datos de recursos:", resourcesData);
-  console.log("Datos de perfiles:", profilesData);
+  // console.log("Datos de recursos:", resourcesData);
+  // console.log("Datos de perfiles:", profilesData);
+  // console.log("Mapa de perfiles:", profilesMap);
 
   return resourcesData.map((r: any) => {
     const profile = profilesMap.get(r.creator_id);
+    // console.log(`Recurso: ${r.name}, creator_id: ${r.creator_id}, profile encontrado:`, profile);
+    
+    const authorName = profile?.display_name || profile?.name || "Sin nombre";
+    // console.log(`Nombre del autor para ${r.name}: ${authorName}`);
     
     return {
       ...r,
       tags: [], // Por ahora tags vacío hasta que se agregue la columna
       author: {
-        name: profile?.name ?? "Sin nombre",
+        name: authorName,
         avatar_url: profile?.avatar_url ?? undefined
       }
     };
@@ -153,7 +162,12 @@ export default function Recursos() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-2">
-            {filtered.map(r => <ResourceCard key={r.id} resource={r} />)}
+            {filtered.map(r => (
+              <div key={r.id}>
+                {/* <ResourceDebugInfo resource={r} /> */}
+                <ResourceCard resource={r} />
+              </div>
+            ))}
           </div>
         )}
       </section>

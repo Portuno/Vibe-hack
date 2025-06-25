@@ -33,28 +33,31 @@ export default function Auth() {
   const redirectTo = searchParams.get("redirect") || "/";
 
   useEffect(() => {
-    // Si no está cargando el auth y hay sesión
-    if (!authLoading && session && onboardingRequired && !hasCheckedOnboarding) {
-      setHasCheckedOnboarding(true);
-      // Pasar el redirect al onboarding también
-      const onboardingUrl = redirectTo !== "/" ? `/onboarding?redirect=${encodeURIComponent(redirectTo)}` : "/onboarding";
-      navigate(onboardingUrl, { replace: true });
-    } else if (!authLoading && session && !onboardingRequired && !hasCheckedOnboarding) {
-      setHasCheckedOnboarding(true);
-      navigate(redirectTo, { replace: true });
-    }
-    // Si se destruye el componente (logout, etc), resetea el flag
+    // Esperar a que termine de cargar la autenticación
+    if (authLoading) return;
+
+    // Si no hay sesión, no hacer nada (quedarse en la página de auth)
     if (!session) {
       setHasCheckedOnboarding(false);
+      return;
+    }
+
+    // Evitar navegación múltiple
+    if (hasCheckedOnboarding) return;
+
+    setHasCheckedOnboarding(true);
+
+    // Si necesita onboarding, ir al onboarding con redirect
+    if (onboardingRequired) {
+      const onboardingUrl = redirectTo !== "/" ? `/onboarding?redirect=${encodeURIComponent(redirectTo)}` : "/onboarding";
+      navigate(onboardingUrl, { replace: true });
+    } else {
+      // Si no necesita onboarding, ir directamente al destino
+      navigate(redirectTo, { replace: true });
     }
   }, [session, onboardingRequired, authLoading, navigate, hasCheckedOnboarding, redirectTo]);
 
-  // Si el perfil recién se cargó después y no se chequeó aún, chequea de nuevo
-  useEffect(() => {
-    if (session && typeof onboardingRequired === "boolean" && !hasCheckedOnboarding) {
-      setHasCheckedOnboarding(false); // Fuerza el paso anterior a re-evaluarse
-    }
-  }, [profile, session, onboardingRequired]);
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

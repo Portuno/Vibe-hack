@@ -79,12 +79,47 @@ const Index = () => {
   // Cargar 3 proyectos al azar
   useEffect(() => {
     async function fetchProyectos() {
-      const { data, error } = await supabase
+      const { data: projectsData, error } = await supabase
         .from("projects")
         .select("*")
         .eq("status", "publicado");
 
-      let all = data ?? [];
+      if (!projectsData || projectsData.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      // Obtener los IDs únicos de creadores
+      const creatorIds = [...new Set(projectsData.map(project => project.creator_id))].filter(Boolean);
+      
+      let profilesData = [];
+      if (creatorIds.length > 0) {
+        // Obtener perfiles profesionales
+        const { data: profiles } = await supabase
+          .from("professional_profiles")
+          .select("user_id, name, display_name, avatar_url")
+          .in("user_id", creatorIds);
+        
+        profilesData = profiles || [];
+      }
+
+      // Crear un mapa de perfiles para búsqueda rápida
+      const profilesMap = new Map(
+        profilesData.map(profile => [profile.user_id, profile])
+      );
+
+      let all = projectsData.map((project: any) => {
+        const profile = profilesMap.get(project.creator_id);
+        
+        return {
+          ...project,
+          creator: {
+            name: profile?.display_name || profile?.name || "Anónimo",
+            avatar_url: profile?.avatar_url
+          }
+        };
+      });
+
       // Mezclar y tomar 3
       all = all.sort(() => Math.random() - 0.5).slice(0, 3);
       setProyectos(all);
@@ -175,8 +210,10 @@ const Index = () => {
                 highlightImg={proj.highlight_img}
                 problem={proj.problem}
                 demoUrl={proj.demo_url}
-                creatorName={proj.creator_id}
-                creatorAvatar={undefined}
+                websiteUrl={proj.website_url}
+                repoUrl={proj.repo_url}
+                creatorName={proj.creator?.name || 'Anónimo'}
+                creatorAvatar={proj.creator?.avatar_url}
               />
             ))
           )}
