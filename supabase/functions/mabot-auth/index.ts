@@ -1,11 +1,27 @@
 // @ts-nocheck
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts"
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-}
+// Lista de dominios permitidos
+const allowedOrigins = [
+  'https://terretahub.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://localhost:5173',
+  'https://localhost:3000'
+];
+
+// Función para obtener headers CORS dinámicamente
+const getCorsHeaders = (origin?: string) => {
+  const isAllowedOrigin = origin && allowedOrigins.includes(origin);
+  
+  return {
+    'Access-Control-Allow-Origin': isAllowedOrigin ? origin : 'https://terretahub.com',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-requested-with, accept, origin, referer, user-agent',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Max-Age': '86400', // 24 hours
+  };
+};
 
 interface MabotAuthRequest {
   action: 'login' | 'refresh' | 'check';
@@ -25,6 +41,10 @@ interface RefreshTokenRequest {
 
 serve(async (req) => {
   console.log(`🚀 Function started - ${req.method}`)
+  
+  // Get origin from request
+  const origin = req.headers.get('origin');
+  const corsHeaders = getCorsHeaders(origin);
   
   // Handle CORS
   if (req.method === 'OPTIONS') {
@@ -57,7 +77,7 @@ serve(async (req) => {
           has_credentials: !!(email && password)
         }),
         { 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
           status: 200 
         }
       )
@@ -74,7 +94,7 @@ serve(async (req) => {
             error: 'Credentials not configured'
           }),
           { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
             status: 400 
           }
         )
@@ -107,7 +127,7 @@ serve(async (req) => {
               error: `Mabot API error: ${response.status}`
             }),
             { 
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
               status: 400 
             }
           )
@@ -126,7 +146,7 @@ serve(async (req) => {
             refresh_token: data.refresh_token
           }),
           { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
             status: 200 
           }
         )
@@ -140,7 +160,7 @@ serve(async (req) => {
             error: `Network error: ${fetchError.message}`
           }),
           { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
             status: 500 
           }
         )
@@ -155,7 +175,7 @@ serve(async (req) => {
             error: 'Refresh token requerido'
           }),
           { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
             status: 400 
           }
         )
@@ -180,7 +200,7 @@ serve(async (req) => {
               error: `Error al renovar token: ${response.status}`
             }),
             { 
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
               status: 400 
             }
           )
@@ -196,7 +216,7 @@ serve(async (req) => {
             refresh_token: data.refresh_token
           }),
           { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
             status: 200 
           }
         )
@@ -210,7 +230,7 @@ serve(async (req) => {
             error: `Error de conexión al renovar: ${refreshError.message}`
           }),
           { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
             status: 500 
           }
         )
@@ -224,7 +244,7 @@ serve(async (req) => {
         error: 'Unknown action'
       }),
       { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
         status: 400 
       }
     )
@@ -239,7 +259,7 @@ serve(async (req) => {
         error: `Function error: ${error.message}`
       }),
       { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...getCorsHeaders(), 'Content-Type': 'application/json' },
         status: 500 
       }
     )
