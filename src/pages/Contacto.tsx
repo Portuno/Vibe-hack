@@ -24,31 +24,42 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { 
+  CreateContactData, 
+  CONTACT_REASON_OPTIONS, 
+  ALLOWED_FILE_TYPES, 
+  MAX_FILE_SIZE 
+} from "@/types/contacts";
+import { useState } from "react";
 
 const formSchema = z.object({
   fullName: z.string().min(1, { message: "El nombre es requerido." }),
-  email: z.string().email({ message: "El correo electrónico no es válido." }),
+  email: z.string().email({ message: "El correo electrónico no es válido." }).optional().or(z.literal("")),
   reason: z.string({ required_error: "Debes seleccionar un motivo." }).min(1, { message: "Debes seleccionar un motivo."}),
   message: z.string().min(10, { message: "El mensaje debe tener al menos 10 caracteres." }),
-  attachment: z.any().optional(),
+  attachment: z.any().optional().refine((file: FileList | undefined) => {
+    if (!file || file.length === 0) return true;
+    const actualFile = file[0];
+    return actualFile.size <= MAX_FILE_SIZE;
+  }, {
+    message: "El archivo no puede superar los 5MB.",
+  }).refine((file: FileList | undefined) => {
+    if (!file || file.length === 0) return true;
+    const actualFile = file[0];
+    return ALLOWED_FILE_TYPES.includes(actualFile.type);
+  }, {
+    message: "Formato de archivo no permitido. Usa PDF, PNG, JPG, DOCX o ZIP.",
+  }),
   consent: z.boolean().refine((val) => val === true, {
     message: "Debes aceptar para poder enviar tu consulta.",
   }),
 });
 
-const reasons = [
-  "Consulta general",
-  "Sugerencia o feedback",
-  "Problema técnico / bug",
-  "Incidencia con un usuario",
-  "Denuncia de contenido",
-  "Propuesta de colaboración",
-  "Prensa / medios",
-  "Otro motivo",
-];
-
 export default function Contacto() {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,14 +71,86 @@ export default function Contacto() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Formulario de contacto enviado:", values);
-    toast({
-      title: "¡Mensaje enviado!",
-      description: "Gracias por contactarnos. Te responderemos a la brevedad.",
-      className: "bg-green-100 border-green-400 text-green-800",
-    });
-    form.reset();
+  const uploadFile = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('contact-attachments')
+        .upload(fileName, file);
+
+      if (error) {
+        console.error('Error uploading file:', error);
+        return null;
+      }
+
+      return data.path;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      return null;
+    }
+  };
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    
+    try {
+      let attachmentPath = null;
+      let attachmentInfo = null;
+
+      // Subir archivo si existe
+      if (values.attachment && values.attachment.length > 0) {
+        const file = values.attachment[0];
+        attachmentPath = await uploadFile(file);
+        
+        if (attachmentPath) {
+          attachmentInfo = {
+            attachment_url: attachmentPath,
+            attachment_filename: file.name,
+            attachment_size: file.size,
+            attachment_mime_type: file.type,
+          };
+        }
+      }
+
+      // Crear el contacto en la base de datos
+      const contactData = {
+        full_name: values.fullName,
+        email: values.email || null,
+        reason: values.reason as any,
+        message: values.message,
+        ...attachmentInfo,
+        // Metadatos opcionales
+        user_agent: navigator.userAgent,
+        referrer: document.referrer || null,
+      };
+
+      const { error } = await supabase
+        .from('contacts' as any)
+        .insert([contactData]);
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "¡Mensaje enviado!",
+        description: "Gracias por contactarnos. Te responderemos a la brevedad.",
+        className: "bg-green-100 border-green-400 text-green-800",
+      });
+      
+      form.reset();
+    } catch (error) {
+      console.error('Error submitting contact:', error);
+      toast({
+        title: "Error al enviar",
+        description: "Hubo un problema al enviar tu mensaje. Por favor, intenta de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -104,7 +187,7 @@ export default function Contacto() {
                   name="email"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Correo electrónico</FormLabel>
+                      <FormLabel>Correo electrónico <span className="text-gris-piedra text-sm">(opcional)</span></FormLabel>
                       <FormControl>
                         <Input type="email" placeholder="tu@correo.com" {...field} />
                       </FormControl>
@@ -132,9 +215,14 @@ export default function Contacto() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="bg-white !bg-opacity-100 z-50 shadow-lg border-arena">
-                          {reasons.map((reason) => (
-                            <SelectItem key={reason} value={reason}>
-                              {reason}
+                          {CONTACT_REASON_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              <div>
+                                <div className="font-medium">{option.label}</div>
+                                {option.description && (
+                                  <div className="text-xs text-gris-piedra">{option.description}</div>
+                                )}
+                              </div>
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -202,9 +290,10 @@ export default function Contacto() {
               {/* Submit */}
               <Button 
                 type="submit"
-                className="w-full bg-terra-cotta hover:bg-terra-cotta/90 text-white shadow-card hover:shadow-lg min-h-[44px] text-base rounded-xl"
+                disabled={isSubmitting}
+                className="w-full bg-terra-cotta hover:bg-terra-cotta/90 disabled:bg-gris-piedra text-white shadow-card hover:shadow-lg min-h-[44px] text-base rounded-xl"
               >
-                Enviar mensaje
+                {isSubmitting ? "Enviando..." : "Enviar mensaje"}
               </Button>
             </form>
           </Form>
@@ -213,4 +302,4 @@ export default function Contacto() {
     </>
   );
 }
-// ADVERTENCIA: Este archivo está creciendo demasiado. Te recomiendo pronto refactorizar este formulario en componentes más pequeños y reutilizables.
+// Formulario de contacto completamente funcional con integración a Supabase
