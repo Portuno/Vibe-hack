@@ -3,6 +3,7 @@ import { ProfessionalCard } from "@/components/ProfessionalCard";
 import { ProjectCard } from "@/components/ProjectCard";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/types";
 
@@ -105,12 +106,12 @@ const Index = () => {
         <p className="max-w-lg text-gris-piedra text-center mb-8 animate-fade-in-up text-base sm:text-lg">
           Comparte proyectos, accede a recursos, conecta con talento interdisciplinar y haz crecer tu ecosistema local.
         </p>
-        <a 
-          href="#" 
+        <Link 
+          to="/auth" 
           className="btn-terra mt-2 px-5 py-2 sm:px-8 sm:py-3 text-base sm:text-lg shadow-card block w-full max-w-xs sm:max-w-fit text-center rounded-xl"
         >
           Únete a Terreta Hub
-        </a>
+        </Link>
       </header>
 
       {/* Profesionales destacados */}
@@ -137,12 +138,12 @@ const Index = () => {
                     <span className="inline-block text-mediterraneo text-xs font-semibold px-2 py-0.5 rounded bg-arena shadow">Asistente Virtual</span>
                   </div>
                   <p className="text-sm text-center text-gris-piedra italic mb-2">{prof.bio}</p>
-                  <a
-                    href="/chipi"
+                  <Link
+                    to="/chipi"
                     className="btn-terra w-full px-4 py-2 mt-2 text-sm font-semibold rounded-xl transition"
                   >
                     Chatea conmigo
-                  </a>
+                  </Link>
                 </div>
               </div>
             ) : (

@@ -1,4 +1,3 @@
-
 import { Dialog, DialogHeader, DialogTitle, DialogContent, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,12 +5,99 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const VERTICALS = ["Tecnología", "Derecho", "Finanzas", "Salud", "Arte", "Comunidad", "Innovación"];
 const LEVELS = ["Básico", "Intermedio", "Avanzado"];
 const TYPES = ["Gratuito", "Pago"];
 
-export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void }) {
+type CourseFormData = {
+  name: string;
+  description: string;
+  vertical: string;
+  level: string;
+  type: string;
+  imageFile: File | null;
+};
+
+const createCourse = async ({ name, description, vertical, level, type, imageFile }: CourseFormData) => {
+  console.log("Iniciando proceso de creación de curso...");
+
+  let imagePublicUrl = "";
+  if (imageFile) {
+    console.log("Subiendo imagen:", imageFile.name, "Tamaño:", imageFile.size);
+    
+    // Generar nombre único para el archivo
+    const fileExt = imageFile.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `courses/${fileName}`;
+    
+    console.log("Ruta del archivo:", filePath);
+    
+    const { error: uploadError, data: uploadData } = await supabase.storage
+      .from("avatars")
+      .upload(filePath, imageFile, { upsert: true });
+    
+    console.log("Resultado de upload:", { uploadError, uploadData });
+    
+    if (uploadError) {
+      console.error("Error detallado de upload:", uploadError);
+      throw new Error(`Error al subir imagen: ${uploadError.message}`);
+    }
+    
+    // obtén la URL pública
+    const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
+    imagePublicUrl = data.publicUrl;
+    console.log("URL pública generada:", imagePublicUrl);
+  }
+
+  // obtener id de usuario actual
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  const creator_id = user?.id;
+
+  console.log("Usuario autenticado:", { user: user?.email, creator_id });
+
+  // Si hay error autenticando, mostrarlo
+  if (authError || !creator_id) {
+    console.error("Error de autenticación:", authError);
+    throw new Error("Debes estar logueado para crear un curso");
+  }
+
+  // Insertar curso con los campos correctos
+  console.log("Insertando curso con datos:", {
+    name,
+    description,
+    vertical,
+    level,
+    type,
+    creator_id,
+    url: imagePublicUrl || null,
+    category: vertical
+  });
+
+  const { error, data: insertedData } = await supabase.from("courses").insert({
+    name,
+    description,
+    vertical,
+    level,
+    type,
+    creator_id,
+    url: imagePublicUrl || null,
+    category: vertical,
+  }).select();
+
+  console.log("Resultado de inserción:", { error, insertedData });
+
+  if (error) {
+    console.error("Error al crear curso:", error);
+    throw new Error(`Error al crear curso: ${error.message}`);
+  }
+  
+  console.log("Curso creado exitosamente");
+  return insertedData?.[0];
+};
+
+export function CourseFormDialog() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -20,8 +106,36 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
   const [type, setType] = useState(TYPES[0]);
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const createCourseMutation = useMutation({
+    mutationFn: createCourse,
+    onSuccess: () => {
+      // Invalidar el cache de cursos para que se recarguen automáticamente
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      toast({ 
+        title: "¡Curso publicado!", 
+        description: "Se ha subido tu curso correctamente." 
+      });
+      setOpen(false);
+      // Reset fields
+      setName(""); 
+      setDescription(""); 
+      setLevel(LEVELS[0]); 
+      setVertical(VERTICALS[0]); 
+      setType(TYPES[0]); 
+      setImageFile(null); 
+      setImageUrl("");
+    },
+    onError: (error: Error) => {
+      toast({ 
+        title: "Error al crear curso", 
+        description: error.message, 
+        variant: "destructive" 
+      });
+    },
+  });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -33,104 +147,15 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    console.log("Iniciando proceso de creación de curso...");
-
-    let imagePublicUrl = "";
-    if (imageFile) {
-      console.log("Subiendo imagen:", imageFile.name, "Tamaño:", imageFile.size);
-      
-      // Generar nombre único para el archivo
-      const fileExt = imageFile.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `courses/${fileName}`;
-      
-      console.log("Ruta del archivo:", filePath);
-      
-      const { error: uploadError, data: uploadData } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, imageFile, { upsert: true });
-      
-      console.log("Resultado de upload:", { uploadError, uploadData });
-      
-      if (uploadError) {
-        console.error("Error detallado de upload:", uploadError);
-        toast({ 
-          title: "Error al subir imagen", 
-          description: uploadError.message, 
-          variant: "destructive" 
-        });
-        setLoading(false);
-        return;
-      }
-      
-      // obtén la URL pública
-      const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
-      imagePublicUrl = data.publicUrl;
-      console.log("URL pública generada:", imagePublicUrl);
-    }
-
-    // obtener id de usuario actual
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    const creator_id = user?.id;
-
-    console.log("Usuario autenticado:", { user: user?.email, creator_id });
-
-    // Si hay error autenticando, mostrarlo
-    if (authError || !creator_id) {
-      console.error("Error de autenticación:", authError);
-      toast({ title: "Error de autenticación", description: "Debes estar logueado para crear un curso", variant: "destructive" });
-      setLoading(false);
-      return;
-    }
-
-    // Insertar curso con los campos correctos
-    console.log("Insertando curso con datos:", {
+    
+    createCourseMutation.mutate({
       name,
       description,
       vertical,
       level,
       type,
-      creator_id,
-      url: imagePublicUrl || null,
-      category: vertical
+      imageFile,
     });
-
-    const { error, data: insertedData } = await supabase.from("courses").insert({
-      name,
-      description,
-      vertical,
-      level,
-      type,
-      creator_id,
-      url: imagePublicUrl || null,
-      category: vertical,
-    }).select();
-
-    console.log("Resultado de inserción:", { error, insertedData });
-
-    setLoading(false);
-
-    if (error) {
-      console.error("Error al crear curso:", error);
-      toast({ title: "Error al crear curso", description: error.message, variant: "destructive" });
-      return;
-    }
-    
-    console.log("Curso creado exitosamente");
-    toast({ title: "¡Curso publicado!", description: "Se ha subido tu curso correctamente." });
-    setOpen(false);
-    if (onCourseAdded) onCourseAdded();
-    
-    // Reset fields
-    setName(""); 
-    setDescription(""); 
-    setLevel(LEVELS[0]); 
-    setVertical(VERTICALS[0]); 
-    setType(TYPES[0]); 
-    setImageFile(null); 
-    setImageUrl("");
   };
 
   return (
@@ -177,7 +202,12 @@ export function CourseFormDialog({ onCourseAdded }: { onCourseAdded?: () => void
             {imageUrl && <img src={imageUrl} alt="preview" className="mt-2 w-24 h-24 object-cover rounded" />}
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={loading}>{loading ? "Subiendo..." : "Subir curso"}</Button>
+            <Button 
+              type="submit" 
+              disabled={createCourseMutation.isPending}
+            >
+              {createCourseMutation.isPending ? "Subiendo..." : "Subir curso"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

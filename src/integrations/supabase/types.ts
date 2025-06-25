@@ -39,6 +39,57 @@ export type Database = {
         }
         Relationships: []
       }
+      blogs: {
+        Row: {
+          id: string
+          title: string
+          slug: string
+          content: string
+          excerpt: string | null
+          featured_image: string | null
+          author_id: string
+          status: string
+          tags: string[] | null
+          read_time: number | null
+          views_count: number
+          created_at: string
+          updated_at: string
+          published_at: string | null
+        }
+        Insert: {
+          id?: string
+          title: string
+          slug?: string
+          content: string
+          excerpt?: string | null
+          featured_image?: string | null
+          author_id: string
+          status?: string
+          tags?: string[] | null
+          read_time?: number | null
+          views_count?: number
+          created_at?: string
+          updated_at?: string
+          published_at?: string | null
+        }
+        Update: {
+          id?: string
+          title?: string
+          slug?: string
+          content?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          author_id?: string
+          status?: string
+          tags?: string[] | null
+          read_time?: number | null
+          views_count?: number
+          created_at?: string
+          updated_at?: string
+          published_at?: string | null
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           attachment_url: string | null
@@ -420,7 +471,70 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_blog_views: {
+        Args: {
+          blog_id: string
+        }
+        Returns: undefined
+      }
+      search_blogs: {
+        Args: {
+          search_term: string
+        }
+        Returns: {
+          id: string
+          title: string
+          slug: string
+          content: string
+          excerpt: string | null
+          featured_image: string | null
+          author_id: string
+          status: string
+          tags: string[] | null
+          read_time: number | null
+          views_count: number
+          created_at: string
+          updated_at: string
+          published_at: string | null
+        }[]
+      }
+      get_related_blogs: {
+        Args: {
+          blog_id: string
+          limit_count?: number
+        }
+        Returns: {
+          id: string
+          title: string
+          slug: string
+          content: string
+          excerpt: string | null
+          featured_image: string | null
+          author_id: string
+          status: string
+          tags: string[] | null
+          read_time: number | null
+          views_count: number
+          created_at: string
+          updated_at: string
+          published_at: string | null
+        }[]
+      }
+      get_author_blog_stats: {
+        Args: {
+          author_user_id: string
+        }
+        Returns: Json
+      }
+      get_popular_tags: {
+        Args: {
+          limit_count?: number
+        }
+        Returns: {
+          tag: string
+          count: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

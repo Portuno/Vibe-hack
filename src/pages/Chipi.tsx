@@ -1,34 +1,56 @@
-
 import { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import { ChipiInputPanel } from "@/components/ChipiInputPanel";
+import { ChipiMessage } from "@/components/ChipiMessage";
+import { useAuth } from "@/hooks/useAuth";
+import { useMabot } from "@/hooks/useMabot";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { type MabotMessage, mabotClient } from "@/integrations/mabot/client";
+import { cn } from "@/lib/utils";
+import { Bot, AlertCircle } from "lucide-react";
 
-interface Message {
+interface LegacyMessage {
   from: "chipi" | "user";
   text: string;
 }
 
 export default function Chipi() {
-  const [messages, setMessages] = useState<Message[]>([
+  // Legacy messages for non-authenticated users
+  const [legacyMessages, setLegacyMessages] = useState<LegacyMessage[]>([
     {
       from: "chipi",
       text: "¡Hola! Soy Chipi, tu asistente de Terreta Hub. ¿En qué puedo ayudarte hoy?",
     },
   ]);
-  const [input, setInput] = useState("");
+
+  // Mabot messages for authenticated users
+  const [mabotMessages, setMabotMessages] = useState<MabotMessage[]>([]);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
 
   // Auth and navigation
   const { session } = useAuth();
   const navigate = useNavigate();
 
-  // Track not-authenticated message flow
+  // Mabot integration (now automatic)
+  const {
+    isAuthenticated: isMabotAuth,
+    isLoading: isMabotLoading,
+    error: mabotError,
+    currentBot,
+    sendMessage: sendMabotMessage,
+    sendAudio: sendMabotAudio,
+    sendDocument: sendMabotDocument,
+    clearError: clearMabotError,
+    retryConnection
+  } = useMabot();
+
+  // Track not-authenticated message flow (legacy)
   const [anonMessageCount, setAnonMessageCount] = useState(0);
   const [registrationOpen, setRegistrationOpen] = useState(false);
   const [blocked, setBlocked] = useState(false);
@@ -42,82 +64,197 @@ export default function Chipi() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [legacyMessages, mabotMessages]);
+
+  // Show Mabot error as toast
+  useEffect(() => {
+    if (mabotError) {
+      toast({
+        title: "Error de Chipi",
+        description: mabotError,
+        variant: "destructive"
+      });
+      clearMabotError();
+    }
+  }, [mabotError, toast, clearMabotError]);
+
+  // Initialize Mabot messages when authenticated
+  useEffect(() => {
+    if (isAuthenticated && isMabotAuth && mabotMessages.length === 0) {
+      const welcomeMessage: MabotMessage = {
+        role: "assistant",
+        contents: [{
+          type: "text",
+          value: "¡Hola! Soy Chipi, tu asistente inteligente de Terreta Hub. Ahora puedo ayudarte con funciones avanzadas como audio y documentos. ¿En qué puedo ayudarte hoy? ¡Pío pío!"
+        }]
+      };
+      setMabotMessages([welcomeMessage]);
+    }
+  }, [isAuthenticated, isMabotAuth, mabotMessages.length]);
 
   // On closing modal: if anonymous sends again, Chipi sends last message
   useEffect(() => {
-    // If registration just closed after hitting anonMessageCount>=3
     if (!registrationOpen && !isAuthenticated && anonMessageCount >= 3 && sentFinalPrompt === false) {
-      // block sending new messages and send one last Chipi prompt on next attempt
       setBlocked(true);
       setSentFinalPrompt(false);
     }
   }, [registrationOpen, isAuthenticated, anonMessageCount, sentFinalPrompt]);
 
-  const handleSend = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (blocked && !sentFinalPrompt && !isAuthenticated) {
-      // Show one last chipi message when user tries to send after closing registration
-      setMessages((prev) => [
+  // Handle text message sending
+  const handleSendText = async (text: string) => {
+    if (!isAuthenticated) {
+      // Legacy flow for non-authenticated users
+      handleLegacySend(text);
+      return;
+    }
+
+    // For authenticated users, always try to use Mabot
+    if (!isMabotAuth) {
+      // Show error and suggest retry
+      toast({
+        title: "Chipi no disponible",
+        description: "Hay un problema con la conexión. Intenta de nuevo.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Add user message to chat
+    const userMessage: MabotMessage = mabotClient.createTextMessage(text);
+    setMabotMessages(prev => [...prev, userMessage]);
+
+    // Send to Mabot
+    const response = await sendMabotMessage(text);
+    if (response && response.messages.length > 0) {
+      setMabotMessages(prev => [...prev, ...response.messages]);
+    }
+  };
+
+  // Handle audio message sending
+  const handleSendAudio = async (file: File) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Función Premium",
+        description: "Debes estar registrado para enviar audio.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!isMabotAuth) {
+      toast({
+        title: "Chipi no disponible",
+        description: "Hay un problema con la conexión de IA.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Add user audio message to chat (will be shown with transcription)
+    const userMessage = mabotClient.createAudioMessage(
+      await fileToBase64(file),
+      file.name,
+      file.type,
+      true
+    );
+    setMabotMessages(prev => [...prev, userMessage]);
+
+    // Send to Mabot
+    const response = await sendMabotAudio(file);
+    if (response && response.messages.length > 0) {
+      setMabotMessages(prev => [...prev, ...response.messages]);
+    }
+  };
+
+  // Handle document message sending
+  const handleSendDocument = async (file: File) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Función Premium",
+        description: "Debes estar registrado para enviar documentos.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!isMabotAuth) {
+      toast({
+        title: "Chipi no disponible",
+        description: "Hay un problema con la conexión de IA.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Add user document message to chat
+    const userMessage = mabotClient.createDocumentMessage(
+      await fileToBase64(file),
+      file.name,
+      file.type
+    );
+    setMabotMessages(prev => [...prev, userMessage]);
+
+    // Send to Mabot
+    const response = await sendMabotDocument(file);
+    if (response && response.messages.length > 0) {
+      setMabotMessages(prev => [...prev, ...response.messages]);
+    }
+  };
+
+  // Legacy message handling for non-authenticated users
+  const handleLegacySend = (text: string) => {
+    if (blocked && !sentFinalPrompt) {
+      setLegacyMessages((prev) => [
         ...prev,
         { from: "chipi", text: "chip chip chip (regístrate)" },
       ]);
       setSentFinalPrompt(true);
       return;
     }
-    if (blocked && sentFinalPrompt && !isAuthenticated) {
-      // Do nothing, blocked.
+    if (blocked && sentFinalPrompt) {
       return;
     }
-    if (input.trim()) {
-      setMessages((prev) => [
-        ...prev,
-        { from: "user", text: input },
-      ]);
-      setInput("");
 
-      // If user is not authenticated, track attempts
-      if (!isAuthenticated) {
-        if (anonMessageCount < 2) {
-          setAnonMessageCount((n) => n + 1);
+    setLegacyMessages((prev) => [...prev, { from: "user", text }]);
 
-          setTimeout(() => {
-            setMessages((prev) => [
-              ...prev,
-              {
-                from: "chipi",
-                text:
-                  "¡Gracias por tu mensaje! Pío pío… Estoy en la Terreta investigando tu consulta 🕵️‍♂️. Pronto te respondo aquí.",
-              },
-            ]);
-          }, 1000);
-        } else if (anonMessageCount === 2) {
-          // On the third message, open registration
-          setAnonMessageCount((n) => n + 1);
-          setRegistrationOpen(true);
-        } 
-        // If anonMessageCount >= 3, block handled above.
-        return;
-      }
-
-      // Authenticated users: chipi replies after a delay just as before
+    if (anonMessageCount < 2) {
+      setAnonMessageCount((n) => n + 1);
       setTimeout(() => {
-        setMessages((prev) => [
+        setLegacyMessages((prev) => [
           ...prev,
           {
             from: "chipi",
-            text:
-              "¡Gracias por tu mensaje! Pío pío… Estoy en la Terreta investigando tu consulta 🕵️‍♂️. Pronto te respondo aquí.",
+            text: "¡Gracias por tu mensaje! Pío pío… Estoy en la Terreta investigando tu consulta 🕵️‍♂️. Para funciones avanzadas como IA, audio y documentos, regístrate en Terreta Hub.",
           },
         ]);
       }, 1000);
+    } else if (anonMessageCount === 2) {
+      setAnonMessageCount((n) => n + 1);
+      setRegistrationOpen(true);
     }
+  };
+
+  // Helper function to convert file to base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(',')[1];
+        resolve(base64);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleRegisterRedirect = () => {
     setRegistrationOpen(false);
     navigate("/auth");
   };
+
+  // Determine which messages to show
+  const isUsingMabot = isAuthenticated && isMabotAuth;
 
   return (
     <div className="flex flex-col h-screen bg-crema">
@@ -134,75 +271,154 @@ export default function Chipi() {
             />
             <div className="font-display font-bold text-terra-cotta text-2xl">Chipi</div>
             <p className="text-mediterraneo text-sm mb-1 text-center px-1">
-              Chatbot de Terreta Hub
+              {isUsingMabot ? "Asistente IA Avanzado" : "Chatbot de Terreta Hub"}
             </p>
-            <div className="w-[70%] h-[2px] bg-arena mb-2 rounded" />
-          </div>
-          {/* Mensajes */}
-          <div className="flex-1 overflow-y-auto pr-0 sm:pr-2 space-y-4 pb-2">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={cn("flex w-full", {
-                  "justify-end": message.from === "user",
-                  "justify-start": message.from === "chipi",
-                })}
-              >
-                {message.from === "chipi" ? (
-                  <div className="flex items-end gap-2">
-                    <img
-                      src="/lovable-uploads/cd8f5122-d206-49ff-bf94-0fc1da28a181.png"
-                      alt="Chipi"
-                      className="w-12 h-12 rounded-full border-2 border-terra-cotta shadow bg-white object-cover"
-                      style={{ background: '#fff' }}
-                    />
-                    <div className="bg-white text-negro-suave px-4 py-3 rounded-2xl rounded-tl-sm shadow-card max-w-xs sm:max-w-sm text-sm">
-                      <span className="block whitespace-pre-line">{message.text}</span>
-                    </div>
+            
+            {/* Status indicators */}
+            {isAuthenticated && (
+              <div className="flex items-center gap-1">
+                {isMabotAuth ? (
+                  <div className="flex items-center gap-1 bg-green-100 px-2 py-1 rounded-full">
+                    <Bot className="h-3 w-3 text-green-600" />
+                    <span className="text-xs text-green-700 font-medium">IA Conectada</span>
                   </div>
                 ) : (
-                  <div className="flex items-end gap-2 flex-row-reverse">
-                    <div className="bg-terra-cotta text-white px-4 py-3 rounded-2xl rounded-br-sm shadow-card max-w-xs sm:max-w-sm text-sm text-right">
-                      <span className="block whitespace-pre-line">{message.text}</span>
-                    </div>
+                  <div className="flex items-center gap-1 bg-yellow-100 px-2 py-1 rounded-full">
+                    <AlertCircle className="h-3 w-3 text-yellow-600" />
+                    <span className="text-xs text-yellow-700 font-medium">IA Desconectada</span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-4 px-1 text-xs text-yellow-700 hover:text-yellow-800"
+                      onClick={retryConnection}
+                    >
+                      Reintentar
+                    </Button>
                   </div>
                 )}
               </div>
-            ))}
+            )}
+            
+            <div className="w-[70%] h-[2px] bg-arena mb-2 rounded" />
+          </div>
+
+          {/* Mensajes */}
+          <div className="flex-1 overflow-y-auto pr-0 sm:pr-2 space-y-4 pb-2">
+            {isUsingMabot ? (
+              // Mabot messages
+              mabotMessages.map((message, index) => (
+                <ChipiMessage
+                  key={index}
+                  message={message}
+                  isChipi={message.role === "assistant"}
+                />
+              ))
+            ) : (
+              // Legacy messages
+              legacyMessages.map((message, index) => (
+                <div
+                  key={index}
+                  className={cn("flex w-full", {
+                    "justify-end": message.from === "user",
+                    "justify-start": message.from === "chipi",
+                  })}
+                >
+                  {message.from === "chipi" ? (
+                    <div className="flex items-end gap-2">
+                      <img
+                        src="/lovable-uploads/cd8f5122-d206-49ff-bf94-0fc1da28a181.png"
+                        alt="Chipi"
+                        className="w-12 h-12 rounded-full border-2 border-terra-cotta shadow bg-white object-cover"
+                        style={{ background: '#fff' }}
+                      />
+                      <div className="bg-white text-negro-suave px-4 py-3 rounded-2xl rounded-tl-sm shadow-card max-w-xs sm:max-w-sm text-sm">
+                        <span className="block whitespace-pre-line">{message.text}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-end gap-2 flex-row-reverse">
+                      <div className="bg-terra-cotta text-white px-4 py-3 rounded-2xl rounded-br-sm shadow-card max-w-xs sm:max-w-sm text-sm text-right">
+                        <span className="block whitespace-pre-line">{message.text}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+            
+            {isMabotLoading && (
+              <div className="flex justify-start">
+                <div className="flex items-end gap-2">
+                  <img
+                    src="/lovable-uploads/cd8f5122-d206-49ff-bf94-0fc1da28a181.png"
+                    alt="Chipi"
+                    className="w-12 h-12 rounded-full border-2 border-terra-cotta shadow bg-white object-cover"
+                  />
+                  <div className="bg-white text-negro-suave px-4 py-3 rounded-2xl rounded-tl-sm shadow-card">
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin h-4 w-4 border-2 border-terra-cotta border-t-transparent rounded-full" />
+                      <span className="text-sm">Chipi está pensando...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
             <div ref={messagesEndRef} />
           </div>
-          {/* Formulario de entrada */}
-          <form
-            onSubmit={handleSend}
-            className="mt-2 flex items-center gap-2 p-2 bg-crema rounded-b-2xl"
-          >
-            <Input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Escribe tu mensaje…"
-              className="flex-1 py-3 bg-arena"
+
+          {/* Input Panel */}
+          {isUsingMabot ? (
+            <ChipiInputPanel
+              onSendText={handleSendText}
+              onSendAudio={handleSendAudio}
+              onSendDocument={handleSendDocument}
               disabled={blocked && sentFinalPrompt && !isAuthenticated}
+              isLoading={isMabotLoading}
             />
-            <Button
-              type="submit"
-              size="icon"
-              className="bg-terra-cotta hover:bg-terra-cotta/90"
-              aria-label="Enviar mensaje"
-              disabled={blocked && sentFinalPrompt && !isAuthenticated}
+          ) : (
+            // Legacy input for non-authenticated users
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const text = formData.get('message') as string;
+                if (text?.trim()) {
+                  handleSendText(text.trim());
+                  (e.target as HTMLFormElement).reset();
+                }
+              }}
+              className="mt-2 flex items-center gap-2 p-2 bg-crema rounded-b-2xl"
             >
-              <Send className="h-4 w-4" />
-            </Button>
-          </form>
+              <Input
+                name="message"
+                placeholder="Escribe tu mensaje…"
+                className="flex-1 py-3 bg-arena"
+                disabled={blocked && sentFinalPrompt && !isAuthenticated}
+              />
+              <Button
+                type="submit"
+                size="icon"
+                className="bg-terra-cotta hover:bg-terra-cotta/90"
+                disabled={blocked && sentFinalPrompt && !isAuthenticated}
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              </Button>
+            </form>
+          )}
         </div>
       </main>
+
       {/* Modal de registro para usuarios no logueados */}
       <Dialog open={registrationOpen} onOpenChange={setRegistrationOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>¡Regístrate para seguir chateando!</DialogTitle>
+            <DialogTitle>¡Regístrate para funciones avanzadas!</DialogTitle>
           </DialogHeader>
           <div className="mb-4 text-sm text-negro-suave">
-            Para continuar conversando con Chipi y acceder a todos los recursos de Terreta Hub, por favor crea una cuenta.
+            Para continuar conversando con Chipi y acceder a funciones de IA avanzadas como audio y documentos, por favor crea una cuenta.
           </div>
           <DialogFooter>
             <Button onClick={handleRegisterRedirect} className="bg-terra-cotta hover:bg-terra-cotta/90 w-full">
@@ -216,4 +432,4 @@ export default function Chipi() {
       </Dialog>
     </div>
   );
-}
+} 

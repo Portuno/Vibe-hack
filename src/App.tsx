@@ -16,6 +16,8 @@ import Profesionales from "./pages/Profesionales";
 import PerfilProfesional from "./pages/PerfilProfesional";
 import Cursos from "./pages/Cursos";
 import Blog from "./pages/Blog";
+import BlogEditor from "./pages/BlogEditor";
+import BlogPost from "./pages/BlogPost";
 import SubirProyecto from "./pages/SubirProyecto";
 import CrearEvento from "./pages/CrearEvento";
 import Onboarding from "./pages/Onboarding";
@@ -43,6 +45,9 @@ const App = () => (
           <Route path="/profesionales/:id" element={<PerfilProfesional />} />
           <Route path="/cursos" element={<Cursos />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/nuevo" element={<BlogEditor />} />
+          <Route path="/blog/edit/:id" element={<BlogEditor />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

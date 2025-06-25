@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { ResourceCard, Resource } from "@/components/ResourceCard";
 import { SearchBar } from "@/components/SearchBar";
@@ -7,47 +6,78 @@ import { FormatFilterBar } from "@/components/FormatFilterBar";
 import { ResourceForm } from "@/components/ResourceForm";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const getResources = async (): Promise<Resource[]> => {
+  console.log("Cargando recursos...");
+  
+  // Obtener recursos
+  const { data: resourcesData, error: resourcesError } = await supabase
+    .from("resources")
+    .select(`
+      id, name, description, description_short, resource_type, category, url, created_at, creator_id
+    `)
+    .eq("status", "publicado")
+    .order("created_at", { ascending: false });
+  
+  if (resourcesError) {
+    console.error("Error cargando recursos:", resourcesError);
+    throw new Error(resourcesError.message);
+  }
+
+  if (!resourcesData || resourcesData.length === 0) return [];
+
+  // Obtener los IDs únicos de creadores
+  const creatorIds = [...new Set(resourcesData.map(resource => resource.creator_id))].filter(Boolean);
+  
+  let profilesData = [];
+  if (creatorIds.length > 0) {
+    // Obtener perfiles profesionales
+    const { data: profiles, error: profilesError } = await supabase
+      .from("professional_profiles")
+      .select("user_id, name, avatar_url")
+      .in("user_id", creatorIds);
+    
+    if (profilesError) {
+      console.error("Error cargando perfiles:", profilesError);
+      // No lanzar error, usar datos por defecto
+    } else {
+      profilesData = profiles || [];
+    }
+  }
+
+  // Crear un mapa de perfiles para búsqueda rápida
+  const profilesMap = new Map(
+    profilesData.map(profile => [profile.user_id, profile])
+  );
+
+  console.log("Datos de recursos:", resourcesData);
+  console.log("Datos de perfiles:", profilesData);
+
+  return resourcesData.map((r: any) => {
+    const profile = profilesMap.get(r.creator_id);
+    
+    return {
+      ...r,
+      tags: [], // Por ahora tags vacío hasta que se agregue la columna
+      author: {
+        name: profile?.name ?? "Sin nombre",
+        avatar_url: profile?.avatar_url ?? undefined
+      }
+    };
+  });
+};
 
 export default function Recursos() {
-  const [resources, setResources] = useState<Resource[]>([]);
   const [search, setSearch] = useState("");
   const [format, setFormat] = useState("todos");
   const [openForm, setOpenForm] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  const reload = async () => {
-    setLoading(true);
-    console.log("Cargando recursos...");
-    const { data, error } = await supabase
-      .from("resources")
-      .select(`
-        id, name, description, description_short, resource_type, category, url, created_at,
-        profiles:creator_id ( name, avatar_url )
-      `)
-      .eq("status", "publicado")
-      .order("created_at", { ascending: false });
-    
-    console.log("Datos de recursos:", data);
-    console.log("Error al cargar recursos:", error);
-    
-    setLoading(false);
-    if (!error && data) {
-      setResources(
-        data.map((r: any) => ({
-          ...r,
-          tags: [], // Por ahora tags vacío hasta que se agregue la columna
-          author: {
-            name: r.profiles?.name ?? "Sin nombre",
-            avatar_url: r.profiles?.avatar_url ?? undefined
-          }
-        }))
-      );
-    }
-  };
-
-  useEffect(() => {
-    reload();
-  }, []);
+  const { data: resources = [], isLoading, isError, error } = useQuery({
+    queryKey: ["resources"],
+    queryFn: getResources,
+  });
 
   const filtered = resources.filter(r => {
     const matchFormat = format === "todos" || (r.resource_type ?? "").toLowerCase() === format;
@@ -59,6 +89,10 @@ export default function Recursos() {
     ).toLowerCase();
     return matchFormat && searchText.includes(search.toLowerCase());
   });
+
+  if (isError) {
+    console.error("Error en query de recursos:", error);
+  }
 
   return (
     <>
@@ -98,9 +132,20 @@ export default function Recursos() {
 
       {/* Listado de recursos */}
       <section className="container mx-auto pt-6 pb-12 animate-fade-in-up">
-        {loading ? (
-          <div className="flex justify-center items-center py-16 text-lg text-gris-piedra">
-            Cargando recursos...
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-2">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="h-48 w-full rounded-xl" />
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </div>
+            ))}
+          </div>
+        ) : isError ? (
+          <div className="flex justify-center items-center py-16 text-lg text-red-500">
+            Error al cargar los recursos. Por favor, intenta de nuevo más tarde.
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex justify-center items-center py-16 text-lg text-gris-piedra">
@@ -114,10 +159,10 @@ export default function Recursos() {
       </section>
 
       {/* Modal para crear recurso */}
-      <ResourceForm open={openForm} onOpenChange={(v) => {
-        setOpenForm(v);
-        if (!v) reload();
-      }} onCreated={reload} />
+      <ResourceForm 
+        open={openForm} 
+        onOpenChange={(v) => setOpenForm(v)} 
+      />
     </>
   );
 }

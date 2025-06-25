@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,26 +22,32 @@ export default function Auth() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { session, onboardingRequired, profile, loading: authLoading } = useAuth();
 
   // Ref para evitar doble navegación
   const [hasCheckedOnboarding, setHasCheckedOnboarding] = useState(false);
+  
+  // Obtener la URL de redirect de los parámetros de búsqueda
+  const redirectTo = searchParams.get("redirect") || "/";
 
   useEffect(() => {
     // Si no está cargando el auth y hay sesión
     if (!authLoading && session && onboardingRequired && !hasCheckedOnboarding) {
       setHasCheckedOnboarding(true);
-      navigate("/onboarding", { replace: true });
+      // Pasar el redirect al onboarding también
+      const onboardingUrl = redirectTo !== "/" ? `/onboarding?redirect=${encodeURIComponent(redirectTo)}` : "/onboarding";
+      navigate(onboardingUrl, { replace: true });
     } else if (!authLoading && session && !onboardingRequired && !hasCheckedOnboarding) {
       setHasCheckedOnboarding(true);
-      navigate("/", { replace: true });
+      navigate(redirectTo, { replace: true });
     }
     // Si se destruye el componente (logout, etc), resetea el flag
     if (!session) {
       setHasCheckedOnboarding(false);
     }
-  }, [session, onboardingRequired, authLoading, navigate, hasCheckedOnboarding]);
+  }, [session, onboardingRequired, authLoading, navigate, hasCheckedOnboarding, redirectTo]);
 
   // Si el perfil recién se cargó después y no se chequeó aún, chequea de nuevo
   useEffect(() => {

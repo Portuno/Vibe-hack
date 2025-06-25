@@ -2,14 +2,18 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { VERTICALES, INTERESES } from "@/constants/onboarding";
 
 // Hook para manejar todo el estado y lógica del onboarding
 export function useOnboardingState() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { session, profile, loading } = useAuth();
+  
+  // Obtener la URL de redirect de los parámetros de búsqueda
+  const redirectTo = searchParams.get("redirect") || "/";
 
   // Slides: 0 = bienvenida, 1 = nombre, etc
   const [slide, setSlide] = useState(0);
@@ -22,7 +26,7 @@ export function useOnboardingState() {
 
   useEffect(() => {
     if (!loading && profile && profile.display_name && profile.headline && profile.vertical && profile.skills && profile.what_i_am_looking_for && profile.bio) {
-      navigate("/");
+      navigate(redirectTo);
     }
     if (!loading && !session) {
       navigate("/auth");
@@ -33,7 +37,7 @@ export function useOnboardingState() {
       setVerticales(profile.skills || []);
       setBio(profile.bio || "");
     }
-  }, [profile, loading, session, navigate]);
+  }, [profile, loading, session, navigate, redirectTo]);
 
   function slideValidation() {
     // Slide 2 (nombre visible) obligatorio
@@ -94,7 +98,7 @@ export function useOnboardingState() {
         title: "¡Perfecto!",
         description: "Tu perfil inicial ha sido creado.",
       });
-      navigate("/");
+      navigate(redirectTo);
     } catch (error: any) {
       toast({
         title: "No se pudo completar el onboarding",

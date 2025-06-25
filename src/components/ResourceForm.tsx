@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogHeader, DialogFooter, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -6,17 +5,52 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 
 const RESOURCE_TYPES = [
   "video", "artículo", "podcast", "guía", "documento", "tool", "plantilla"
 ];
 
-export function ResourceForm({ open, onOpenChange, onCreated }: {
+type ResourceFormData = {
+  name: string;
+  description: string;
+  description_short: string;
+  resource_type: string;
+  category: string;
+  url: string;
+};
+
+const createResource = async (formData: ResourceFormData) => {
+  // Obtener el usuario actual
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  
+  if (authError || !user) {
+    throw new Error("Debes estar logueado para crear un recurso");
+  }
+
+  const { error, data } = await supabase.from("resources").insert([{
+    name: formData.name,
+    description: formData.description,
+    description_short: formData.description_short,
+    resource_type: formData.resource_type,
+    category: formData.category,
+    url: formData.url,
+    creator_id: user.id,
+    status: "publicado"
+  }]).select();
+
+  if (error) {
+    throw new Error(`Error al crear recurso: ${error.message}`);
+  }
+
+  return data?.[0];
+};
+
+export function ResourceForm({ open, onOpenChange }: {
   open: boolean,
   onOpenChange: (v: boolean) => void,
-  onCreated?: () => void
 }) {
-  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -27,36 +61,54 @@ export function ResourceForm({ open, onOpenChange, onCreated }: {
     url: ""
   });
 
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const createResourceMutation = useMutation({
+    mutationFn: createResource,
+    onSuccess: () => {
+      // Invalidar el cache de recursos para que se recarguen automáticamente
+      queryClient.invalidateQueries({ queryKey: ["resources"] });
+      toast({
+        title: "¡Recurso agregado!",
+        description: "El recurso se ha añadido correctamente.",
+      });
+      onOpenChange(false);
+      // Reset form
+      setForm({
+        name: "",
+        description: "",
+        description_short: "",
+        resource_type: "",
+        category: "",
+        tags: "",
+        url: ""
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error al crear recurso",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    // Procesar tags (separar por coma, quitar espacios etc)
-    // let tags = form.tags.split(",").map(t => t.trim()).filter(Boolean);
-    // Eliminar por completo el uso de tags ya que la tabla no la soporta
-
-    const { error } = await supabase.from("resources").insert([{
+    
+    createResourceMutation.mutate({
       name: form.name,
       description: form.description,
       description_short: form.description_short,
       resource_type: form.resource_type,
       category: form.category,
-      // tags: tags, // ELIMINADO: la tabla no soporta esta columna
       url: form.url,
-      creator_id: "f2317142-17c1-4b12-817a-853b03645398", // temp id
-      status: "publicado"
-    }]);
-    setLoading(false);
-    if (!error) {
-      onOpenChange(false);
-      onCreated?.();
-    } else {
-      alert("Error al subir recurso: " + error.message);
-    }
+    });
   };
 
   return (
@@ -105,8 +157,11 @@ export function ResourceForm({ open, onOpenChange, onCreated }: {
           </div>
           <DialogFooter>
             <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>Cancelar</Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Subiendo..." : "Agregar recurso"}
+            <Button 
+              type="submit" 
+              disabled={createResourceMutation.isPending}
+            >
+              {createResourceMutation.isPending ? "Subiendo..." : "Agregar recurso"}
             </Button>
           </DialogFooter>
         </form>
