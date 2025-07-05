@@ -24,6 +24,14 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { toast } from "sonner";
 
+type ResourceAuthor = {
+  name: string;
+  avatar_url?: string;
+  bio?: string;
+  headline?: string;
+  user_id?: string;
+};
+
 const ICONS: Record<string, JSX.Element> = {
   "video": <Video className="text-mediterraneo w-8 h-8" />,
   "artículo": <BookOpen className="text-mediterraneo w-8 h-8" />,
@@ -47,7 +55,7 @@ const getResourceById = async (id: string): Promise<Resource> => {
   }
 
   // Obtener información del autor
-  let author = { name: "Sin nombre", avatar_url: undefined };
+  let author: ResourceAuthor = { name: "Sin nombre", avatar_url: undefined };
   
   if (resourceData.creator_id) {
     const { data: profile } = await supabase

@@ -170,6 +170,7 @@ export default function BlogEditor() {
             status: blogData.status,
             tags: blogData.tags,
             author_id: blogData.author_id,
+            slug: '', // Proporcionar slug vacío - será reemplazado por el trigger
           })
           .select()
           .single();
