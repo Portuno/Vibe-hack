@@ -1,3 +1,4 @@
+
 import Navbar from "@/components/Navbar";
 import { ProfessionalCard } from "@/components/ProfessionalCard";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -131,51 +132,53 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-crema flex flex-col">
       <Navbar />
-      <header className="mb-10 flex flex-col items-center justify-center px-3 sm:px-0 w-full bg-gradient-to-b from-arena/50 to-crema pt-7 pb-6">
-        <h1 className="text-5xl sm:text-6xl md:text-7xl font-display font-bold text-terra-cotta drop-shadow-sm leading-tight mb-4 animate-fade-in-up text-center">
+      <header className="mb-8 flex flex-col items-center justify-center px-4 w-full bg-gradient-to-b from-arena/50 to-crema pt-8 pb-8">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-terra-cotta drop-shadow-sm leading-tight mb-4 animate-fade-in-up text-center max-w-4xl">
           Terreta Hub
         </h1>
-        <p className="max-w-xl text-lg sm:text-2xl text-mediterraneo font-medium text-center mb-2 animate-fade-in-up">
-          Comunidad colaborativa para creativos, profesionales y makers de Valencia. 
+        <p className="max-w-2xl text-base sm:text-lg md:text-xl lg:text-2xl text-mediterraneo font-medium text-center mb-3 animate-fade-in-up px-2">
+          Comunidad colaborativa para creativos, profesionales y makers de Valencia
         </p>
-        <p className="max-w-lg text-gris-piedra text-center mb-8 animate-fade-in-up text-base sm:text-lg">
-          Comparte proyectos, accede a recursos, conecta con talento interdisciplinar y haz crecer tu ecosistema local.
+        <p className="max-w-xl text-sm sm:text-base md:text-lg text-gris-piedra text-center mb-6 animate-fade-in-up px-4 leading-relaxed">
+          Comparte proyectos, accede a recursos, conecta con talento interdisciplinar y haz crecer tu ecosistema local
         </p>
         <Link 
           to="/auth" 
-          className="btn-terra mt-2 px-5 py-2 sm:px-8 sm:py-3 text-base sm:text-lg shadow-card block w-full max-w-xs sm:max-w-fit text-center rounded-xl"
+          className="btn-terra mt-2 px-6 py-3 text-base font-semibold shadow-card block w-full max-w-xs text-center rounded-xl hover:shadow-lg transition-all"
         >
           Únete a Terreta Hub
         </Link>
       </header>
 
       {/* Profesionales destacados */}
-      <section className="container mx-auto mb-10 px-2">
-        <h2 className="font-display text-2xl sm:text-3xl text-negro-suave mb-4 sm:mb-6 tracking-tight">
+      <section className="container mx-auto mb-8 px-4">
+        <h2 className="font-display text-xl sm:text-2xl md:text-3xl text-negro-suave mb-6 tracking-tight text-center sm:text-left">
           Profesionales destacados
         </h2>
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {profesionales.map((prof) =>
             prof.id === "chipi" ? (
               <div
                 key="chipi"
-                className="relative group"
+                className="relative group w-full"
               >
-                <div className="bg-gradient-to-br from-white via-arena/70 to-arena/40 card-fade-in p-5 rounded-2xl card-shadow flex flex-col gap-3 w-full max-w-sm shadow-lg border border-arena">
-                  <div className="flex flex-col items-center gap-4">
+                <div className="bg-gradient-to-br from-white via-arena/70 to-arena/40 card-fade-in p-6 rounded-2xl card-shadow flex flex-col gap-4 w-full shadow-lg border border-arena min-h-[320px]">
+                  <div className="flex flex-col items-center gap-4 flex-1">
                     <img
                       src={prof.avatar_url}
                       alt="Chipi"
-                      className="rounded-full w-20 h-20 border-4 border-terra-cotta shadow-lg bg-white object-cover mb-1"
+                      className="rounded-full w-16 h-16 sm:w-20 sm:h-20 border-4 border-terra-cotta shadow-lg bg-white object-cover"
                       style={{ background: "#fff" }}
                     />
-                    <span className="font-display text-xl font-bold text-terra-cotta">Chipi</span>
-                    <span className="inline-block text-mediterraneo text-xs font-semibold px-2 py-0.5 rounded bg-arena shadow">Asistente Virtual</span>
+                    <span className="font-display text-lg sm:text-xl font-bold text-terra-cotta text-center">Chipi</span>
+                    <span className="inline-block text-mediterraneo text-xs font-semibold px-3 py-1 rounded-full bg-arena shadow">
+                      Asistente Virtual
+                    </span>
                   </div>
-                  <p className="text-sm text-center text-gris-piedra italic mb-2">{prof.bio}</p>
+                  <p className="text-sm text-center text-gris-piedra italic mb-3 leading-relaxed">{prof.bio}</p>
                   <Link
                     to="/chipi"
-                    className="btn-terra w-full px-4 py-2 mt-2 text-sm font-semibold rounded-xl transition"
+                    className="btn-terra w-full px-4 py-3 text-sm font-semibold rounded-xl transition-all hover:shadow-md"
                   >
                     Chatea conmigo
                   </Link>
@@ -189,16 +192,16 @@ const Index = () => {
       </section>
 
       {/* Proyectos inspiradores */}
-      <section className="container mx-auto mb-10 px-2">
-        <h2 className="font-display text-2xl sm:text-3xl text-negro-suave mb-4 sm:mb-6 tracking-tight">
+      <section className="container mx-auto mb-8 px-4">
+        <h2 className="font-display text-xl sm:text-2xl md:text-3xl text-negro-suave mb-6 tracking-tight text-center sm:text-left">
           Proyectos inspiradores
         </h2>
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-7">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
             <>
-              <div className="bg-arena animate-pulse h-[270px] rounded-2xl" />
-              <div className="bg-arena animate-pulse h-[270px] rounded-2xl" />
-              <div className="bg-arena animate-pulse h-[270px] rounded-2xl" />
+              <div className="bg-arena animate-pulse h-[280px] rounded-2xl" />
+              <div className="bg-arena animate-pulse h-[280px] rounded-2xl" />
+              <div className="bg-arena animate-pulse h-[280px] rounded-2xl" />
             </>
           ) : (
             proyectos.map((proj) => (
@@ -223,7 +226,7 @@ const Index = () => {
       {/* Newsletter */}
       <NewsletterSignup />
 
-      <footer className="text-center text-xs text-gris-piedra font-medium pb-8 pt-10">
+      <footer className="text-center text-xs text-gris-piedra font-medium pb-8 pt-10 px-4">
         Terreta Hub © {new Date().getFullYear()} &ndash; Comunidad Valenciana
       </footer>
     </div>

@@ -41,54 +41,122 @@ export type Database = {
       }
       blogs: {
         Row: {
-          id: string
-          title: string
-          slug: string
+          author_id: string
           content: string
+          created_at: string | null
           excerpt: string | null
           featured_image: string | null
-          author_id: string
-          status: string
-          tags: string[] | null
-          read_time: number | null
-          views_count: number
-          created_at: string
-          updated_at: string
+          id: string
           published_at: string | null
+          read_time: number | null
+          slug: string
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          views_count: number | null
         }
         Insert: {
-          id?: string
-          title: string
-          slug?: string
+          author_id: string
           content: string
+          created_at?: string | null
           excerpt?: string | null
           featured_image?: string | null
-          author_id: string
-          status?: string
-          tags?: string[] | null
-          read_time?: number | null
-          views_count?: number
-          created_at?: string
-          updated_at?: string
+          id?: string
           published_at?: string | null
+          read_time?: number | null
+          slug: string
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          views_count?: number | null
         }
         Update: {
-          id?: string
-          title?: string
-          slug?: string
+          author_id?: string
           content?: string
+          created_at?: string | null
           excerpt?: string | null
           featured_image?: string | null
-          author_id?: string
-          status?: string
-          tags?: string[] | null
-          read_time?: number | null
-          views_count?: number
-          created_at?: string
-          updated_at?: string
+          id?: string
           published_at?: string | null
+          read_time?: number | null
+          slug?: string
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          views_count?: number | null
         }
         Relationships: []
+      }
+      chipi_conversations: {
+        Row: {
+          created_at: string | null
+          id: string
+          mabot_chat_id: string | null
+          session_id: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          mabot_chat_id?: string | null
+          session_id: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          mabot_chat_id?: string | null
+          session_id?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      chipi_messages: {
+        Row: {
+          content_metadata: Json | null
+          content_text: string | null
+          content_type: string
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          mabot_message_id: string | null
+          role: string
+        }
+        Insert: {
+          content_metadata?: Json | null
+          content_text?: string | null
+          content_type: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          mabot_message_id?: string | null
+          role: string
+        }
+        Update: {
+          content_metadata?: Json | null
+          content_text?: string | null
+          content_type?: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          mabot_message_id?: string | null
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chipi_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chipi_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contact_messages: {
         Row: {
@@ -120,6 +188,72 @@ export type Database = {
           id?: string
           message?: string
           reason?: string
+        }
+        Relationships: []
+      }
+      contacts: {
+        Row: {
+          assigned_to: string | null
+          attachment_filename: string | null
+          attachment_mime_type: string | null
+          attachment_size: number | null
+          attachment_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string
+          id: string
+          internal_notes: string | null
+          ip_address: unknown | null
+          message: string
+          priority: string | null
+          reason: Database["public"]["Enums"]["contact_reason"]
+          referrer: string | null
+          response_sent_at: string | null
+          status: string | null
+          updated_at: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          attachment_filename?: string | null
+          attachment_mime_type?: string | null
+          attachment_size?: number | null
+          attachment_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          internal_notes?: string | null
+          ip_address?: unknown | null
+          message: string
+          priority?: string | null
+          reason: Database["public"]["Enums"]["contact_reason"]
+          referrer?: string | null
+          response_sent_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          attachment_filename?: string | null
+          attachment_mime_type?: string | null
+          attachment_size?: number | null
+          attachment_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          internal_notes?: string | null
+          ip_address?: unknown | null
+          message?: string
+          priority?: string | null
+          reason?: Database["public"]["Enums"]["contact_reason"]
+          referrer?: string | null
+          response_sent_at?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
         }
         Relationships: []
       }
@@ -471,73 +605,83 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      increment_blog_views: {
-        Args: {
-          blog_id: string
-        }
-        Returns: undefined
+      calculate_read_time: {
+        Args: { content: string }
+        Returns: number
       }
-      search_blogs: {
-        Args: {
-          search_term: string
-        }
-        Returns: {
-          id: string
-          title: string
-          slug: string
-          content: string
-          excerpt: string | null
-          featured_image: string | null
-          author_id: string
-          status: string
-          tags: string[] | null
-          read_time: number | null
-          views_count: number
-          created_at: string
-          updated_at: string
-          published_at: string | null
-        }[]
-      }
-      get_related_blogs: {
-        Args: {
-          blog_id: string
-          limit_count?: number
-        }
-        Returns: {
-          id: string
-          title: string
-          slug: string
-          content: string
-          excerpt: string | null
-          featured_image: string | null
-          author_id: string
-          status: string
-          tags: string[] | null
-          read_time: number | null
-          views_count: number
-          created_at: string
-          updated_at: string
-          published_at: string | null
-        }[]
+      generate_slug: {
+        Args: { title: string }
+        Returns: string
       }
       get_author_blog_stats: {
-        Args: {
-          author_user_id: string
-        }
+        Args: { author_user_id: string }
+        Returns: Json
+      }
+      get_contact_stats: {
+        Args: Record<PropertyKey, never>
         Returns: Json
       }
       get_popular_tags: {
-        Args: {
-          limit_count?: number
-        }
+        Args: { limit_count?: number }
         Returns: {
           tag: string
           count: number
         }[]
       }
+      get_related_blogs: {
+        Args: { blog_id: string; limit_count?: number }
+        Returns: {
+          author_id: string
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          published_at: string | null
+          read_time: number | null
+          slug: string
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          views_count: number | null
+        }[]
+      }
+      increment_blog_views: {
+        Args: { blog_id: string }
+        Returns: undefined
+      }
+      search_blogs: {
+        Args: { search_term: string }
+        Returns: {
+          author_id: string
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          published_at: string | null
+          read_time: number | null
+          slug: string
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          views_count: number | null
+        }[]
+      }
     }
     Enums: {
-      [_ in never]: never
+      contact_reason:
+        | "consulta_general"
+        | "soporte_tecnico"
+        | "propuesta_colaboracion"
+        | "reportar_problema"
+        | "sugerencia_mejora"
+        | "solicitar_evento"
+        | "partnership"
+        | "prensa_media"
+        | "otro"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -652,6 +796,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      contact_reason: [
+        "consulta_general",
+        "soporte_tecnico",
+        "propuesta_colaboracion",
+        "reportar_problema",
+        "sugerencia_mejora",
+        "solicitar_evento",
+        "partnership",
+        "prensa_media",
+        "otro",
+      ],
+    },
   },
 } as const
