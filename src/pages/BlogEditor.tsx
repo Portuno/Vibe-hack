@@ -145,7 +145,14 @@ export default function BlogEditor() {
       if (isEditing) {
         const { data: updatedBlog, error } = await supabase
           .from("blogs")
-          .update(blogData)
+          .update({
+            title: blogData.title,
+            content: blogData.content,
+            excerpt: blogData.excerpt,
+            featured_image: blogData.featured_image,
+            status: blogData.status,
+            tags: blogData.tags,
+          })
           .eq("id", id)
           .select()
           .single();
@@ -155,7 +162,15 @@ export default function BlogEditor() {
       } else {
         const { data: newBlog, error } = await supabase
           .from("blogs")
-          .insert(blogData)
+          .insert({
+            title: blogData.title,
+            content: blogData.content,
+            excerpt: blogData.excerpt,
+            featured_image: blogData.featured_image,
+            status: blogData.status,
+            tags: blogData.tags,
+            author_id: blogData.author_id,
+          })
           .select()
           .single();
 
@@ -541,4 +556,4 @@ export default function BlogEditor() {
       </div>
     </>
   );
-} 
+}

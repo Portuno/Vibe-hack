@@ -207,6 +207,7 @@ const Index = () => {
             proyectos.map((proj) => (
               <ProjectCard
                 key={proj.id}
+                id={proj.id}
                 name={proj.name}
                 description={proj.description}
                 vertical={proj.vertical}

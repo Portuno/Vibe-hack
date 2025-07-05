@@ -78,9 +78,18 @@ export const blogApi = {
 
   // Crear un nuevo blog
   createBlog: async (blogData: BlogFormData & { author_id: string }) => {
+    // No incluir slug en los datos - se genera automáticamente por trigger
     const { data, error } = await supabase
       .from("blogs")
-      .insert(blogData)
+      .insert({
+        title: blogData.title,
+        content: blogData.content,
+        excerpt: blogData.excerpt || null,
+        featured_image: blogData.featured_image || null,
+        status: blogData.status,
+        tags: blogData.tags,
+        author_id: blogData.author_id,
+      })
       .select()
       .single();
 
@@ -93,9 +102,18 @@ export const blogApi = {
 
   // Actualizar un blog existente
   updateBlog: async (id: string, blogData: Partial<BlogFormData>) => {
+    const updateData: any = {};
+    
+    if (blogData.title !== undefined) updateData.title = blogData.title;
+    if (blogData.content !== undefined) updateData.content = blogData.content;
+    if (blogData.excerpt !== undefined) updateData.excerpt = blogData.excerpt || null;
+    if (blogData.featured_image !== undefined) updateData.featured_image = blogData.featured_image || null;
+    if (blogData.status !== undefined) updateData.status = blogData.status;
+    if (blogData.tags !== undefined) updateData.tags = blogData.tags;
+
     const { data, error } = await supabase
       .from("blogs")
-      .update(blogData)
+      .update(updateData)
       .eq("id", id)
       .select()
       .single();
@@ -340,4 +358,4 @@ export const usePopularTags = (limit?: number) => {
     queryKey: ["popular-tags", limit],
     queryFn: () => blogApi.getPopularTags(limit),
   });
-}; 
+};
