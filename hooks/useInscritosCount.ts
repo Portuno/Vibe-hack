@@ -20,27 +20,43 @@ export const useInscritosCount = () => {
 
       try {
         console.log('Fetching inscritos count...')
+        console.log('Supabase client:', supabase)
         
-        // Fetch del conteo total
+        // Verificar qué tablas existen
+        const { data: tables, error: tablesError } = await supabase!
+          .from('information_schema.tables')
+          .select('table_name')
+          .eq('table_schema', 'public')
+        
+        console.log('Available tables:', tables, 'Error:', tablesError)
+        
+        // Verificar que podemos hacer una consulta simple
+        const { data: testData, error: testError } = await supabase!
+          .from('hackathon_registrations')
+          .select('id')
+          .limit(1)
+        
+        console.log('Test query result:', { testData, testError })
+        
+        // Fetch del conteo total - usando la estructura real de la tabla
         const { count: totalRegistrations, error: countError } = await supabase!
           .from('hackathon_registrations')
           .select('*', { count: 'exact', head: true })
 
-        if (countError) throw countError
+        if (countError) {
+          console.error('Count error:', countError)
+          throw countError
+        }
 
         console.log('Total registrations:', totalRegistrations)
 
-        // Fetch del conteo confirmado
-        const { count: confirmedRegistrations, error: confirmedError } = await supabase!
-          .from('hackathon_registrations')
-          .select('*', { count: 'exact', head: true })
-          .eq('registration_status', 'confirmed')
-
-        if (confirmedError) throw confirmedError
+        // Como no hay campo status, todos los registros se consideran confirmados
+        // O podemos filtrar por algún otro criterio si es necesario
+        const confirmedRegistrations = totalRegistrations
 
         console.log('Confirmed registrations:', confirmedRegistrations)
 
-        // count = total, totalCount = confirmed
+        // count = total, totalCount = confirmed (que es igual al total en este caso)
         setCount(totalRegistrations || 0)
         setTotalCount(confirmedRegistrations || 0)
         

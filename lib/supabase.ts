@@ -1,10 +1,23 @@
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
-const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
+const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
+
+console.log('Supabase config:', {
+  url: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : 'undefined',
+  key: supabaseKey ? `${supabaseKey.substring(0, 20)}...` : 'undefined',
+  hasUrl: !!supabaseUrl,
+  hasKey: !!supabaseKey
+})
 
 // Solo crear el cliente si tenemos las variables de entorno
-export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null
+export const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
+
+if (supabase) {
+  console.log('Supabase client created successfully')
+} else {
+  console.warn('Supabase client not created - missing environment variables')
+}
 
 // Types for our database tables
 export interface Sponsor {
