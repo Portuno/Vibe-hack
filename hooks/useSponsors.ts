@@ -13,6 +13,13 @@ export const useSponsors = () => {
   useEffect(() => {
     const fetchSponsors = async () => {
       try {
+        // Verificar que tenemos el cliente de Supabase
+        if (!supabase) {
+          setError('Sistema de sponsors no disponible en este momento')
+          setLoading(false)
+          return
+        }
+
         setLoading(true)
         
         // Obtener sponsors desde Supabase

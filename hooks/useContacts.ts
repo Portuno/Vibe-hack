@@ -18,9 +18,11 @@ interface ContactResponse {
 }
 
 // Crear cliente de Supabase
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
+const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
+
+// Solo crear el cliente si tenemos las variables de entorno
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
 
 export const useContacts = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -28,6 +30,16 @@ export const useContacts = () => {
   const [success, setSuccess] = useState(false)
 
   const submitContact = async (data: ContactData): Promise<ContactResponse> => {
+    // Verificar que tenemos el cliente de Supabase
+    if (!supabase) {
+      const errorMessage = 'Sistema de contactos no disponible en este momento'
+      setError(errorMessage)
+      return {
+        success: false,
+        error: errorMessage
+      }
+    }
+
     setIsLoading(true)
     setError(null)
     setSuccess(false)
