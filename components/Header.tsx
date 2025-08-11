@@ -1,0 +1,157 @@
+'use client'
+
+import Link from 'next/link'
+import { useState } from 'react'
+import { Zap, Rocket, Users, Calendar, Heart, Book, Menu, X } from 'lucide-react'
+import OnboardingTrigger from './OnboardingTrigger'
+
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showAgendaTooltip, setShowAgendaTooltip] = useState(false)
+
+  const navigationItems = [
+    { name: 'Hackathon', href: '/hackathon', icon: Rocket },
+    { name: 'Sponsors', href: '/sponsors', icon: Users },
+    { name: 'Agenda', href: '/agenda', icon: Calendar, isComingSoon: true },
+    { name: 'Comunidad', href: '/comunidad', icon: Heart },
+    { name: 'Recursos', href: '/recursos', icon: Book },
+  ]
+
+  const handleToggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          <Link href="/" className="flex items-center space-x-2">
+            <Zap className="h-8 w-8 text-primary-600" />
+            <span className="text-xl font-bold text-gray-900">VibeHack</span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            {navigationItems.map((item) => {
+              // Validar que el icono existe antes de renderizarlo
+              if (!item.icon) {
+                console.warn(`Icon not found for navigation item: ${item.name}`)
+                return null
+              }
+              
+              const Icon = item.icon
+              
+              // Renderizado especial para Agenda
+              if (item.isComingSoon) {
+                return (
+                  <div
+                    key={item.name}
+                    className="relative"
+                    onMouseEnter={() => setShowAgendaTooltip(true)}
+                    onMouseLeave={() => setShowAgendaTooltip(false)}
+                  >
+                    <Link
+                      href={item.href}
+                      className="flex items-center space-x-1 text-gray-400 hover:text-gray-500 transition-colors duration-200 cursor-not-allowed"
+                    >
+                      <Icon className="h-4 w-4" />
+                      <span>{item.name}</span>
+                    </Link>
+                    
+                    {/* Tooltip */}
+                    {showAgendaTooltip && (
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg whitespace-nowrap z-50">
+                        ¡Más información pronto!
+                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-1 w-2 h-2 bg-gray-800 rotate-45"></div>
+                      </div>
+                    )}
+                  </div>
+                )
+              }
+              
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="flex items-center space-x-1 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+                >
+                  <Icon className="h-4 w-4" />
+                  <span>{item.name}</span>
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* Desktop CTA Button */}
+          <div className="hidden md:block">
+            <OnboardingTrigger size="lg">
+              ¡Inscríbete Ahora!
+            </OnboardingTrigger>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={handleToggleMenu}
+            className="md:hidden p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-md">
+            <nav className="py-4 space-y-2">
+              {navigationItems.map((item) => {
+                if (!item.icon) {
+                  console.warn(`Icon not found for navigation item: ${item.name}`)
+                  return null
+                }
+                
+                const Icon = item.icon
+                
+                // Renderizado especial para Agenda en mobile
+                if (item.isComingSoon) {
+                  return (
+                    <div
+                      key={item.name}
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-400 cursor-not-allowed"
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                        Pronto
+                      </span>
+                    </div>
+                  )
+                }
+                
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span className="font-medium">{item.name}</span>
+                  </Link>
+                )
+              })}
+              
+              {/* Mobile CTA Button */}
+              <div className="px-4 pt-4">
+                <OnboardingTrigger size="lg" className="w-full">
+                  ¡Inscríbete Ahora!
+                </OnboardingTrigger>
+              </div>
+            </nav>
+          </div>
+        )}
+      </div>
+    </header>
+  )
+}
+
+export default Header
