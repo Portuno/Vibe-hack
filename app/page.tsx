@@ -2,7 +2,7 @@ import Header from '@/components/Header'
 import NewsletterForm from '@/components/NewsletterForm'
 import OnboardingTrigger from '@/components/OnboardingTrigger'
 import InscritosCounter from '@/components/InscritosCounter'
-import { Calendar, MapPin, ArrowRight, Sparkles, Users, Clock, Target } from 'lucide-react'
+import { Calendar, ArrowRight, Sparkles, Users, Clock, Target } from 'lucide-react'
 
 export default function Home() {
 
