@@ -1,5 +1,5 @@
 import Header from '@/components/Header'
-import { Wrench, BookOpen, ExternalLink, Download, Clock, Star, Search, Filter } from 'lucide-react'
+import { Wrench, BookOpen, ExternalLink, Download, Star, Search, Filter } from 'lucide-react'
 
 export default function RecursosPage() {
   // Mock data - esto será reemplazado por datos de la base de datos
