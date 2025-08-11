@@ -57,7 +57,7 @@ export default function SponsorsPage() {
           {principalSponsors.length > 0 && (
             <div className="mb-20">
               <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-                Sponsor Principal
+                Main Sponsors
               </h2>
               
               {/* Grid responsive para main sponsors */}
