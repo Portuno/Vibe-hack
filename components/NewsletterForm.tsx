@@ -5,9 +5,9 @@ import { Mail, Check, Send } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
 // Initialize Supabase client
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
+const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
 
 const NewsletterForm = () => {
   const [email, setEmail] = useState('')
@@ -17,6 +17,13 @@ const NewsletterForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Verificar que tenemos el cliente de Supabase
+    if (!supabase) {
+      setError('Newsletter no disponible en este momento')
+      return
+    }
+    
     setIsSubmitting(true)
     setError('')
 

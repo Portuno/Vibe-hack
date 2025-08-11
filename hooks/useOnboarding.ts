@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
+const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
+
+// Solo crear el cliente si tenemos las variables de entorno
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
 
 export interface OnboardingData {
   full_name: string
@@ -39,6 +41,12 @@ export const useOnboarding = () => {
   const [success, setSuccess] = useState(false)
 
   const submitOnboarding = async (data: OnboardingData) => {
+    // Verificar que tenemos el cliente de Supabase
+    if (!supabase) {
+      setError('Supabase not configured')
+      return { success: false, error: 'Supabase not configured' }
+    }
+
     setIsLoading(true)
     setError(null)
     setSuccess(false)
@@ -89,7 +97,9 @@ export const useOnboarding = () => {
       setSuccess(true)
       
       // Disparar un evento personalizado para que otros componentes sepan que se actualizó el conteo
-      window.dispatchEvent(new CustomEvent('inscripcion-completada'))
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('inscripcion-completada'))
+      }
       
       return { success: true }
     } catch (err) {
