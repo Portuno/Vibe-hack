@@ -1,17 +1,19 @@
 "use client"
 
 import { useInscritosCount } from '@/hooks/useInscritosCount'
+import { useState, useEffect } from 'react'
 
 export default function InscritosCounter() {
-  // Solo ejecutar el hook si estamos en el cliente y hay variables de entorno
-  const shouldFetch = typeof window !== 'undefined' && 
-    process.env['NEXT_PUBLIC_SUPABASE_URL'] && 
-    process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
-
+  const [isClient, setIsClient] = useState(false)
   const { count, totalCount, isLoading, error } = useInscritosCount()
 
-  // Si no debemos hacer fetch, mostrar un placeholder
-  if (!shouldFetch) {
+  // Asegurar que solo renderizamos en el cliente para evitar problemas de hidratación
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // No renderizar nada hasta que estemos en el cliente
+  if (!isClient) {
     return (
       <div className="bg-teal-50 rounded-2xl p-4 text-center">
         <div className="text-2xl font-bold text-teal-600">...</div>

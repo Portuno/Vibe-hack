@@ -38,7 +38,8 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
       opinion: ''
     },
     ai_tools_used: [],
-    expectations: []
+    expectations: [],
+    consent_newsletter: false
   })
 
   const totalSteps = 9
@@ -118,7 +119,8 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
               opinion: ''
             },
             ai_tools_used: [],
-            expectations: []
+            expectations: [],
+            consent_newsletter: false
           })
           setCurrentStep(1)
         }, 2000) // Dar tiempo para que el usuario vea el mensaje de éxito
@@ -455,6 +457,21 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
         className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         required
       />
+    </div>
+
+    {/* Consentimiento para recibir novedades */}
+    <div className="pt-4">
+      <label className="flex items-start space-x-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={data.consent_newsletter || false}
+          onChange={(e) => updateData('consent_newsletter', e.target.checked)}
+          className="mt-1 w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+        />
+        <div className="text-sm text-gray-600 leading-relaxed">
+          <span className="font-medium">Acepto recibir novedades y anuncios</span> de parte de Terreta Hub, incluyendo información sobre eventos, recursos y oportunidades de la comunidad innovadora de Valencia. Puedo cancelar mi suscripción en cualquier momento.
+        </div>
+      </label>
     </div>
   </div>
 )

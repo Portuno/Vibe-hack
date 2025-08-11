@@ -8,9 +8,8 @@ export const useInscritosCount = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Solo hacer fetch si tenemos el cliente de Supabase
-    if (!supabase) {
-      setError('Supabase not configured')
+    // Solo hacer fetch si estamos en el cliente y tenemos el cliente de Supabase
+    if (typeof window === 'undefined' || !supabase) {
       return
     }
 
@@ -20,45 +19,29 @@ export const useInscritosCount = () => {
 
       try {
         console.log('Fetching inscritos count...')
-        console.log('Supabase client:', supabase)
         
-        // Verificar qué tablas existen
-        const { data: tables, error: tablesError } = await supabase!
-          .from('information_schema.tables')
-          .select('table_name')
-          .eq('table_schema', 'public')
-        
-        console.log('Available tables:', tables, 'Error:', tablesError)
-        
-        // Verificar que podemos hacer una consulta simple
-        const { data: testData, error: testError } = await supabase!
+        // Primero obtener todos los registros para contar
+        const { data: registrations, error: fetchError } = await supabase!
           .from('hackathon_registrations')
           .select('id')
-          .limit(1)
-        
-        console.log('Test query result:', { testData, testError })
-        
-        // Fetch del conteo total - usando la estructura real de la tabla
-        const { count: totalRegistrations, error: countError } = await supabase!
-          .from('hackathon_registrations')
-          .select('*', { count: 'exact', head: true })
 
-        if (countError) {
-          console.error('Count error:', countError)
-          throw countError
+        if (fetchError) {
+          console.error('Fetch error:', fetchError)
+          throw fetchError
         }
 
-        console.log('Total registrations:', totalRegistrations)
+        const totalRegistrations = registrations ? registrations.length : 0
+        console.log('Total registrations count:', totalRegistrations)
+        console.log('Registrations data:', registrations)
 
         // Como no hay campo status, todos los registros se consideran confirmados
-        // O podemos filtrar por algún otro criterio si es necesario
         const confirmedRegistrations = totalRegistrations
 
         console.log('Confirmed registrations:', confirmedRegistrations)
 
         // count = total, totalCount = confirmed (que es igual al total en este caso)
-        setCount(totalRegistrations || 0)
-        setTotalCount(confirmedRegistrations || 0)
+        setCount(totalRegistrations)
+        setTotalCount(confirmedRegistrations)
         
         console.log('Final counts - Total:', totalRegistrations, 'Confirmed:', confirmedRegistrations)
       } catch (err) {

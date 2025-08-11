@@ -93,6 +93,20 @@ const NewsletterForm = () => {
           </div>
         </div>
         
+        {/* Consentimiento para recibir novedades */}
+        <div className="pt-2">
+          <label className="flex items-start space-x-3 cursor-pointer">
+            <input
+              type="checkbox"
+              required
+              className="mt-1 w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+            />
+            <div className="text-sm text-gray-600 leading-relaxed">
+              <span className="font-medium">Acepto recibir novedades y anuncios</span> de parte de Terreta Hub, incluyendo información sobre eventos, recursos y oportunidades de la comunidad innovadora de Valencia. Puedo cancelar mi suscripción en cualquier momento.
+            </div>
+          </label>
+        </div>
+
         <button
           type="submit"
           disabled={isSubmitting}

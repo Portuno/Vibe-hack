@@ -27,6 +27,7 @@ export interface OnboardingData {
   }
   ai_tools_used: string[]
   expectations: string[]
+  consent_newsletter: boolean
 }
 
 export const useOnboarding = () => {
@@ -73,6 +74,7 @@ export const useOnboarding = () => {
         astrology_opinion: data.astrology.opinion,
         ai_tools_used: data.ai_tools_used, // Mantener como array
         expectations: data.expectations, // Mantener como array
+        consent_newsletter: data.consent_newsletter, // Consentimiento para newsletter
         registration_status: 'pending', // Estado por defecto
         created_at: new Date().toISOString()
       }

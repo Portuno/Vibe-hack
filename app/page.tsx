@@ -47,9 +47,6 @@ export default function Home() {
                 <OnboardingTrigger size="lg">
                   ¡Inscríbete Ahora!
                 </OnboardingTrigger>
-                <OnboardingTrigger variant="outline" size="lg">
-                  Saber Más
-                </OnboardingTrigger>
               </div>
             </div>
             
