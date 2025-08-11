@@ -1,16 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
-
-// Verificar que las variables de entorno estén definidas
-if (!supabaseUrl || !supabaseKey) {
-  console.warn('Supabase environment variables not found')
-}
-
-// Solo crear el cliente si tenemos las variables de entorno
-const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
+import { supabase } from '@/lib/supabase'
 
 export const useInscritosCount = () => {
   const [count, setCount] = useState(0)
@@ -30,23 +19,32 @@ export const useInscritosCount = () => {
       setError(null)
 
       try {
+        console.log('Fetching inscritos count...')
+        
         // Fetch del conteo total
-        const { count: totalCount, error: countError } = await supabase
+        const { count: totalRegistrations, error: countError } = await supabase!
           .from('hackathon_registrations')
           .select('*', { count: 'exact', head: true })
 
         if (countError) throw countError
 
+        console.log('Total registrations:', totalRegistrations)
+
         // Fetch del conteo confirmado
-        const { count: confirmedCount, error: confirmedError } = await supabase
+        const { count: confirmedRegistrations, error: confirmedError } = await supabase!
           .from('hackathon_registrations')
           .select('*', { count: 'exact', head: true })
           .eq('registration_status', 'confirmed')
 
         if (confirmedError) throw confirmedError
 
-        setCount(totalCount || 0)
-        setTotalCount(confirmedCount || 0)
+        console.log('Confirmed registrations:', confirmedRegistrations)
+
+        // count = total, totalCount = confirmed
+        setCount(totalRegistrations || 0)
+        setTotalCount(confirmedRegistrations || 0)
+        
+        console.log('Final counts - Total:', totalRegistrations, 'Confirmed:', confirmedRegistrations)
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Error desconocido'
         setError(errorMessage)

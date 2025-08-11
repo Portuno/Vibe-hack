@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
 
 // Tipos para los datos de contacto
 export interface ContactData {
@@ -16,13 +16,6 @@ interface ContactResponse {
   message?: string
   error?: string
 }
-
-// Crear cliente de Supabase
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
-
-// Solo crear el cliente si tenemos las variables de entorno
-const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
 
 export const useContacts = () => {
   const [isLoading, setIsLoading] = useState(false)
