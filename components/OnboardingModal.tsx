@@ -243,38 +243,16 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
               </div>
             </div>
             
-            {/* Controles del header */}
-            <div className="flex flex-col items-end space-y-3">
-              <button
-                onClick={onClose}
-                className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 group hover:scale-110"
-                aria-label="Cerrar modal"
-              >
-                <X className="h-5 w-5 text-gray-600 group-hover:text-gray-800" />
-              </button>
-              
-              {/* Indicador de progreso mejorado */}
-              <div className="text-center">
-                <div className="text-lg font-bold text-primary-600">{currentStep}</div>
-                <div className="text-xs text-gray-500">de {totalSteps}</div>
-              </div>
-            </div>
+            {/* Solo botón de cerrar */}
+            <button
+              onClick={onClose}
+              className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 group hover:scale-110"
+              aria-label="Cerrar modal"
+            >
+              <X className="h-5 w-5 text-gray-600 group-hover:text-gray-800" />
+            </button>
           </div>
-          
-          {/* Progress Bar mejorado */}
-          <div className="mt-6">
-            <div className="flex justify-between text-xs text-gray-500 mb-2">
-              <span>Paso {currentStep}</span>
-              <span>{Math.round((currentStep / totalSteps) * 100)}% completado</span>
-            </div>
-            <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
-              <div 
-                className="bg-gradient-to-r from-primary-500 via-teal-500 to-primary-600 h-3 rounded-full transition-all duration-500 ease-out shadow-sm"
-                style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-              />
-            </div>
-          </div>
-        </div>
+                  </div>
 
         {/* Error Message */}
         {(error || localError) && (
@@ -284,7 +262,7 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
         )}
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[40vh]">
+        <div className="p-6 overflow-y-auto max-h-[50vh] pb-32">
           {currentStep === 1 && (
             <Step1BasicInfo data={data} updateData={updateData} />
           )}
@@ -322,8 +300,8 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
           )}
         </div>
 
-        {/* Footer Navigation */}
-        <div className="p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                {/* Footer Navigation - Siempre visible */}
+        <div className="p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-white sticky bottom-0">
           <div className="flex justify-between items-center">
             {/* Botón Anterior */}
             <button
@@ -381,9 +359,9 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
             )}
           </div>
           
-          {/* Información adicional del paso */}
+          {/* Información del paso actual - Solo en la parte inferior */}
           <div className="mt-4 text-center">
-            <p className="text-xs text-gray-500">
+            <p className="text-sm text-gray-600 font-medium">
               {currentStep === 1 && 'Paso 1 de 9 • Información básica'}
               {currentStep === 2 && 'Paso 2 de 9 • Preferencias de equipo'}
               {currentStep === 3 && 'Paso 3 de 9 • Estado del proyecto'}
