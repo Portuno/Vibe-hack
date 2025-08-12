@@ -436,21 +436,6 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
         required
       />
     </div>
-
-    {/* Consentimiento para recibir novedades */}
-    <div className="pt-4">
-      <label className="flex items-start space-x-3 cursor-pointer">
-        <input
-          type="checkbox"
-          checked={data.consent_newsletter || false}
-          onChange={(e) => updateData('consent_newsletter', e.target.checked)}
-          className="mt-1 w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
-        />
-        <div className="text-sm text-gray-600 leading-relaxed">
-          <span className="font-medium">Acepto recibir novedades y anuncios</span> de parte de Terreta Hub, incluyendo información sobre eventos, recursos y oportunidades de la comunidad innovadora de Valencia. Puedo cancelar mi suscripción en cualquier momento.
-        </div>
-      </label>
-    </div>
   </div>
 )
 
@@ -641,13 +626,6 @@ const Step5Skills = ({ data, updateSkills }: { data: OnboardingData; updateSkill
 
 const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updateAstrology: (field: keyof OnboardingData['astrology'], value: string) => void }) => (
   <div className="space-y-6">
-    <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4">
-      <div className="flex items-center space-x-2 text-purple-700">
-        <Star className="h-5 w-5" />
-        <span className="text-sm font-medium">Esta sección es completamente opcional y divertida. Nos ayuda a crear equipos con buena energía ✨</span>
-      </div>
-    </div>
-
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-2">
         Signo Solar
