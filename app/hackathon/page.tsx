@@ -202,7 +202,7 @@ export default function HackathonPage() {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <a
-                href="https://t.me/vibehack"
+                href="https://t.me/+Qp73D_rzUmo2ODNk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-blue-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-600 transition-all duration-300 hover:scale-105 inline-flex items-center space-x-3"

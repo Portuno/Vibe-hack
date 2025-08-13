@@ -34,7 +34,7 @@ export default function AgendaPage() {
               </div>
               
               <a
-                href="https://t.me/vibehack"
+                href="https://t.me/+Qp73D_rzUmo2ODNk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-200 hover:shadow-lg"
