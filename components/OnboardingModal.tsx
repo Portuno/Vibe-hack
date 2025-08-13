@@ -143,7 +143,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-start justify-center p-2 sm:p-4 pt-16 sm:pt-4">
       <div className="bg-white rounded-2xl w-full max-w-sm sm:max-w-2xl h-[90vh] sm:h-[80vh] flex flex-col shadow-2xl border border-gray-100">
         {/* Header compacto - Tamaño fijo */}
         <div className="bg-gradient-to-r from-primary-50 to-teal-50 p-3 sm:p-4 border-b border-gray-100 flex-shrink-0">
