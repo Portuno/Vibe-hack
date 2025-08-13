@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase'
 export interface OnboardingData {
   full_name: string
   email: string
+  phone: string
   social_link: string
   role: string
   team_preference: 'solo' | 'buscando' | 'equipo'
@@ -51,6 +52,7 @@ export const useOnboarding = () => {
       const supabaseData = {
         full_name: data.full_name,
         email: data.email,
+        phone: data.phone,
         social_link: data.social_link,
         role: data.role,
         team_preference: data.team_preference,

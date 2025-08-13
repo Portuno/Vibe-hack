@@ -11,6 +11,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
   const [data, setData] = useState<OnboardingData>({
     full_name: '',
     email: '',
+    phone: '',
     social_link: '',
     role: '',
     team_preference: 'solo',
@@ -61,6 +62,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           setData({
             full_name: '',
             email: '',
+            phone: '',
             social_link: '',
             role: '',
             team_preference: 'solo',
@@ -330,6 +332,19 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
         placeholder="tu@email.com"
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
         required
+      />
+    </div>
+
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Número de teléfono (opcional)
+      </label>
+      <input
+        type="tel"
+        value={data.phone}
+        onChange={(e) => updateData('phone', e.target.value)}
+        placeholder="Ej: 555-123-4567"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
