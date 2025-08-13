@@ -144,9 +144,9 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-2xl w-full max-w-sm max-h-[98vh] flex flex-col shadow-2xl border border-gray-100">
-        {/* Header compacto */}
-        <div className="bg-gradient-to-r from-primary-50 to-teal-50 p-3 border-b border-gray-100">
+      <div className="bg-white rounded-2xl w-full max-w-sm h-[90vh] flex flex-col shadow-2xl border border-gray-100">
+        {/* Header compacto - Tamaño fijo */}
+        <div className="bg-gradient-to-r from-primary-50 to-teal-50 p-3 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary-500 to-teal-500 flex items-center justify-center">
@@ -198,15 +198,15 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           </div>
         </div>
 
-        {/* Error Message */}
+        {/* Error Message - Tamaño fijo */}
         {error && (
-          <div className="mx-3 mt-3 p-3 bg-red-50 border border-red-200 rounded-xl">
+          <div className="mx-3 mt-3 p-3 bg-red-50 border border-red-200 rounded-xl flex-shrink-0">
             <p className="text-red-600 text-sm">{error}</p>
           </div>
         )}
 
-        {/* Content - Scrollable solo si es necesario */}
-        <div className="flex-1 overflow-y-auto p-3">
+        {/* Content - Scrollable con tamaño fijo */}
+        <div className="flex-1 overflow-y-auto p-3 min-h-0">
           {currentStep === 1 && (
             <Step1BasicInfo data={data} updateData={updateData} />
           )}
@@ -244,8 +244,8 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           )}
         </div>
 
-        {/* Footer Navigation - Siempre visible */}
-        <div className="p-3 border-t border-gray-100 bg-white">
+        {/* Footer Navigation - Siempre visible, tamaño fijo */}
+        <div className="p-3 border-t border-gray-100 bg-white flex-shrink-0">
           <div className="flex justify-between items-center space-x-3">
             {/* Botón Anterior */}
             <button
