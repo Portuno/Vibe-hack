@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import OnboardingModal from './OnboardingModal'
 
@@ -18,17 +18,8 @@ const OnboardingTrigger = ({
   className = ''
 }: OnboardingTriggerProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 })
-  const buttonRef = useRef<HTMLButtonElement>(null)
 
   const handleOpenModal = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect()
-      setButtonPosition({
-        top: rect.top + window.scrollY,
-        left: rect.left + window.scrollX
-      })
-    }
     setIsModalOpen(true)
   }
 
@@ -51,7 +42,6 @@ const OnboardingTrigger = ({
   return (
     <>
       <button
-        ref={buttonRef}
         onClick={handleOpenModal}
         className={`${classes} group`}
       >
@@ -62,7 +52,6 @@ const OnboardingTrigger = ({
       <OnboardingModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
-        buttonPosition={buttonPosition}
       />
     </>
   )
