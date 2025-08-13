@@ -435,15 +435,15 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
 )
 
 const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-4">
-    <div className="space-y-2">
+  <div className="space-y-6 sm:space-y-4">
+    <div className="space-y-4 sm:space-y-2">
       {[
         'Tengo un proyecto iniciado',
         'Tengo problemas concretos que quiero resolver',
         'Tengo ideas que me gustaría empezar',
         'Quiero construir algo pero no tengo ideas todavía'
       ].map((option) => (
-        <label key={option} className="flex items-center space-x-3 cursor-pointer">
+        <label key={option} className="flex items-center space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
             checked={data.project_status.includes(option)}
@@ -454,30 +454,30 @@ const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; update
                 updateData('project_status', data.project_status.filter(item => item !== option))
               }
             }}
-            className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
           />
-          <span className="text-sm text-gray-700">{option}</span>
+          <span className="text-base sm:text-sm text-gray-700">{option}</span>
         </label>
       ))}
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
         Cuéntanos más (opcional)
       </label>
       <textarea
         value={data.project_status.join(', ')}
         onChange={(e) => updateData('project_status', e.target.value.split(', ').filter(Boolean))}
         placeholder="Describe tu proyecto, idea o problema..."
-        rows={3}
-        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
+        rows={4}
+        className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
 )
 
 const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-3">
+  <div className="space-y-5 sm:space-y-3">
     {[
       { value: 'b2c', title: 'B2C', subtitle: 'Productos para consumidores finales', example: 'app para estudiantes', color: 'bg-purple-500' },
       { value: 'b2b', title: 'B2B', subtitle: 'Herramientas para negocios', example: 'bot de WhatsApp', color: 'bg-orange-500' },
@@ -486,7 +486,7 @@ const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateD
     ].map((option) => (
       <label
         key={option.value}
-        className={`block p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+        className={`block p-5 sm:p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
           data.project_focus === option.value
             ? 'border-primary-500 bg-primary-50'
             : 'border-gray-200 hover:border-gray-300'
@@ -500,13 +500,13 @@ const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateD
           onChange={(e) => updateData('project_focus', e.target.value)}
           className="sr-only"
         />
-        <div className="flex items-center space-x-3">
-          <div className={`w-10 h-10 ${option.color} rounded-xl flex items-center justify-center text-white font-bold text-sm`}>
+        <div className="flex items-center space-x-4 sm:space-x-3">
+          <div className={`w-14 h-14 sm:w-10 sm:h-10 ${option.color} rounded-xl flex items-center justify-center text-white font-bold text-lg sm:text-sm`}>
             {option.title}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="font-medium text-gray-800 text-sm">{option.subtitle}</div>
-            <div className="text-xs text-gray-600">Ej: {option.example}</div>
+            <div className="font-medium text-gray-800 text-base sm:text-sm mb-2 sm:mb-1">{option.subtitle}</div>
+            <div className="text-sm sm:text-xs text-gray-600">Ej: {option.example}</div>
           </div>
         </div>
       </label>
@@ -623,8 +623,8 @@ const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updat
 )
 
 const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-4">
-    <div className="space-y-2">
+  <div className="space-y-6 sm:space-y-4">
+    <div className="space-y-4 sm:space-y-2">
       {[
         'Base44 / Lovable / Bolt / v0',
         'ChatGPT / Claude / Perplexity',
@@ -633,7 +633,7 @@ const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: 
         'Midjourney / DALL-E / Runway',
         'Ninguna (pero tengo ganas de aprender)'
       ].map((tool) => (
-        <label key={tool} className="flex items-center space-x-3 cursor-pointer">
+        <label key={tool} className="flex items-center space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
             checked={data.ai_tools_used.includes(tool)}
@@ -644,29 +644,29 @@ const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: 
                 updateData('ai_tools_used', data.ai_tools_used.filter(item => item !== tool))
               }
             }}
-            className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
           />
-          <span className="text-sm text-gray-700">{tool}</span>
+          <span className="text-base sm:text-sm text-gray-700">{tool}</span>
         </label>
       ))}
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
         Otras herramientas
       </label>
       <input
         type="text"
         placeholder="¿Usas alguna otra herramienta de IA?"
-        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+        className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
   </div>
 )
 
 const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-4">
-    <div className="space-y-2">
+  <div className="space-y-6 sm:space-y-4">
+    <div className="space-y-4 sm:space-y-2">
       {[
         'Conocer gente con intereses similares',
         'Aprender sobre IA y nuevas tecnologías',
@@ -675,7 +675,7 @@ const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateD
         'Experimentar y jugar',
         'Ganar 😎'
       ].map((expectation) => (
-        <label key={expectation} className="flex items-center space-x-3 cursor-pointer">
+        <label key={expectation} className="flex items-center space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
             checked={data.expectations.includes(expectation)}
@@ -686,21 +686,21 @@ const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateD
                 updateData('expectations', data.expectations.filter(item => item !== expectation))
               }
             }}
-            className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
           />
-          <span className="text-sm text-gray-700">{expectation}</span>
+          <span className="text-base sm:text-sm text-gray-700">{expectation}</span>
         </label>
       ))}
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
         Otras expectativas
       </label>
       <textarea
         placeholder="¿Algo más que esperas de la hackathon?"
-        rows={2}
-        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
+        rows={3}
+        className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
