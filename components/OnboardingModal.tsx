@@ -1,17 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { X, ArrowLeft, ArrowRight, Check, User, Users, Lightbulb, Target, Brain, Star, Zap, Heart } from 'lucide-react'
 import { useOnboarding, OnboardingData } from '@/hooks/useOnboarding'
 
-const OnboardingModal = ({ isOpen, onClose, buttonPosition }: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  buttonPosition: { top: number; left: number } 
-}) => {
+const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [currentStep, setCurrentStep] = useState(1)
   const { submitOnboarding, isLoading, error, success, resetOnboarding } = useOnboarding()
-  const [localError, setLocalError] = useState<string | null>(null)
   
   const [data, setData] = useState<OnboardingData>({
     full_name: '',
@@ -44,37 +39,8 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
 
   const totalSteps = 9
 
-  // Prevenir scroll del body cuando el modal esté abierto
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-
-    // Cleanup al desmontar
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [isOpen])
-
   const handleNext = () => {
-    // Validar campos obligatorios según el paso actual
-    if (currentStep === 1) {
-      if (!data.full_name.trim() || !data.email.trim() || !data.role.trim()) {
-        setLocalError('Por favor completa todos los campos obligatorios')
-        return
-      }
-      // Validar formato de email
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      if (!emailRegex.test(data.email)) {
-        setLocalError('Por favor ingresa un email válido')
-        return
-      }
-    }
-    
     if (currentStep < totalSteps) {
-      setLocalError(null) // Limpiar errores previos
       setCurrentStep(currentStep + 1)
     }
   }
@@ -151,24 +117,10 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
   // Mostrar mensaje de éxito
   if (success) {
     return (
-<<<<<<< HEAD
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-lg z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-300">
-        <div className="bg-white rounded-3xl max-w-md w-full p-8 text-center shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-300">
-          {/* Icono de éxito animado */}
-          <div className="relative mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto shadow-lg animate-pulse">
-              <Check className="h-10 w-10 text-white" />
-            </div>
-            {/* Partículas de celebración */}
-            <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
-            <div className="absolute -top-1 -left-2 w-3 h-3 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-            <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
-=======
       <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl border border-gray-100">
           <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="h-8 w-8 text-white" />
->>>>>>> e036398 (?)
           </div>
           
           <h2 className="text-2xl font-bold text-gray-800 mb-3">
@@ -191,42 +143,6 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
   }
 
   return (
-<<<<<<< HEAD
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-lg z-[9999] flex items-start justify-center p-4 animate-in fade-in duration-300" style={{ paddingTop: `${Math.max(20, buttonPosition.top - 100)}px` }}>
-      <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[75vh] overflow-hidden shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-300">
-        {/* Header mejorado */}
-        <div className="bg-gradient-to-r from-primary-50 via-white to-teal-50 p-6 border-b border-gray-100">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center space-x-4">
-              {/* Icono animado del paso actual */}
-              <div className="relative">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-teal-500 flex items-center justify-center shadow-lg">
-                  {currentStep === 1 && <User className="h-6 w-6 text-white" />}
-                  {currentStep === 2 && <Users className="h-6 w-6 text-white" />}
-                  {currentStep === 3 && <Lightbulb className="h-6 w-6 text-white" />}
-                  {currentStep === 4 && <Target className="h-6 w-6 text-white" />}
-                  {currentStep === 5 && <Brain className="h-6 w-6 text-white" />}
-                  {currentStep === 6 && <Star className="h-6 w-6 text-white" />}
-                  {currentStep === 7 && <Zap className="h-6 w-6 text-white" />}
-                  {currentStep === 8 && <Heart className="h-6 w-6 text-white" />}
-                  {currentStep === 9 && <Check className="h-6 w-6 text-white" />}
-                </div>
-                {/* Indicador de paso activo */}
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 rounded-full border-2 border-white animate-pulse"></div>
-              </div>
-              
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-gray-800 mb-2">
-                  {currentStep === 1 && '👋 Identidad básica'}
-                  {currentStep === 2 && '🤝 ¿Con quién quieres participar?'}
-                  {currentStep === 3 && '💡 ¿Con qué vienes a esta hackathon?'}
-                  {currentStep === 4 && '🎯 ¿A qué apunta tu proyecto?'}
-                  {currentStep === 5 && '🧠 Tus habilidades'}
-                  {currentStep === 6 && '⭐ Carta astral'}
-                  {currentStep === 7 && '🤖 Herramientas de IA'}
-                  {currentStep === 8 && '💭 Expectativas'}
-                  {currentStep === 9 && '✅ Confirmación'}
-=======
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
       <div className="bg-white rounded-2xl w-full max-w-sm max-h-[98vh] flex flex-col shadow-2xl border border-gray-100">
         {/* Header compacto */}
@@ -256,7 +172,6 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
                   {currentStep === 7 && 'IA Tools'}
                   {currentStep === 8 && 'Expectativas'}
                   {currentStep === 9 && 'Confirmar'}
->>>>>>> e036398 (?)
                 </h2>
                 <p className="text-xs text-gray-600 truncate">
                   Paso {currentStep} de {totalSteps}
@@ -264,28 +179,6 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
               </div>
             </div>
             
-<<<<<<< HEAD
-            {/* Solo botón de cerrar */}
-            <button
-              onClick={onClose}
-              className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 group hover:scale-110"
-              aria-label="Cerrar modal"
-            >
-              <X className="h-5 w-5 text-gray-600 group-hover:text-gray-800" />
-            </button>
-          </div>
-                  </div>
-
-        {/* Error Message */}
-        {(error || localError) && (
-          <div className="mx-6 mt-4 p-4 bg-red-50 border border-red-200 rounded-2xl animate-in slide-in-from-top-2 duration-300">
-            <p className="text-red-600 text-sm">{localError || error}</p>
-          </div>
-        )}
-
-        {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[50vh] pb-32">
-=======
             <button
               onClick={onClose}
               className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0"
@@ -314,7 +207,6 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
 
         {/* Content - Scrollable solo si es necesario */}
         <div className="flex-1 overflow-y-auto p-3">
->>>>>>> e036398 (?)
           {currentStep === 1 && (
             <Step1BasicInfo data={data} updateData={updateData} />
           )}
@@ -352,24 +244,14 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
           )}
         </div>
 
-<<<<<<< HEAD
-                {/* Footer Navigation - Siempre visible */}
-        <div className="p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-white sticky bottom-0">
-          <div className="flex justify-between items-center">
-=======
         {/* Footer Navigation - Siempre visible */}
         <div className="p-3 border-t border-gray-100 bg-white">
           <div className="flex justify-between items-center space-x-3">
->>>>>>> e036398 (?)
             {/* Botón Anterior */}
             <button
               onClick={handlePrevious}
               disabled={currentStep === 1}
-<<<<<<< HEAD
-              className="flex items-center space-x-2 px-6 py-3 border-2 border-gray-200 rounded-full text-gray-600 hover:border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium hover:scale-105"
-=======
               className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
->>>>>>> e036398 (?)
             >
               <ArrowLeft className="h-4 w-4" />
               <span className="hidden sm:inline">Anterior</span>
@@ -414,24 +296,6 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
               </button>
             )}
           </div>
-<<<<<<< HEAD
-          
-          {/* Información del paso actual - Solo en la parte inferior */}
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600 font-medium">
-              {currentStep === 1 && 'Paso 1 de 9 • Información básica'}
-              {currentStep === 2 && 'Paso 2 de 9 • Preferencias de equipo'}
-              {currentStep === 3 && 'Paso 3 de 9 • Estado del proyecto'}
-              {currentStep === 4 && 'Paso 4 de 9 • Enfoque del proyecto'}
-              {currentStep === 5 && 'Paso 5 de 9 • Evaluación de habilidades'}
-              {currentStep === 6 && 'Paso 6 de 9 • Información astrológica'}
-              {currentStep === 7 && 'Paso 7 de 9 • Herramientas de IA'}
-              {currentStep === 8 && 'Paso 8 de 9 • Expectativas'}
-              {currentStep === 9 && 'Paso 9 de 9 • Confirmación final'}
-            </p>
-          </div>
-=======
->>>>>>> e036398 (?)
         </div>
       </div>
     </div>
@@ -684,9 +548,6 @@ const Step5Skills = ({ data, updateSkills }: { data: OnboardingData; updateSkill
 )
 
 const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updateAstrology: (field: keyof OnboardingData['astrology'], value: string) => void }) => (
-<<<<<<< HEAD
-  <div className="space-y-6">
-=======
   <div className="space-y-4">
     <div className="bg-purple-50 border border-purple-200 rounded-xl p-3">
       <div className="flex items-center space-x-2 text-purple-700">
@@ -695,7 +556,6 @@ const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updat
       </div>
     </div>
 
->>>>>>> e036398 (?)
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
         Signo Solar
