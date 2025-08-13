@@ -144,25 +144,25 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-2xl w-full max-w-sm h-[90vh] flex flex-col shadow-2xl border border-gray-100">
+      <div className="bg-white rounded-2xl w-full max-w-sm sm:max-w-2xl h-[90vh] sm:h-auto sm:max-h-[85vh] flex flex-col shadow-2xl border border-gray-100">
         {/* Header compacto - Tamaño fijo */}
-        <div className="bg-gradient-to-r from-primary-50 to-teal-50 p-3 border-b border-gray-100 flex-shrink-0">
+        <div className="bg-gradient-to-r from-primary-50 to-teal-50 p-3 sm:p-4 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary-500 to-teal-500 flex items-center justify-center">
-                {currentStep === 1 && <User className="h-4 w-4 text-white" />}
-                {currentStep === 2 && <Users className="h-4 w-4 text-white" />}
-                {currentStep === 3 && <Lightbulb className="h-4 w-4 text-white" />}
-                {currentStep === 4 && <Target className="h-4 w-4 text-white" />}
-                {currentStep === 5 && <Brain className="h-4 w-4 text-white" />}
-                {currentStep === 6 && <Star className="h-4 w-4 text-white" />}
-                {currentStep === 7 && <Zap className="h-4 w-4 text-white" />}
-                {currentStep === 8 && <Heart className="h-4 w-4 text-white" />}
-                {currentStep === 9 && <Check className="h-4 w-4 text-white" />}
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-primary-500 to-teal-500 flex items-center justify-center">
+                {currentStep === 1 && <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 2 && <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 3 && <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 4 && <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 5 && <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 6 && <Star className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 7 && <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 8 && <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 9 && <Check className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
               </div>
               
               <div className="flex-1 min-w-0">
-                <h2 className="text-lg font-bold text-gray-800 truncate">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 truncate">
                   {currentStep === 1 && 'Identidad básica'}
                   {currentStep === 2 && 'Equipo'}
                   {currentStep === 3 && 'Proyecto'}
@@ -173,7 +173,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
                   {currentStep === 8 && 'Expectativas'}
                   {currentStep === 9 && 'Confirmar'}
                 </h2>
-                <p className="text-xs text-gray-600 truncate">
+                <p className="text-xs sm:text-sm text-gray-600 truncate">
                   Paso {currentStep} de {totalSteps}
                 </p>
               </div>
@@ -181,9 +181,9 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
             
             <button
               onClick={onClose}
-              className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0"
+              className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0"
             >
-              <X className="h-3 w-3 text-gray-600" />
+              <X className="h-3 w-3 sm:h-4 sm:w-4 text-gray-600" />
             </button>
           </div>
           
@@ -206,7 +206,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
         )}
 
         {/* Content - Scrollable con tamaño fijo */}
-        <div className="flex-1 overflow-y-auto p-3 min-h-0">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 min-h-0">
           {currentStep === 1 && (
             <Step1BasicInfo data={data} updateData={updateData} />
           )}
@@ -245,7 +245,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
         </div>
 
         {/* Footer Navigation - Siempre visible, tamaño fijo */}
-        <div className="p-3 border-t border-gray-100 bg-white flex-shrink-0">
+        <div className="p-3 sm:p-4 border-t border-gray-100 bg-white flex-shrink-0">
           <div className="flex justify-between items-center space-x-3">
             {/* Botón Anterior */}
             <button
