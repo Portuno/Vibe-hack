@@ -89,11 +89,9 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
     try {
       const result = await submitOnboarding(data)
       if (result.success) {
-        // El envío fue exitoso, el hook ya maneja el estado
         setTimeout(() => {
           onClose()
           resetOnboarding()
-          // Resetear el formulario
           setData({
             full_name: '',
             email: '',
@@ -123,7 +121,7 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
             consent_newsletter: false
           })
           setCurrentStep(1)
-        }, 2000) // Dar tiempo para que el usuario vea el mensaje de éxito
+        }, 2000)
       }
     } catch (error) {
       console.error('Error al enviar datos:', error)
@@ -153,6 +151,7 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
   // Mostrar mensaje de éxito
   if (success) {
     return (
+<<<<<<< HEAD
       <div className="fixed inset-0 bg-black/70 backdrop-blur-lg z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-300">
         <div className="bg-white rounded-3xl max-w-md w-full p-8 text-center shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-300">
           {/* Icono de éxito animado */}
@@ -164,29 +163,27 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
             <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full animate-bounce"></div>
             <div className="absolute -top-1 -left-2 w-3 h-3 bg-pink-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
             <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-blue-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+=======
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl border border-gray-100">
+          <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Check className="h-8 w-8 text-white" />
+>>>>>>> e036398 (?)
           </div>
           
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold text-gray-800 mb-3">
             ¡Registro Exitoso! 🎉
           </h2>
           
-          <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-            Tu inscripción ha sido enviada correctamente. Te contactaremos pronto para confirmar tu participación en el hackathon.
+          <p className="text-gray-600 mb-6 text-base">
+            Tu inscripción ha sido enviada correctamente.
           </p>
-          
-          {/* Información adicional */}
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-4 mb-6 border border-green-200">
-            <p className="text-sm text-green-700">
-              📧 Revisa tu email para confirmar tu registro
-            </p>
-          </div>
           
           <button
             onClick={onClose}
-            className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center justify-center mx-auto space-x-2"
+            className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-full font-semibold w-full"
           >
-            <span>¡Perfecto!</span>
-            <Check className="h-5 w-5" />
+            ¡Perfecto!
           </button>
         </div>
       </div>
@@ -194,6 +191,7 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
   }
 
   return (
+<<<<<<< HEAD
     <div className="fixed inset-0 bg-black/70 backdrop-blur-lg z-[9999] flex items-start justify-center p-4 animate-in fade-in duration-300" style={{ paddingTop: `${Math.max(20, buttonPosition.top - 100)}px` }}>
       <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[75vh] overflow-hidden shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-300">
         {/* Header mejorado */}
@@ -228,21 +226,45 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
                   {currentStep === 7 && '🤖 Herramientas de IA'}
                   {currentStep === 8 && '💭 Expectativas'}
                   {currentStep === 9 && '✅ Confirmación'}
+=======
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-white rounded-2xl w-full max-w-sm max-h-[98vh] flex flex-col shadow-2xl border border-gray-100">
+        {/* Header compacto */}
+        <div className="bg-gradient-to-r from-primary-50 to-teal-50 p-3 border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary-500 to-teal-500 flex items-center justify-center">
+                {currentStep === 1 && <User className="h-4 w-4 text-white" />}
+                {currentStep === 2 && <Users className="h-4 w-4 text-white" />}
+                {currentStep === 3 && <Lightbulb className="h-4 w-4 text-white" />}
+                {currentStep === 4 && <Target className="h-4 w-4 text-white" />}
+                {currentStep === 5 && <Brain className="h-4 w-4 text-white" />}
+                {currentStep === 6 && <Star className="h-4 w-4 text-white" />}
+                {currentStep === 7 && <Zap className="h-4 w-4 text-white" />}
+                {currentStep === 8 && <Heart className="h-4 w-4 text-white" />}
+                {currentStep === 9 && <Check className="h-4 w-4 text-white" />}
+              </div>
+              
+              <div className="flex-1 min-w-0">
+                <h2 className="text-lg font-bold text-gray-800 truncate">
+                  {currentStep === 1 && 'Identidad básica'}
+                  {currentStep === 2 && 'Equipo'}
+                  {currentStep === 3 && 'Proyecto'}
+                  {currentStep === 4 && 'Enfoque'}
+                  {currentStep === 5 && 'Habilidades'}
+                  {currentStep === 6 && 'Astrología'}
+                  {currentStep === 7 && 'IA Tools'}
+                  {currentStep === 8 && 'Expectativas'}
+                  {currentStep === 9 && 'Confirmar'}
+>>>>>>> e036398 (?)
                 </h2>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {currentStep === 1 && 'Cuéntanos quién eres y cómo podemos contactarte'}
-                  {currentStep === 2 && 'Define tu dinámica de trabajo en equipo'}
-                  {currentStep === 3 && 'Cuéntanos el estado de tu proyecto o idea'}
-                  {currentStep === 4 && 'Define el enfoque estratégico de tu idea'}
-                  {currentStep === 5 && 'Evalúa tu comodidad en diferentes áreas'}
-                  {currentStep === 6 && 'Un toque lúdico para romper el hielo'}
-                  {currentStep === 7 && '¿Qué herramientas usas para crear?'}
-                  {currentStep === 8 && '¿Qué esperas de esta hackathon?'}
-                  {currentStep === 9 && 'Revisa tu información y confirma el registro'}
+                <p className="text-xs text-gray-600 truncate">
+                  Paso {currentStep} de {totalSteps}
                 </p>
               </div>
             </div>
             
+<<<<<<< HEAD
             {/* Solo botón de cerrar */}
             <button
               onClick={onClose}
@@ -263,6 +285,36 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
 
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[50vh] pb-32">
+=======
+            <button
+              onClick={onClose}
+              className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0"
+            >
+              <X className="h-3 w-3 text-gray-600" />
+            </button>
+          </div>
+          
+          {/* Progress bar compacto */}
+          <div className="mt-3">
+            <div className="bg-gray-200 rounded-full h-1.5 overflow-hidden">
+              <div 
+                className="bg-gradient-to-r from-primary-500 to-teal-500 h-1.5 rounded-full transition-all duration-300"
+                style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="mx-3 mt-3 p-3 bg-red-50 border border-red-200 rounded-xl">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* Content - Scrollable solo si es necesario */}
+        <div className="flex-1 overflow-y-auto p-3">
+>>>>>>> e036398 (?)
           {currentStep === 1 && (
             <Step1BasicInfo data={data} updateData={updateData} />
           )}
@@ -300,27 +352,37 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
           )}
         </div>
 
+<<<<<<< HEAD
                 {/* Footer Navigation - Siempre visible */}
         <div className="p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-white sticky bottom-0">
           <div className="flex justify-between items-center">
+=======
+        {/* Footer Navigation - Siempre visible */}
+        <div className="p-3 border-t border-gray-100 bg-white">
+          <div className="flex justify-between items-center space-x-3">
+>>>>>>> e036398 (?)
             {/* Botón Anterior */}
             <button
               onClick={handlePrevious}
               disabled={currentStep === 1}
+<<<<<<< HEAD
               className="flex items-center space-x-2 px-6 py-3 border-2 border-gray-200 rounded-full text-gray-600 hover:border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium hover:scale-105"
+=======
+              className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+>>>>>>> e036398 (?)
             >
               <ArrowLeft className="h-4 w-4" />
-              <span>Anterior</span>
+              <span className="hidden sm:inline">Anterior</span>
             </button>
 
-            {/* Progress Dots mejorados */}
-            <div className="flex space-x-2">
+            {/* Progress Dots */}
+            <div className="flex space-x-1.5">
               {Array.from({ length: totalSteps }, (_, i) => (
                 <div
                   key={i}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
                     i + 1 === currentStep 
-                      ? 'bg-gradient-to-r from-primary-500 to-teal-500 scale-125' 
+                      ? 'bg-primary-500 scale-125' 
                       : i + 1 < currentStep 
                         ? 'bg-teal-400' 
                         : 'bg-gray-300'
@@ -333,31 +395,26 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
             {currentStep < totalSteps ? (
               <button
                 onClick={handleNext}
-                className="bg-gradient-to-r from-primary-500 to-teal-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center space-x-2 group"
+                className="flex-1 bg-gradient-to-r from-primary-500 to-teal-500 text-white px-4 py-3 rounded-xl font-semibold flex items-center justify-center space-x-2"
               >
-                <span>Siguiente</span>
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
+                <span className="hidden sm:inline">Siguiente</span>
+                <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
               <button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center space-x-2 disabled:opacity-75 disabled:cursor-not-allowed"
+                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-3 rounded-xl font-semibold disabled:opacity-75 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Enviando...</span>
-                  </>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 ) : (
-                  <>
-                    <Check className="h-4 w-4" />
-                    <span>¡Confirmar Inscripción!</span>
-                  </>
+                  '¡Confirmar!'
                 )}
               </button>
             )}
           </div>
+<<<<<<< HEAD
           
           {/* Información del paso actual - Solo en la parte inferior */}
           <div className="mt-4 text-center">
@@ -373,17 +430,19 @@ const OnboardingModal = ({ isOpen, onClose, buttonPosition }: {
               {currentStep === 9 && 'Paso 9 de 9 • Confirmación final'}
             </p>
           </div>
+=======
+>>>>>>> e036398 (?)
         </div>
       </div>
     </div>
   )
 }
 
-// Step Components
+// Step Components optimizados para mobile
 const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-6">
+  <div className="space-y-3">
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Nombre completo *
       </label>
       <input
@@ -391,13 +450,13 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
         value={data.full_name}
         onChange={(e) => updateData('full_name', e.target.value)}
         placeholder="Tu nombre completo"
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
         required
       />
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Email de contacto *
       </label>
       <input
@@ -405,13 +464,13 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
         value={data.email}
         onChange={(e) => updateData('email', e.target.value)}
         placeholder="tu@email.com"
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
         required
       />
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Link a red social o portfolio
       </label>
       <input
@@ -419,12 +478,12 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
         value={data.social_link}
         onChange={(e) => updateData('social_link', e.target.value)}
         placeholder="LinkedIn, GitHub, Instagram..."
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Rol autopercibido *
       </label>
       <input
@@ -432,7 +491,7 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
         value={data.role}
         onChange={(e) => updateData('role', e.target.value)}
         placeholder="Developer, Diseñador/a UX, Creador/a de contenido..."
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
         required
       />
     </div>
@@ -440,15 +499,15 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
 )
 
 const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-4">
+  <div className="space-y-3">
     {[
-      { value: 'solo', title: 'Quiero trabajar solo/a', subtitle: 'Prefiero desarrollar mi proyecto de forma independiente' },
-      { value: 'buscando', title: 'Estoy buscando equipo', subtitle: 'Me gustaría formar equipo con otros participantes' },
-      { value: 'equipo', title: 'Ya tengo equipo armado', subtitle: 'Vengo con mi equipo ya formado' }
+      { value: 'solo', title: 'Quiero trabajar solo/a', subtitle: 'Proyecto independiente' },
+      { value: 'buscando', title: 'Estoy buscando equipo', subtitle: 'Formar equipo' },
+      { value: 'equipo', title: 'Ya tengo equipo armado', subtitle: 'Equipo formado' }
     ].map((option) => (
       <label
         key={option.value}
-        className={`block p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
+        className={`block p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
           data.team_preference === option.value
             ? 'border-primary-500 bg-primary-50'
             : 'border-gray-200 hover:border-gray-300'
@@ -472,18 +531,18 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
               <div className="w-2 h-2 bg-white rounded-full m-0.5" />
             )}
           </div>
-          <div>
-            <div className="font-medium text-gray-800">{option.title}</div>
-            <div className="text-sm text-gray-600">{option.subtitle}</div>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-gray-800 text-sm">{option.title}</div>
+            <div className="text-xs text-gray-600">{option.subtitle}</div>
           </div>
         </div>
       </label>
     ))}
 
     {data.team_preference === 'equipo' && (
-      <div className="space-y-4 mt-6 p-4 bg-gray-50 rounded-2xl">
+      <div className="space-y-3 mt-3 p-3 bg-gray-50 rounded-xl">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Nombre del equipo
           </label>
           <input
@@ -491,19 +550,19 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
             value={data.team_name}
             onChange={(e) => updateData('team_name', e.target.value)}
             placeholder="Nombre de tu equipo"
-            className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Nombres de los miembros
           </label>
           <input
             type="text"
             value={data.team_members}
             onChange={(e) => updateData('team_members', e.target.value)}
-            placeholder="Juan Pérez, María García... (cada uno debe registrarse individualmente)"
-            className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            placeholder="Juan Pérez, María García..."
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
           />
         </div>
       </div>
@@ -512,8 +571,8 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
 )
 
 const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-6">
-    <div className="space-y-3">
+  <div className="space-y-4">
+    <div className="space-y-2">
       {[
         'Tengo un proyecto iniciado',
         'Tengo problemas concretos que quiero resolver',
@@ -533,37 +592,37 @@ const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; update
             }}
             className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
           />
-          <span className="text-gray-700">{option}</span>
+          <span className="text-sm text-gray-700">{option}</span>
         </label>
       ))}
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Cuéntanos más (opcional)
       </label>
       <textarea
         value={data.project_status.join(', ')}
         onChange={(e) => updateData('project_status', e.target.value.split(', ').filter(Boolean))}
-        placeholder="Describe tu proyecto, idea o problema que quieres resolver..."
-        rows={4}
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+        placeholder="Describe tu proyecto, idea o problema..."
+        rows={3}
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
 )
 
 const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-4">
+  <div className="space-y-3">
     {[
-      { value: 'b2c', title: 'B2C', subtitle: 'Productos o servicios para consumidores finales', example: 'una app para estudiantes universitarios', color: 'bg-purple-500' },
-      { value: 'b2b', title: 'B2B', subtitle: 'Herramientas para negocios o profesionales', example: 'un bot de WhatsApp que responde a clientes', color: 'bg-orange-500' },
-      { value: 'social', title: 'Causa Social', subtitle: 'Enfoque con impacto social o comunitario', example: 'una herramienta que mejora la accesibilidad digital', color: 'bg-red-500' },
-      { value: 'other', title: 'Otro', subtitle: 'Proyectos artísticos, performance, instalaciones interactivas', example: 'arte generativo, experiencias inmersivas', color: 'bg-green-500' }
+      { value: 'b2c', title: 'B2C', subtitle: 'Productos para consumidores finales', example: 'app para estudiantes', color: 'bg-purple-500' },
+      { value: 'b2b', title: 'B2B', subtitle: 'Herramientas para negocios', example: 'bot de WhatsApp', color: 'bg-orange-500' },
+      { value: 'social', title: 'Causa Social', subtitle: 'Impacto social o comunitario', example: 'accesibilidad digital', color: 'bg-red-500' },
+      { value: 'other', title: 'Otro', subtitle: 'Proyectos artísticos, performance', example: 'arte generativo', color: 'bg-green-500' }
     ].map((option) => (
       <label
         key={option.value}
-        className={`block p-4 border-2 rounded-2xl cursor-pointer transition-all duration-200 ${
+        className={`block p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
           data.project_focus === option.value
             ? 'border-primary-500 bg-primary-50'
             : 'border-gray-200 hover:border-gray-300'
@@ -577,13 +636,13 @@ const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateD
           onChange={(e) => updateData('project_focus', e.target.value)}
           className="sr-only"
         />
-        <div className="flex items-center space-x-4">
-          <div className={`w-12 h-12 ${option.color} rounded-2xl flex items-center justify-center text-white font-bold`}>
+        <div className="flex items-center space-x-3">
+          <div className={`w-10 h-10 ${option.color} rounded-xl flex items-center justify-center text-white font-bold text-sm`}>
             {option.title}
           </div>
-          <div className="flex-1">
-            <div className="font-medium text-gray-800">{option.subtitle}</div>
-            <div className="text-sm text-gray-600">Ejemplo: {option.example}</div>
+          <div className="flex-1 min-w-0">
+            <div className="font-medium text-gray-800 text-sm">{option.subtitle}</div>
+            <div className="text-xs text-gray-600">Ej: {option.example}</div>
           </div>
         </div>
       </label>
@@ -592,30 +651,30 @@ const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateD
 )
 
 const Step5Skills = ({ data, updateSkills }: { data: OnboardingData; updateSkills: (skill: keyof OnboardingData['skills'], value: number) => void }) => (
-  <div className="space-y-6">
+  <div className="space-y-4">
     {[
-      { key: 'creativity', title: 'Creatividad y generación de ideas', question: '¿Se te ocurren conceptos, soluciones o formas nuevas de hacer las cosas?' },
-      { key: 'programming', title: 'Programación / desarrollo técnico', question: '¿Sabes convertir ideas en productos funcionales usando código?' },
-      { key: 'design', title: 'Diseño y experiencia de usuario (UX/UI)', question: '¿Tienes ojo para lo visual, lo intuitivo y lo usable?' },
-      { key: 'communication', title: 'Comunicación y narrativa', question: '¿Te sientes cómodo/a explicando, contando historias o creando contenido?' },
-      { key: 'leadership', title: 'Organización y liderazgo', question: '¿Sabes coordinar tareas, motivar equipos o tomar decisiones?' },
-      { key: 'ai_tools', title: 'IA / no-code / prompt engineering', question: '¿Usas IA para crear, prototipar o resolver tareas cotidianas?' }
+      { key: 'creativity', title: 'Creatividad', question: '¿Se te ocurren conceptos nuevos?' },
+      { key: 'programming', title: 'Programación', question: '¿Sabes convertir ideas en código?' },
+      { key: 'design', title: 'Diseño UX/UI', question: '¿Tienes ojo para lo visual?' },
+      { key: 'communication', title: 'Comunicación', question: '¿Te sientes cómodo explicando?' },
+      { key: 'leadership', title: 'Liderazgo', question: '¿Sabes coordinar equipos?' },
+      { key: 'ai_tools', title: 'IA Tools', question: '¿Usas IA para crear?' }
     ].map((skill) => (
-      <div key={skill.key} className="space-y-3">
+      <div key={skill.key} className="space-y-2">
         <div>
-          <div className="font-medium text-gray-800 mb-1">{skill.title}</div>
-          <div className="text-sm text-gray-600">{skill.question}</div>
+          <div className="font-medium text-gray-800 text-sm mb-1">{skill.title}</div>
+          <div className="text-xs text-gray-600">{skill.question}</div>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           <input
             type="range"
             min="1"
             max="10"
             value={data.skills[skill.key as keyof OnboardingData['skills']]}
             onChange={(e) => updateSkills(skill.key as keyof OnboardingData['skills'], parseInt(e.target.value))}
-            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
           />
-          <div className="text-primary-600 font-bold w-8 text-center">
+          <div className="text-primary-600 font-bold w-6 text-center text-sm">
             {data.skills[skill.key as keyof OnboardingData['skills']]}
           </div>
         </div>
@@ -625,15 +684,26 @@ const Step5Skills = ({ data, updateSkills }: { data: OnboardingData; updateSkill
 )
 
 const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updateAstrology: (field: keyof OnboardingData['astrology'], value: string) => void }) => (
+<<<<<<< HEAD
   <div className="space-y-6">
+=======
+  <div className="space-y-4">
+    <div className="bg-purple-50 border border-purple-200 rounded-xl p-3">
+      <div className="flex items-center space-x-2 text-purple-700">
+        <Star className="h-4 w-4" />
+        <span className="text-xs font-medium">Opcional y divertido ✨</span>
+      </div>
+    </div>
+
+>>>>>>> e036398 (?)
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Signo Solar
       </label>
       <select
         value={data.astrology.solar_sign}
         onChange={(e) => updateAstrology('solar_sign', e.target.value)}
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       >
         <option value="">Tu signo</option>
         <option value="aries">Aries</option>
@@ -652,7 +722,7 @@ const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updat
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Ascendente
       </label>
       <input
@@ -660,12 +730,12 @@ const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updat
         value={data.astrology.ascendant}
         onChange={(e) => updateAstrology('ascendant', e.target.value)}
         placeholder="Si lo sabes..."
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Signo Lunar
       </label>
       <input
@@ -673,28 +743,28 @@ const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updat
         value={data.astrology.lunar_sign}
         onChange={(e) => updateAstrology('lunar_sign', e.target.value)}
         placeholder="Si lo sabes..."
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         ¿Qué piensas sobre la astrología?
       </label>
       <textarea
         value={data.astrology.opinion}
         onChange={(e) => updateAstrology('opinion', e.target.value)}
-        placeholder="'Creo que suma para formar equipos compatibles', 'Es solo por diversión', 'No tengo opinión'"
-        rows={3}
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+        placeholder="'Creo que suma', 'Es solo por diversión', 'No tengo opinión'"
+        rows={2}
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
 )
 
 const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-6">
-    <div className="space-y-3">
+  <div className="space-y-4">
+    <div className="space-y-2">
       {[
         'Base44 / Lovable / Bolt / v0',
         'ChatGPT / Claude / Perplexity',
@@ -716,27 +786,27 @@ const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: 
             }}
             className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
           />
-          <span className="text-gray-700">{tool}</span>
+          <span className="text-sm text-gray-700">{tool}</span>
         </label>
       ))}
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Otras herramientas
       </label>
       <input
         type="text"
         placeholder="¿Usas alguna otra herramienta de IA?"
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
   </div>
 )
 
 const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-6">
-    <div className="space-y-3">
+  <div className="space-y-4">
+    <div className="space-y-2">
       {[
         'Conocer gente con intereses similares',
         'Aprender sobre IA y nuevas tecnologías',
@@ -758,48 +828,47 @@ const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateD
             }}
             className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
           />
-          <span className="text-gray-700">{expectation}</span>
+          <span className="text-sm text-gray-700">{expectation}</span>
         </label>
       ))}
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
         Otras expectativas
       </label>
       <textarea
         placeholder="¿Algo más que esperas de la hackathon?"
-        rows={3}
-        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+        rows={2}
+        className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
 )
 
 const Step9Confirmation = ({ data }: { data: OnboardingData }) => (
-  <div className="space-y-6">
-    <div className="bg-blue-50 rounded-2xl p-6">
-      <h3 className="font-semibold text-gray-800 mb-4">Resumen de tu registro</h3>
-      <div className="space-y-2 text-sm">
+  <div className="space-y-4">
+    <div className="bg-blue-50 rounded-xl p-4">
+      <h3 className="font-semibold text-gray-800 mb-3 text-sm">Resumen de tu registro</h3>
+      <div className="space-y-1 text-xs">
         <div><span className="font-medium">Nombre:</span> {data.full_name}</div>
         <div><span className="font-medium">Email:</span> {data.email}</div>
         <div><span className="font-medium">Rol:</span> {data.role}</div>
-        <div><span className="font-medium">Trabajo en equipo:</span> {
+        <div><span className="font-medium">Equipo:</span> {
           data.team_preference === 'solo' ? 'Solo' :
-          data.team_preference === 'buscando' ? 'Buscando equipo' :
+          data.team_preference === 'buscando' ? 'Buscando' :
           'Tengo equipo'
         }</div>
         <div><span className="font-medium">Enfoque:</span> {data.project_focus}</div>
-        <div><span className="font-medium">Expectativas:</span> {data.expectations.join(', ') || 'No especificadas'}</div>
       </div>
     </div>
 
-    <div className="bg-gray-50 rounded-2xl p-6">
-      <h3 className="font-semibold text-gray-800 mb-4">Al confirmar, acepto que:</h3>
-      <ul className="space-y-2 text-sm text-gray-600">
-        <li>• Pueden contactarme por email para temas relacionados al evento.</li>
-        <li>• Durante la hackathon habrá fotos y videos que podrían ser utilizados con fines de comunicación y difusión.</li>
-        <li>• El envío de este formulario no garantiza una plaza: los cupos son limitados y la participación será confirmada por la organización.</li>
+    <div className="bg-gray-50 rounded-xl p-4">
+      <h3 className="font-semibold text-gray-800 mb-3 text-sm">Al confirmar, acepto que:</h3>
+      <ul className="space-y-1 text-xs text-gray-600">
+        <li>• Pueden contactarme por email para temas del evento.</li>
+        <li>• Habrá fotos y videos durante la hackathon.</li>
+        <li>• El envío no garantiza una plaza.</li>
       </ul>
     </div>
   </div>
