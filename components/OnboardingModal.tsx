@@ -144,7 +144,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
-      <div className="bg-white rounded-2xl w-full max-w-sm sm:max-w-2xl h-[90vh] sm:h-auto sm:max-h-[85vh] flex flex-col shadow-2xl border border-gray-100">
+      <div className="bg-white rounded-2xl w-full max-w-sm sm:max-w-2xl h-[90vh] sm:h-[80vh] flex flex-col shadow-2xl border border-gray-100">
         {/* Header compacto - Tamaño fijo */}
         <div className="bg-gradient-to-r from-primary-50 to-teal-50 p-3 sm:p-4 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center justify-between">
@@ -443,7 +443,7 @@ const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; update
         'Tengo ideas que me gustaría empezar',
         'Quiero construir algo pero no tengo ideas todavía'
       ].map((option) => (
-        <label key={option} className="flex items-center space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
+        <label key={option} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
             checked={data.project_status.includes(option)}
@@ -454,9 +454,9 @@ const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; update
                 updateData('project_status', data.project_status.filter(item => item !== option))
               }
             }}
-            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-0.5 flex-shrink-0"
           />
-          <span className="text-base sm:text-sm text-gray-700">{option}</span>
+          <span className="text-base sm:text-sm text-gray-700 leading-relaxed">{option}</span>
         </label>
       ))}
     </div>
@@ -633,7 +633,7 @@ const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: 
         'Midjourney / DALL-E / Runway',
         'Ninguna (pero tengo ganas de aprender)'
       ].map((tool) => (
-        <label key={tool} className="flex items-center space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
+        <label key={tool} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
             checked={data.ai_tools_used.includes(tool)}
@@ -644,9 +644,9 @@ const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: 
                 updateData('ai_tools_used', data.ai_tools_used.filter(item => item !== tool))
               }
             }}
-            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-0.5 flex-shrink-0"
           />
-          <span className="text-base sm:text-sm text-gray-700">{tool}</span>
+          <span className="text-base sm:text-sm text-gray-700 leading-relaxed">{tool}</span>
         </label>
       ))}
     </div>
@@ -675,7 +675,7 @@ const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateD
         'Experimentar y jugar',
         'Ganar 😎'
       ].map((expectation) => (
-        <label key={expectation} className="flex items-center space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
+        <label key={expectation} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
             checked={data.expectations.includes(expectation)}
@@ -686,9 +686,9 @@ const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateD
                 updateData('expectations', data.expectations.filter(item => item !== expectation))
               }
             }}
-            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-0.5 flex-shrink-0"
           />
-          <span className="text-base sm:text-sm text-gray-700">{expectation}</span>
+          <span className="text-base sm:text-sm text-gray-700 leading-relaxed">{expectation}</span>
         </label>
       ))}
     </div>
