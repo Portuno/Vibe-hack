@@ -257,9 +257,9 @@ export default function ContactPage() {
                   href="https://t.me/+Qp73D_rzUmo2ODNk"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-600 transition-all duration-200"
+                  className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-200 hover:scale-105 w-full sm:w-auto"
                 >
-                  <span>Unirse</span>
+                  <span>Unirse al Telegram</span>
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

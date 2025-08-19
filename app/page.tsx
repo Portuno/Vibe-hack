@@ -94,16 +94,10 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Telegram Button */}
-                  <a
-                    href="https://t.me/+Qp73D_rzUmo2ODNk"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center w-full space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-2xl font-medium hover:shadow-lg transition-all duration-200 hover:scale-105"
-                  >
-                    <span>Unirse al Telegram</span>
-                    <span>→</span>
-                  </a>
+                  {/* CTA Inscripción */}
+                  <OnboardingTrigger size="lg" className="w-full">
+                    ¡Inscríbete Ahora!
+                  </OnboardingTrigger>
                 </div>
               </div>
               

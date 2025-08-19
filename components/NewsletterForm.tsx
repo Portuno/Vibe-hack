@@ -23,11 +23,40 @@ const NewsletterForm = () => {
     setError('')
 
     try {
-      const { error } = await supabase
-        .from('newsletter_subscribers')
-        .insert([{ email }])
+      const normalizedEmail = email.trim().toLowerCase()
 
-      if (error) throw error
+      // 1) ¿Ya existe? Si existe, tratamos como éxito silencioso
+      const { data: existing, error: selectError } = await supabase
+        .from('newsletter_subscribers')
+        .select('id')
+        .eq('email', normalizedEmail)
+        .limit(1)
+
+      if (selectError) {
+        throw selectError
+      }
+
+      if (existing && existing.length > 0) {
+        setIsSubmitted(true)
+        setEmail('')
+        return
+      }
+
+      // 2) Insertar si no existe
+      const { error: insertError } = await supabase
+        .from('newsletter_subscribers')
+        .insert([{ email: normalizedEmail, is_active: true, source: 'website' }])
+
+      if (insertError) {
+        // Si es conflicto único (duplicado), también lo consideramos éxito
+        // @ts-expect-error: Supabase error puede contener code
+        if (insertError.code === '23505') {
+          setIsSubmitted(true)
+          setEmail('')
+          return
+        }
+        throw insertError
+      }
 
       setIsSubmitted(true)
       setEmail('')
