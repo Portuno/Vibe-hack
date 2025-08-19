@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X, ArrowLeft, ArrowRight, Check, User, Users, Lightbulb, Target, Brain, Star, Zap, Heart } from 'lucide-react'
 import { useOnboarding, OnboardingData } from '@/hooks/useOnboarding'
 
@@ -118,7 +119,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
   // Mostrar mensaje de éxito
   if (success) {
-    return (
+    return createPortal(
       <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl border border-gray-100">
           <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -140,11 +141,12 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
             ¡Perfecto!
           </button>
         </div>
-      </div>
+      </div>,
+      document.body
     )
   }
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-start justify-center p-2 sm:p-4 pt-16 sm:pt-4">
       <div className="bg-white rounded-2xl w-full max-w-sm sm:max-w-2xl h-[90vh] sm:h-[80vh] flex flex-col shadow-2xl border border-gray-100">
         {/* Header compacto - Tamaño fijo */}
@@ -300,7 +302,8 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
