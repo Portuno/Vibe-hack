@@ -49,8 +49,8 @@ const NewsletterForm = () => {
 
       if (insertError) {
         // Si es conflicto único (duplicado), también lo consideramos éxito
-        // @ts-expect-error: Supabase error puede contener code
-        if (insertError.code === '23505') {
+        const pgCode = (insertError as unknown as { code?: string })?.code
+        if (pgCode === '23505') {
           setIsSubmitted(true)
           setEmail('')
           return
