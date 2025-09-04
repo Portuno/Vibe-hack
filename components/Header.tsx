@@ -14,7 +14,6 @@ const Header = () => {
   const { t } = useI18n()
 
   const navigationItems = [
-    { name: t('nav.hackathon'), href: '/hackathon', icon: Rocket },
     { name: t('nav.sponsors'), href: '/sponsors', icon: Users },
     { name: t('nav.agenda'), href: '/agenda', icon: Calendar, isComingSoon: true },
     { name: t('nav.ideatorio'), href: '/ideatorio', icon: Rocket },
@@ -88,9 +87,9 @@ const Header = () => {
           </nav>
 
           {/* Desktop Right Section: Language + CTA */}
-          <div className="hidden md:flex items-center space-x-3">
-            <LanguageSelector />
-            <OnboardingTrigger size="lg">
+          <div className="hidden md:flex items-center space-x-4">
+            <LanguageSelector dropdown />
+            <OnboardingTrigger size="lg" className="shadow-primary-500/30 hover:shadow-primary-500/40 shadow-xl rounded-full">
               {t('cta.registerNow')}
             </OnboardingTrigger>
           </div>
@@ -155,7 +154,7 @@ const Header = () => {
               </div>
               {/* Mobile Language Selector */}
               <div className="px-4 pt-2 pb-4 flex justify-end">
-                <LanguageSelector compact />
+                <LanguageSelector dropdown compact />
               </div>
             </nav>
           </div>
