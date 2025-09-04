@@ -2,7 +2,7 @@
 import IdeaCard from '@/components/IdeaCard'
 import useIdeas from '@/hooks/useIdeas'
 import { useI18n } from '@/components/i18n/LanguageProvider'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
 function Tags({ label, inputValue, setInputValue, chips, setChips, addChip, removeChip }: {
