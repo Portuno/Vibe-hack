@@ -1,10 +1,12 @@
 "use client"
 import IdeaCard from '@/components/IdeaCard'
+import IdeaModal from '@/components/IdeaModal'
 import useIdeas from '@/hooks/useIdeas'
 import { useI18n } from '@/components/i18n/LanguageProvider'
 import { useCallback, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Header from '@/components/Header'
+import type { Idea } from '@/components/IdeaCard'
 
 function Tags({ label, inputValue, setInputValue, chips, setChips, addChip, removeChip }: {
   label: string
@@ -59,6 +61,9 @@ export default function IdeatorioPage() {
   const [mvpChips, setMvpChips] = useState<string[]>([])
   const [techInput, setTechInput] = useState('')
   const [techChips, setTechChips] = useState<string[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const addChip = useCallback((value: string, setter: (v: string[]) => void, current: string[]) => {
     const v = value.trim()
@@ -70,6 +75,29 @@ export default function IdeatorioPage() {
   const removeChip = useCallback((value: string, setter: (v: string[]) => void, current: string[]) => {
     setter(current.filter(c => c !== value))
   }, [])
+
+  // Filtrar ideas por categoría
+  const filteredIdeas = ideas.filter(idea => {
+    if (selectedCategory === 'all') return true
+    return idea.categories.some(cat => 
+      cat.toLowerCase().includes(selectedCategory.toLowerCase())
+    )
+  })
+
+  // Obtener categorías únicas para los filtros
+  const availableCategories = Array.from(
+    new Set(ideas.flatMap(idea => idea.categories))
+  ).sort()
+
+  const handleIdeaClick = (idea: Idea) => {
+    setSelectedIdea(idea)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedIdea(null)
+  }
 
   const handleOpenAdd = () => setShowPassword(true)
 
@@ -255,12 +283,52 @@ export default function IdeatorioPage() {
           </div>
         )}
 
-        {/* Filters (placeholder minimal) */}
-        <div className="mb-6 flex items-center gap-3">
-          <button className="px-4 py-2 rounded-full border border-gray-200 text-sm bg-gray-50">
-            {t('pages.ideatorio.filters.all')}
-          </button>
-          <span className="text-sm text-gray-500">{t('pages.ideatorio.filters.categories')}</span>
+        {/* Filters */}
+        <div className="mb-6">
+          <div className="flex flex-wrap items-center gap-3">
+            <button 
+              onClick={() => setSelectedCategory('all')}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedCategory === 'all' 
+                  ? 'bg-primary-500 text-white' 
+                  : 'border border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              {t('pages.ideatorio.filters.all')} ({ideas.length})
+            </button>
+            
+            {availableCategories.map(category => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-primary-500 text-white'
+                    : 'border border-gray-200 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                {category} ({ideas.filter(idea => 
+                  idea.categories.some(cat => 
+                    cat.toLowerCase().includes(category.toLowerCase())
+                  )
+                ).length})
+              </button>
+            ))}
+          </div>
+          
+          {selectedCategory !== 'all' && (
+            <div className="mt-3 flex items-center gap-2">
+              <span className="text-sm text-gray-600">
+                Mostrando {filteredIdeas.length} de {ideas.length} ideas
+              </span>
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className="text-sm text-primary-600 hover:text-primary-800 font-medium"
+              >
+                Limpiar filtro
+              </button>
+            </div>
+          )}
         </div>
 
         {error && (
@@ -275,11 +343,28 @@ export default function IdeatorioPage() {
               <div key={idx} className="h-64 rounded-2xl bg-gray-100 animate-pulse" />
             ))}
           </div>
-        ) : ideas.length > 0 ? (
+        ) : filteredIdeas.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ideas.map((idea) => (
-              <IdeaCard key={idea.id} idea={idea} />
+            {filteredIdeas.map((idea) => (
+              <IdeaCard 
+                key={idea.id} 
+                idea={idea} 
+                onClick={() => handleIdeaClick(idea)}
+              />
             ))}
+          </div>
+        ) : selectedCategory !== 'all' ? (
+          <div className="text-center py-16">
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">No hay ideas en esta categoría</h3>
+            <p className="text-gray-500 mb-4">
+              No se encontraron ideas para la categoría "{selectedCategory}"
+            </p>
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className="px-4 py-2 rounded-lg bg-primary-500 text-white hover:bg-primary-600 transition-colors"
+            >
+              Ver todas las ideas
+            </button>
           </div>
         ) : (
           <div className="text-center py-16">
@@ -289,6 +374,13 @@ export default function IdeatorioPage() {
         )}
       </section>
       </div>
+
+      {/* Modal */}
+      <IdeaModal
+        idea={selectedIdea}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </main>
   )
 }
