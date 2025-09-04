@@ -8,42 +8,6 @@ import { supabase } from '@/lib/supabase'
 import Header from '@/components/Header'
 import type { Idea } from '@/components/IdeaCard'
 
-function Tags({ label, inputValue, setInputValue, chips, setChips, addChip, removeChip }: {
-  label: string
-  inputValue: string
-  setInputValue: (v: string) => void
-  chips: string[]
-  setChips: (v: string[]) => void
-  addChip: (v: string, setter: (v: string[]) => void, current: string[]) => void
-  removeChip: (v: string, setter: (v: string[]) => void, current: string[]) => void
-}) {
-  return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <div className="flex flex-wrap gap-2 mb-2">
-        {chips.map((chip) => (
-          <span key={chip} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-primary-50 text-primary-700 border border-primary-200">
-            {chip}
-            <button type="button" onClick={() => removeChip(chip, setChips, chips)} className="text-primary-600 hover:text-primary-800">×</button>
-          </span>
-        ))}
-      </div>
-      <input
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault()
-            addChip(inputValue, setChips, chips)
-            setInputValue('')
-          }
-        }}
-        placeholder={label}
-        className="w-full px-3 py-2 border rounded-lg"
-      />
-    </div>
-  )
-}
 
 export default function IdeatorioPage() {
   const { ideas, loading, error } = useIdeas()
