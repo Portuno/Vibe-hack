@@ -33,9 +33,118 @@ const ES_DICTIONARY = flatten({
     community: 'Comunidad',
     resources: 'Recursos',
   },
+  onboarding: {
+    header: {
+      step1: 'Identidad básica',
+      step2: 'Equipo',
+      step3: 'Proyecto',
+      step4: 'Enfoque',
+      step5: 'Habilidades',
+      step6: 'Astrología',
+      step7: 'IA Tools',
+      step8: 'Expectativas',
+      step9: 'Confirmar',
+      stepOf: 'Paso {current} de {total}'
+    },
+    success: {
+      title: '¡Registro Exitoso! 🎉',
+      desc: 'Tu inscripción ha sido enviada correctamente.',
+      button: '¡Perfecto!'
+    },
+    nav: { prev: 'Anterior', next: 'Siguiente', confirm: '¡Confirmar!' },
+    step1: {
+      fullName: 'Nombre completo *',
+      fullNamePh: 'Tu nombre completo',
+      email: 'Email de contacto *',
+      emailPh: 'tu@email.com',
+      phone: 'Número de teléfono (opcional)',
+      phonePh: 'Ej: 555-123-4567',
+      social: 'Link a red social o portfolio',
+      socialPh: 'LinkedIn, GitHub, Instagram...',
+      role: 'Rol autopercibido *',
+      rolePh: 'Developer, Diseñador/a UX, Creador/a de contenido...'
+    },
+    step2: {
+      solo: { title: 'Quiero trabajar solo/a', sub: 'Proyecto independiente' },
+      buscando: { title: 'Estoy buscando equipo', sub: 'Formar equipo' },
+      equipo: { title: 'Ya tengo equipo armado', sub: 'Equipo formado' },
+      teamName: 'Nombre del equipo',
+      teamNamePh: 'Nombre de tu equipo',
+      members: 'Nombres de los miembros',
+      membersPh: 'Juan Pérez, María García...'
+    },
+    step3: {
+      options: [
+        'Tengo un proyecto iniciado',
+        'Tengo problemas concretos que quiero resolver',
+        'Tengo ideas que me gustaría empezar',
+        'Quiero construir algo pero no tengo ideas todavía'
+      ],
+      more: 'Cuéntanos más (opcional)',
+      morePh: 'Describe tu proyecto, idea o problema...'
+    },
+    step4: {
+      b2c: { title: 'B2C', sub: 'Productos para consumidores finales', ex: 'app para estudiantes' },
+      b2b: { title: 'B2B', sub: 'Herramientas para negocios', ex: 'bot de WhatsApp' },
+      social: { title: 'Causa Social', sub: 'Impacto social o comunitario', ex: 'accesibilidad digital' },
+      other: { title: 'Otro', sub: 'Proyectos artísticos, performance', ex: 'arte generativo' }
+    },
+    step5: {
+      creativity: { title: 'Creatividad', q: '¿Se te ocurren conceptos nuevos?' },
+      programming: { title: 'Programación', q: '¿Sabes convertir ideas en código?' },
+      design: { title: 'Diseño UX/UI', q: '¿Tienes ojo para lo visual?' },
+      communication: { title: 'Comunicación', q: '¿Te sientes cómodo explicando?' },
+      leadership: { title: 'Liderazgo', q: '¿Sabes coordinar equipos?' },
+      ai_tools: { title: 'IA Tools', q: '¿Usas IA para crear?' }
+    },
+    step6: {
+      optional: 'Opcional y divertido ✨',
+      solar: 'Signo Solar',
+      yourSign: 'Tu signo',
+      asc: 'Ascendente',
+      ascPh: 'Si lo sabes...',
+      lunar: 'Signo Lunar',
+      lunarPh: 'Si lo sabes...',
+      opinion: '¿Qué piensas sobre la astrología?',
+      opinionPh: "'Creo que suma', 'Es solo por diversión', 'No tengo opinión'"
+    },
+    step7: {
+      others: 'Otras herramientas',
+      othersPh: '¿Usas alguna otra herramienta de IA?'
+    },
+    step8: {
+      options: [
+        'Conocer gente con intereses similares',
+        'Aprender sobre IA y nuevas tecnologías',
+        'Lanzar un proyecto real',
+        'Validar una idea',
+        'Experimentar y jugar',
+        'Ganar 😎'
+      ],
+      other: 'Otras expectativas',
+      otherPh: '¿Algo más que esperas de la hackathon?'
+    },
+    step9: {
+      summary: 'Resumen de tu registro',
+      name: 'Nombre',
+      email: 'Email',
+      role: 'Rol',
+      team: 'Equipo',
+      teamValues: { solo: 'Solo', buscando: 'Buscando', equipo: 'Tengo equipo' },
+      focus: 'Enfoque',
+      accept: 'Al confirmar, acepto que:',
+      acceptLines: [
+        '• Pueden contactarme por email para temas del evento.',
+        '• Habrá fotos y videos durante la hackathon.',
+        '• El envío no garantiza una plaza.'
+      ]
+    }
+  },
   labels: {
     soon: 'Pronto',
-    moreInfoSoon: '¡Más información pronto!'
+    moreInfoSoon: '¡Más información pronto!',
+    loading: 'Cargando...',
+    errorLoading: 'Error al cargar'
   },
   cta: {
     registerNow: '¡Inscríbete Ahora!',
@@ -167,7 +276,9 @@ const EN_DICTIONARY = flatten({
   },
   labels: {
     soon: 'Soon',
-    moreInfoSoon: 'More information soon!'
+    moreInfoSoon: 'More information soon!',
+    loading: 'Loading...',
+    errorLoading: 'Error loading'
   },
   cta: {
     registerNow: 'Register Now!',
@@ -208,12 +319,136 @@ const EN_DICTIONARY = flatten({
         successDesc: 'Meanwhile, join our community on Telegram to stay up to date on all the news and connect with other innovators.',
         joinTelegram: 'Join Telegram'
       }
-    }
+    },
+    sponsors: {
+      title1: 'Our',
+      title2: 'Sponsors',
+      description: 'We are grateful to the companies that make this event possible and support innovation.',
+      main: 'Main Sponsors',
+      co: 'Co-Sponsors',
+      emptyTitle: 'No sponsors available',
+      emptyDesc: 'Sponsors will appear here when added to the database.',
+      ctaTitle: 'Want to support innovation?',
+      ctaDesc: 'Become a sponsor and connect with future talent.',
+      ctaButton: 'I want to sponsor'
+    },
+    contact: EN_ONBOARDING ? {} : {}
   },
+  onboarding: EN_ONBOARDING,
   a11y: {
     toggleMenu: 'Toggle menu'
   }
 })
+
+// English onboarding
+const EN_ONBOARDING = {
+  header: {
+    step1: 'Basic identity',
+    step2: 'Team',
+    step3: 'Project',
+    step4: 'Focus',
+    step5: 'Skills',
+    step6: 'Astrology',
+    step7: 'AI Tools',
+    step8: 'Expectations',
+    step9: 'Confirm',
+    stepOf: 'Step {current} of {total}'
+  },
+  success: {
+    title: 'Registration Successful! 🎉',
+    desc: 'Your application has been submitted correctly.',
+    button: 'Great!'
+  },
+  nav: { prev: 'Previous', next: 'Next', confirm: 'Confirm!' },
+  step1: {
+    fullName: 'Full name *',
+    fullNamePh: 'Your full name',
+    email: 'Contact email *',
+    emailPh: 'your@email.com',
+    phone: 'Phone number (optional)',
+    phonePh: 'e.g., 555-123-4567',
+    social: 'Social link or portfolio',
+    socialPh: 'LinkedIn, GitHub, Instagram...',
+    role: 'Self-perceived role *',
+    rolePh: 'Developer, UX Designer, Content Creator...'
+  },
+  step2: {
+    solo: { title: 'I want to work solo', sub: 'Independent project' },
+    buscando: { title: 'I am looking for a team', sub: 'Form a team' },
+    equipo: { title: 'I already have a team', sub: 'Team formed' },
+    teamName: 'Team name',
+    teamNamePh: 'Your team name',
+    members: 'Team members',
+    membersPh: 'John Smith, Jane Doe...'
+  },
+  step3: {
+    options: [
+      'I have a project started',
+      'I have concrete problems I want to solve',
+      'I have ideas I would like to start',
+      "I want to build something but I don't have ideas yet"
+    ],
+    more: 'Tell us more (optional)',
+    morePh: 'Describe your project, idea or problem...'
+  },
+  step4: {
+    b2c: { title: 'B2C', sub: 'Products for consumers', ex: 'app for students' },
+    b2b: { title: 'B2B', sub: 'Tools for businesses', ex: 'WhatsApp bot' },
+    social: { title: 'Social Cause', sub: 'Social or community impact', ex: 'digital accessibility' },
+    other: { title: 'Other', sub: 'Art, performance projects', ex: 'generative art' }
+  },
+  step5: {
+    creativity: { title: 'Creativity', q: 'Do new concepts come to you?' },
+    programming: { title: 'Programming', q: 'Can you turn ideas into code?' },
+    design: { title: 'UX/UI Design', q: 'Do you have an eye for visuals?' },
+    communication: { title: 'Communication', q: 'Are you comfortable explaining?' },
+    leadership: { title: 'Leadership', q: 'Can you coordinate teams?' },
+    ai_tools: { title: 'AI Tools', q: 'Do you use AI to create?' }
+  },
+  step6: {
+    optional: 'Optional and fun ✨',
+    solar: 'Sun Sign',
+    yourSign: 'Your sign',
+    asc: 'Ascendant',
+    ascPh: 'If you know it...',
+    lunar: 'Moon Sign',
+    lunarPh: 'If you know it...',
+    opinion: 'What do you think about astrology?',
+    opinionPh: "'I think it helps', 'Just for fun', 'No opinion'"
+  },
+  step7: {
+    others: 'Other tools',
+    othersPh: 'Do you use any other AI tool?'
+  },
+  step8: {
+    options: [
+      'Meet people with similar interests',
+      'Learn about AI and new technologies',
+      'Launch a real project',
+      'Validate an idea',
+      'Experiment and play',
+      'Win 😎'
+    ],
+    other: 'Other expectations',
+    otherPh: 'Anything else you expect from the hackathon?'
+  },
+  step9: {
+    summary: 'Your registration summary',
+    name: 'Name',
+    email: 'Email',
+    role: 'Role',
+    team: 'Team',
+    teamValues: { solo: 'Solo', buscando: 'Looking', equipo: 'Have team' },
+    focus: 'Focus',
+    accept: 'By confirming, I accept that:',
+    acceptLines: [
+      '• You can contact me by email about the event.',
+      '• There will be photos and videos during the hackathon.',
+      '• Submission does not guarantee a spot.'
+    ]
+  }
+}
+
 
 const LOCALES: Record<SupportedLocale, Dictionary> = {
   es: ES_DICTIONARY,

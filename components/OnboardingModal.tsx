@@ -4,10 +4,12 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { X, ArrowLeft, ArrowRight, Check, User, Users, Lightbulb, Target, Brain, Star, Zap, Heart } from 'lucide-react'
 import { useOnboarding, OnboardingData } from '@/hooks/useOnboarding'
+import { useI18n } from './i18n/LanguageProvider'
 
 const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [currentStep, setCurrentStep] = useState(1)
   const { submitOnboarding, isLoading, error, success, resetOnboarding } = useOnboarding()
+  const { t } = useI18n()
   
   const [data, setData] = useState<OnboardingData>({
     full_name: '',
@@ -127,18 +129,18 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           </div>
           
           <h2 className="text-2xl font-bold text-gray-800 mb-3">
-            ¡Registro Exitoso! 🎉
+            {t('onboarding.success.title')}
           </h2>
           
           <p className="text-gray-600 mb-6 text-base">
-            Tu inscripción ha sido enviada correctamente.
+            {t('onboarding.success.desc')}
           </p>
           
           <button
             onClick={onClose}
             className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-full font-semibold w-full"
           >
-            ¡Perfecto!
+            {t('onboarding.success.button')}
           </button>
         </div>
       </div>,
@@ -167,18 +169,20 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
               
               <div className="flex-1 min-w-0">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 truncate">
-                  {currentStep === 1 && 'Identidad básica'}
-                  {currentStep === 2 && 'Equipo'}
-                  {currentStep === 3 && 'Proyecto'}
-                  {currentStep === 4 && 'Enfoque'}
-                  {currentStep === 5 && 'Habilidades'}
-                  {currentStep === 6 && 'Astrología'}
-                  {currentStep === 7 && 'IA Tools'}
-                  {currentStep === 8 && 'Expectativas'}
-                  {currentStep === 9 && 'Confirmar'}
+                  {currentStep === 1 && t('onboarding.header.step1')}
+                  {currentStep === 2 && t('onboarding.header.step2')}
+                  {currentStep === 3 && t('onboarding.header.step3')}
+                  {currentStep === 4 && t('onboarding.header.step4')}
+                  {currentStep === 5 && t('onboarding.header.step5')}
+                  {currentStep === 6 && t('onboarding.header.step6')}
+                  {currentStep === 7 && t('onboarding.header.step7')}
+                  {currentStep === 8 && t('onboarding.header.step8')}
+                  {currentStep === 9 && t('onboarding.header.step9')}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 truncate">
-                  Paso {currentStep} de {totalSteps}
+                  {t('onboarding.header.stepOf')
+                    .replace('{current}', String(currentStep))
+                    .replace('{total}', String(totalSteps))}
                 </p>
               </div>
             </div>
@@ -258,7 +262,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
               className="flex-1 flex items-center justify-center space-x-2 px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">Anterior</span>
+              <span className="hidden sm:inline">{t('onboarding.nav.prev')}</span>
             </button>
 
             {/* Progress Dots */}
@@ -283,7 +287,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
                 onClick={handleNext}
                 className="flex-1 bg-gradient-to-r from-primary-500 to-teal-500 text-white px-4 py-3 rounded-xl font-semibold flex items-center justify-center space-x-2"
               >
-                <span className="hidden sm:inline">Siguiente</span>
+                <span className="hidden sm:inline">{t('onboarding.nav.next')}</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
@@ -295,7 +299,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
                 {isLoading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 ) : (
-                  '¡Confirmar!'
+                  t('onboarding.nav.confirm')
                 )}
               </button>
             )}
@@ -308,17 +312,20 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 }
 
 // Step Components optimizados para mobile
-const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
+const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  return (
   <div className="space-y-3">
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Nombre completo *
+        {translate('onboarding.step1.fullName')}
       </label>
       <input
         type="text"
         value={data.full_name}
         onChange={(e) => updateData('full_name', e.target.value)}
-        placeholder="Tu nombre completo"
+        placeholder={translate('onboarding.step1.fullNamePh')}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
         required
       />
@@ -326,13 +333,13 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Email de contacto *
+        {translate('onboarding.step1.email')}
       </label>
       <input
         type="email"
         value={data.email}
         onChange={(e) => updateData('email', e.target.value)}
-        placeholder="tu@email.com"
+        placeholder={translate('onboarding.step1.emailPh')}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
         required
       />
@@ -340,52 +347,55 @@ const Step1BasicInfo = ({ data, updateData }: { data: OnboardingData; updateData
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Número de teléfono (opcional)
+        {translate('onboarding.step1.phone')}
       </label>
       <input
         type="tel"
         value={data.phone}
         onChange={(e) => updateData('phone', e.target.value)}
-        placeholder="Ej: 555-123-4567"
+        placeholder={translate('onboarding.step1.phonePh')}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Link a red social o portfolio
+        {translate('onboarding.step1.social')}
       </label>
       <input
         type="url"
         value={data.social_link}
         onChange={(e) => updateData('social_link', e.target.value)}
-        placeholder="LinkedIn, GitHub, Instagram..."
+        placeholder={translate('onboarding.step1.socialPh')}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Rol autopercibido *
+        {translate('onboarding.step1.role')}
       </label>
       <input
         type="text"
         value={data.role}
         onChange={(e) => updateData('role', e.target.value)}
-        placeholder="Developer, Diseñador/a UX, Creador/a de contenido..."
+        placeholder={translate('onboarding.step1.rolePh')}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
         required
       />
     </div>
   </div>
-)
+)}
 
-const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
+const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  return (
   <div className="space-y-3">
     {[
-      { value: 'solo', title: 'Quiero trabajar solo/a', subtitle: 'Proyecto independiente' },
-      { value: 'buscando', title: 'Estoy buscando equipo', subtitle: 'Formar equipo' },
-      { value: 'equipo', title: 'Ya tengo equipo armado', subtitle: 'Equipo formado' }
+      { value: 'solo', title: translate('onboarding.step2.solo.title'), subtitle: translate('onboarding.step2.solo.sub') },
+      { value: 'buscando', title: translate('onboarding.step2.buscando.title'), subtitle: translate('onboarding.step2.buscando.sub') },
+      { value: 'equipo', title: translate('onboarding.step2.equipo.title'), subtitle: translate('onboarding.step2.equipo.sub') }
     ].map((option) => (
       <label
         key={option.value}
@@ -425,42 +435,47 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
       <div className="space-y-3 mt-3 p-3 bg-gray-50 rounded-xl">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre del equipo
+            {translate('onboarding.step2.teamName')}
           </label>
           <input
             type="text"
             value={data.team_name}
             onChange={(e) => updateData('team_name', e.target.value)}
-            placeholder="Nombre de tu equipo"
+            placeholder={translate('onboarding.step2.teamNamePh')}
             className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nombres de los miembros
+            {translate('onboarding.step2.members')}
           </label>
           <input
             type="text"
             value={data.team_members}
             onChange={(e) => updateData('team_members', e.target.value)}
-            placeholder="Juan Pérez, María García..."
+            placeholder={translate('onboarding.step2.membersPh')}
             className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
           />
         </div>
       </div>
     )}
   </div>
-)
+)}
 
-const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-6 sm:space-y-4">
-    <div className="space-y-4 sm:space-y-2">
-      {[
+const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  const options: string[] = (translate('onboarding.step3.options') as unknown as string[]) || []
+  const list = options.length ? options : [
         'Tengo un proyecto iniciado',
         'Tengo problemas concretos que quiero resolver',
         'Tengo ideas que me gustaría empezar',
         'Quiero construir algo pero no tengo ideas todavía'
-      ].map((option) => (
+  ]
+  return (
+    <div className="space-y-6 sm:space-y-4">
+      <div className="space-y-4 sm:space-y-2">
+        {list.map((option) => (
         <label key={option} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
@@ -481,27 +496,32 @@ const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; update
 
     <div>
       <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
-        Cuéntanos más (opcional)
+          {translate('onboarding.step3.more')}
       </label>
       <textarea
         value={data.project_status.join(', ')}
         onChange={(e) => updateData('project_status', e.target.value.split(', ').filter(Boolean))}
-        placeholder="Describe tu proyecto, idea o problema..."
+          placeholder={translate('onboarding.step3.morePh')}
         rows={4}
         className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
 )
+}
 
-const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
+const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  const opts = [
+    { value: 'b2c', title: translate('onboarding.step4.b2c.title'), subtitle: translate('onboarding.step4.b2c.sub'), example: translate('onboarding.step4.b2c.ex'), color: 'bg-purple-500' },
+    { value: 'b2b', title: translate('onboarding.step4.b2b.title'), subtitle: translate('onboarding.step4.b2b.sub'), example: translate('onboarding.step4.b2b.ex'), color: 'bg-orange-500' },
+    { value: 'social', title: translate('onboarding.step4.social.title'), subtitle: translate('onboarding.step4.social.sub'), example: translate('onboarding.step4.social.ex'), color: 'bg-red-500' },
+    { value: 'other', title: translate('onboarding.step4.other.title'), subtitle: translate('onboarding.step4.other.sub'), example: translate('onboarding.step4.other.ex'), color: 'bg-green-500' }
+  ]
+  return (
   <div className="space-y-5 sm:space-y-3">
-    {[
-      { value: 'b2c', title: 'B2C', subtitle: 'Productos para consumidores finales', example: 'app para estudiantes', color: 'bg-purple-500' },
-      { value: 'b2b', title: 'B2B', subtitle: 'Herramientas para negocios', example: 'bot de WhatsApp', color: 'bg-orange-500' },
-      { value: 'social', title: 'Causa Social', subtitle: 'Impacto social o comunitario', example: 'accesibilidad digital', color: 'bg-red-500' },
-      { value: 'other', title: 'Otro', subtitle: 'Proyectos artísticos, performance', example: 'arte generativo', color: 'bg-green-500' }
-    ].map((option) => (
+      {opts.map((option) => (
       <label
         key={option.value}
         className={`block p-5 sm:p-3 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
@@ -531,17 +551,22 @@ const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateD
     ))}
   </div>
 )
+}
 
-const Step5Skills = ({ data, updateSkills }: { data: OnboardingData; updateSkills: (skill: keyof OnboardingData['skills'], value: number) => void }) => (
+const Step5Skills = ({ data, updateSkills }: { data: OnboardingData; updateSkills: (skill: keyof OnboardingData['skills'], value: number) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  const skills = [
+    { key: 'creativity', title: translate('onboarding.step5.creativity.title'), question: translate('onboarding.step5.creativity.q') },
+    { key: 'programming', title: translate('onboarding.step5.programming.title'), question: translate('onboarding.step5.programming.q') },
+    { key: 'design', title: translate('onboarding.step5.design.title'), question: translate('onboarding.step5.design.q') },
+    { key: 'communication', title: translate('onboarding.step5.communication.title'), question: translate('onboarding.step5.communication.q') },
+    { key: 'leadership', title: translate('onboarding.step5.leadership.title'), question: translate('onboarding.step5.leadership.q') },
+    { key: 'ai_tools', title: translate('onboarding.step5.ai_tools.title'), question: translate('onboarding.step5.ai_tools.q') }
+  ] as const
+  return (
   <div className="space-y-4">
-    {[
-      { key: 'creativity', title: 'Creatividad', question: '¿Se te ocurren conceptos nuevos?' },
-      { key: 'programming', title: 'Programación', question: '¿Sabes convertir ideas en código?' },
-      { key: 'design', title: 'Diseño UX/UI', question: '¿Tienes ojo para lo visual?' },
-      { key: 'communication', title: 'Comunicación', question: '¿Te sientes cómodo explicando?' },
-      { key: 'leadership', title: 'Liderazgo', question: '¿Sabes coordinar equipos?' },
-      { key: 'ai_tools', title: 'IA Tools', question: '¿Usas IA para crear?' }
-    ].map((skill) => (
+      {skills.map((skill) => (
       <div key={skill.key} className="space-y-2">
         <div>
           <div className="font-medium text-gray-800 text-sm mb-1">{skill.title}</div>
@@ -564,26 +589,30 @@ const Step5Skills = ({ data, updateSkills }: { data: OnboardingData; updateSkill
     ))}
   </div>
 )
+}
 
-const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updateAstrology: (field: keyof OnboardingData['astrology'], value: string) => void }) => (
+const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updateAstrology: (field: keyof OnboardingData['astrology'], value: string) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  return (
   <div className="space-y-4">
     <div className="bg-purple-50 border border-purple-200 rounded-xl p-3">
       <div className="flex items-center space-x-2 text-purple-700">
         <Star className="h-4 w-4" />
-        <span className="text-xs font-medium">Opcional y divertido ✨</span>
-      </div>
+          <span className="text-xs font-medium">{translate('onboarding.step6.optional')}</span>
+        </div>
     </div>
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Signo Solar
+          {translate('onboarding.step6.solar')}
       </label>
       <select
         value={data.astrology.solar_sign}
         onChange={(e) => updateAstrology('solar_sign', e.target.value)}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       >
-        <option value="">Tu signo</option>
+          <option value="">{translate('onboarding.step6.yourSign')}</option>
         <option value="aries">Aries</option>
         <option value="tauro">Tauro</option>
         <option value="geminis">Géminis</option>
@@ -601,56 +630,61 @@ const Step6Astrology = ({ data, updateAstrology }: { data: OnboardingData; updat
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Ascendente
+          {translate('onboarding.step6.asc')}
       </label>
       <input
         type="text"
         value={data.astrology.ascendant}
         onChange={(e) => updateAstrology('ascendant', e.target.value)}
-        placeholder="Si lo sabes..."
+          placeholder={translate('onboarding.step6.ascPh')}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        Signo Lunar
+          {translate('onboarding.step6.lunar')}
       </label>
       <input
         type="text"
         value={data.astrology.lunar_sign}
         onChange={(e) => updateAstrology('lunar_sign', e.target.value)}
-        placeholder="Si lo sabes..."
+          placeholder={translate('onboarding.step6.lunarPh')}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
 
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">
-        ¿Qué piensas sobre la astrología?
+          {translate('onboarding.step6.opinion')}
       </label>
       <textarea
         value={data.astrology.opinion}
         onChange={(e) => updateAstrology('opinion', e.target.value)}
-        placeholder="'Creo que suma', 'Es solo por diversión', 'No tengo opinión'"
+          placeholder={translate('onboarding.step6.opinionPh')}
         rows={2}
         className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
 )
+}
 
-const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-6 sm:space-y-4">
-    <div className="space-y-4 sm:space-y-2">
-      {[
+const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  const tools: string[] = [
         'Base44 / Lovable / Bolt / v0',
         'ChatGPT / Claude / Perplexity',
         'Figma AI / Diagram',
         'Replit Ghostwriter / Codeium / GitHub Copilot',
         'Midjourney / DALL-E / Runway',
-        'Ninguna (pero tengo ganas de aprender)'
-      ].map((tool) => (
+    translate('onboarding.step7.othersPh')
+  ]
+  return (
+    <div className="space-y-6 sm:space-y-4">
+      <div className="space-y-4 sm:space-y-2">
+        {tools.map((tool) => (
         <label key={tool} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
@@ -671,28 +705,34 @@ const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: 
 
     <div>
       <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
-        Otras herramientas
+          {translate('onboarding.step7.others')}
       </label>
       <input
         type="text"
-        placeholder="¿Usas alguna otra herramienta de IA?"
+          placeholder={translate('onboarding.step7.othersPh')}
         className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
       />
     </div>
   </div>
 )
+}
 
-const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => (
-  <div className="space-y-6 sm:space-y-4">
-    <div className="space-y-4 sm:space-y-2">
-      {[
+const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  const options: string[] = (translate('onboarding.step8.options') as unknown as string[]) || []
+  const list = options.length ? options : [
         'Conocer gente con intereses similares',
         'Aprender sobre IA y nuevas tecnologías',
         'Lanzar un proyecto real',
         'Validar una idea',
         'Experimentar y jugar',
         'Ganar 😎'
-      ].map((expectation) => (
+  ]
+  return (
+    <div className="space-y-6 sm:space-y-4">
+      <div className="space-y-4 sm:space-y-2">
+        {list.map((expectation) => (
         <label key={expectation} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
           <input
             type="checkbox"
@@ -713,43 +753,53 @@ const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateD
 
     <div>
       <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
-        Otras expectativas
+          {translate('onboarding.step8.other')}
       </label>
       <textarea
-        placeholder="¿Algo más que esperas de la hackathon?"
+          placeholder={translate('onboarding.step8.otherPh')}
         rows={3}
         className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
       />
     </div>
   </div>
 )
+}
 
-const Step9Confirmation = ({ data }: { data: OnboardingData }) => (
+const Step9Confirmation = ({ data }: { data: OnboardingData }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  const lines: string[] = (translate('onboarding.step9.acceptLines') as unknown as string[]) || []
+  return (
   <div className="space-y-4">
     <div className="bg-blue-50 rounded-xl p-4">
-      <h3 className="font-semibold text-gray-800 mb-3 text-sm">Resumen de tu registro</h3>
+        <h3 className="font-semibold text-gray-800 mb-3 text-sm">{translate('onboarding.step9.summary')}</h3>
       <div className="space-y-1 text-xs">
-        <div><span className="font-medium">Nombre:</span> {data.full_name}</div>
-        <div><span className="font-medium">Email:</span> {data.email}</div>
-        <div><span className="font-medium">Rol:</span> {data.role}</div>
-        <div><span className="font-medium">Equipo:</span> {
-          data.team_preference === 'solo' ? 'Solo' :
-          data.team_preference === 'buscando' ? 'Buscando' :
-          'Tengo equipo'
+          <div><span className="font-medium">{translate('onboarding.step9.name')}:</span> {data.full_name}</div>
+          <div><span className="font-medium">{translate('onboarding.step9.email')}:</span> {data.email}</div>
+          <div><span className="font-medium">{translate('onboarding.step9.role')}:</span> {data.role}</div>
+          <div><span className="font-medium">{translate('onboarding.step9.team')}:</span> {
+            data.team_preference === 'solo' ? translate('onboarding.step9.teamValues.solo') :
+            data.team_preference === 'buscando' ? translate('onboarding.step9.teamValues.buscando') :
+            translate('onboarding.step9.teamValues.equipo')
         }</div>
-        <div><span className="font-medium">Enfoque:</span> {data.project_focus}</div>
-      </div>
+          <div><span className="font-medium">{translate('onboarding.step9.focus')}:</span> {data.project_focus}</div>
+        </div>
     </div>
 
     <div className="bg-gray-50 rounded-xl p-4">
-      <h3 className="font-semibold text-gray-800 mb-3 text-sm">Al confirmar, acepto que:</h3>
+        <h3 className="font-semibold text-gray-800 mb-3 text-sm">{translate('onboarding.step9.accept')}</h3>
       <ul className="space-y-1 text-xs text-gray-600">
-        <li>• Pueden contactarme por email para temas del evento.</li>
-        <li>• Habrá fotos y videos durante la hackathon.</li>
-        <li>• El envío no garantiza una plaza.</li>
+          {(lines.length ? lines : [
+            '• Pueden contactarme por email para temas del evento.',
+            '• Habrá fotos y videos durante la hackathon.',
+            '• El envío no garantiza una plaza.'
+          ]).map((line, idx) => (
+            <li key={idx}>{line}</li>
+          ))}
       </ul>
     </div>
   </div>
 )
+}
 
 export default OnboardingModal
