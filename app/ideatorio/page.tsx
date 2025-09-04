@@ -145,9 +145,14 @@ export default function IdeatorioPage() {
       setSubmitMsg('')
       const formData = new FormData(e.currentTarget)
       const title = String(formData.get('title') || '')
-      const categories = categoriesChips.join(',')
       const problem = String(formData.get('problem') || '')
       const solution = String(formData.get('solution') || '')
+      
+      // Procesar categorías: combinar chips existentes con input de texto
+      const categoryInput = String(formData.get('category_input') || '')
+      const categoryFromChips = categoriesChips.join(',')
+      const categoryCombined = [categoryFromChips, categoryInput].filter(Boolean).join(',')
+      const categories = categoryCombined
       
       // Procesar MVP: combinar chips existentes con input de texto
       const mvpInput = String(formData.get('mvp_input') || '')
@@ -304,15 +309,39 @@ export default function IdeatorioPage() {
                 <h4 className="font-semibold text-gray-800 mb-3">{t('pages.ideatorio.add.formTitle')}</h4>
                 <form onSubmit={handleSubmitIdea} className="space-y-3">
                   <input name="title" placeholder={t('pages.ideatorio.add.fields.title')} required className="w-full px-3 py-2 border rounded-lg" />
-                  <Tags
-                    label={t('pages.ideatorio.add.fields.categories')}
-                    inputValue={categoryInput}
-                    setInputValue={setCategoryInput}
-                    chips={categoriesChips}
-                    setChips={setCategoriesChips}
-                    addChip={addChip}
-                    removeChip={removeChip}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t('pages.ideatorio.add.fields.categories')}
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {categoriesChips.map((chip) => (
+                        <span key={chip} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-primary-50 text-primary-700 border border-primary-200">
+                          {chip}
+                          <button type="button" onClick={() => removeChip(chip, setCategoriesChips, categoriesChips)} className="text-primary-600 hover:text-primary-800">×</button>
+                        </span>
+                      ))}
+                    </div>
+                    <input
+                      name="category_input"
+                      value={categoryInput}
+                      onChange={(e) => setCategoryInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          processCommaText(categoryInput, setCategoriesChips, categoriesChips)
+                          setCategoryInput('')
+                        }
+                      }}
+                      onBlur={() => {
+                        if (categoryInput.includes(',')) {
+                          processCommaText(categoryInput, setCategoriesChips, categoriesChips)
+                          setCategoryInput('')
+                        }
+                      }}
+                      placeholder="B2C, B2B, Causa Social (separados por comas)"
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
                   <textarea name="problem" placeholder={t('pages.ideatorio.add.fields.problem')} required className="w-full px-3 py-2 border rounded-lg" rows={2} />
                   <textarea name="solution" placeholder={t('pages.ideatorio.add.fields.solution')} required className="w-full px-3 py-2 border rounded-lg" rows={2} />
                   <div>
