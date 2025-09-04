@@ -27,6 +27,7 @@ const ES_DICTIONARY = flatten({
     hackathon: 'Hackathon',
     sponsors: 'Sponsors',
     agenda: 'Agenda',
+    ideatorio: 'Ideatorio',
     community: 'Comunidad',
     resources: 'Recursos',
   },
@@ -38,6 +39,12 @@ const ES_DICTIONARY = flatten({
     registerNow: '¡Inscríbete Ahora!',
     signupHackathon: 'Inscribirse en la Hackathon'
   },
+  pages: {
+    ideatorio: {
+      title: 'Ideatorio',
+      intro: 'Un espacio con ideas accionables para construir en 72 horas.'
+    }
+  },
   a11y: {
     toggleMenu: 'Alternar menú'
   }
@@ -48,6 +55,7 @@ const EN_DICTIONARY = flatten({
     hackathon: 'Hackathon',
     sponsors: 'Sponsors',
     agenda: 'Agenda',
+    ideatorio: 'Idea Lab',
     community: 'Community',
     resources: 'Resources',
   },
@@ -58,6 +66,12 @@ const EN_DICTIONARY = flatten({
   cta: {
     registerNow: 'Register Now!',
     signupHackathon: 'Sign up for the Hackathon'
+  },
+  pages: {
+    ideatorio: {
+      title: 'Idea Lab',
+      intro: 'A space with actionable ideas to build in 72 hours.'
+    }
   },
   a11y: {
     toggleMenu: 'Toggle menu'

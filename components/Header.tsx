@@ -17,6 +17,7 @@ const Header = () => {
     { name: t('nav.hackathon'), href: '/hackathon', icon: Rocket },
     { name: t('nav.sponsors'), href: '/sponsors', icon: Users },
     { name: t('nav.agenda'), href: '/agenda', icon: Calendar, isComingSoon: true },
+    { name: t('nav.ideatorio'), href: '/ideatorio', icon: Rocket },
     { name: t('nav.community'), href: '/comunidad', icon: Heart },
     { name: t('nav.resources'), href: '/recursos', icon: Book },
   ]
