@@ -4,6 +4,7 @@ import useIdeas from '@/hooks/useIdeas'
 import { useI18n } from '@/components/i18n/LanguageProvider'
 import { useCallback, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import Header from '@/components/Header'
 
 function Tags({ label, inputValue, setInputValue, chips, setChips, addChip, removeChip }: {
   label: string
@@ -107,7 +108,7 @@ export default function IdeatorioPage() {
       const image_url = String(formData.get('image_url') || '')
       const demo_url = String(formData.get('demo_url') || '')
 
-      const { data, error: rpcError } = await supabase.rpc('create_idea_with_password', {
+      const { error: rpcError } = await supabase.rpc('create_idea_with_password', {
         p_password: 'Robable',
         p_title: title,
         p_categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
@@ -132,7 +133,9 @@ export default function IdeatorioPage() {
   }
 
   return (
-    <main className="pt-24 pb-16 bg-white min-h-screen">
+    <main className="bg-white min-h-screen">
+      <Header />
+      <div className="pt-24 pb-16">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{t('pages.ideatorio.title')}</h1>
@@ -259,6 +262,7 @@ export default function IdeatorioPage() {
           </div>
         )}
       </section>
+      </div>
     </main>
   )
 }
