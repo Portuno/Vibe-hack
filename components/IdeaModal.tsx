@@ -123,7 +123,7 @@ export const IdeaModal = ({ idea, isOpen, onClose }: IdeaModalProps) => {
             )}
 
             {/* Tecnologías */}
-            {idea.technologies?.length > 0 && (
+            {idea.technologies && idea.technologies.length > 0 && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Tecnologías</h3>
                 <div className="flex flex-wrap gap-2">
