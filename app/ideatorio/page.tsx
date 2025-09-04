@@ -8,12 +8,20 @@ export default function IdeatorioPage() {
   const { t } = useI18n()
 
   return (
-    <main className="pt-20 pb-16">
+    <main className="pt-24 pb-16 bg-white min-h-screen">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="mb-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">{t('pages.ideatorio.title')}</h1>
           <p className="mt-3 text-gray-600">{t('pages.ideatorio.intro')}</p>
         </header>
+
+        {/* Filters (placeholder minimal) */}
+        <div className="mb-6 flex items-center gap-3">
+          <button className="px-4 py-2 rounded-full border border-gray-200 text-sm bg-gray-50">
+            {t('pages.ideatorio.filters.all')}
+          </button>
+          <span className="text-sm text-gray-500">{t('pages.ideatorio.filters.categories')}</span>
+        </div>
 
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
@@ -27,11 +35,16 @@ export default function IdeatorioPage() {
               <div key={idx} className="h-64 rounded-2xl bg-gray-100 animate-pulse" />
             ))}
           </div>
-        ) : (
+        ) : ideas.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {ideas.map((idea) => (
               <IdeaCard key={idea.id} idea={idea} />
             ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">{t('pages.ideatorio.emptyTitle')}</h3>
+            <p className="text-gray-500">{t('pages.ideatorio.emptyDesc')}</p>
           </div>
         )}
       </section>

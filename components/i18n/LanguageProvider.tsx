@@ -137,7 +137,13 @@ const ES_DICTIONARY = flatten({
   pages: {
     ideatorio: {
       title: 'Ideatorio',
-      intro: 'Un espacio con ideas accionables para construir en 72 horas.'
+      intro: 'Un espacio con ideas accionables para construir en 72 horas.',
+      emptyTitle: 'Aún no hay ideas publicadas',
+      emptyDesc: 'Cuando carguemos ideas, las verás aquí. ¡Vuelve pronto!',
+      filters: {
+        all: 'Todas',
+        categories: 'Categorías'
+      }
     },
     home: {
       dateLocation: 'Octubre 2025 • Valencia',
@@ -343,7 +349,13 @@ const EN_DICTIONARY = flatten({
   pages: {
     ideatorio: {
       title: 'Idea Lab',
-      intro: 'A space with actionable ideas to build in 72 hours.'
+      intro: 'A space with actionable ideas to build in 72 hours.',
+      emptyTitle: 'No ideas published yet',
+      emptyDesc: 'Once we add ideas, you will see them here. Check back soon!',
+      filters: {
+        all: 'All',
+        categories: 'Categories'
+      }
     },
     home: {
       dateLocation: 'October 2025 • Valencia',
