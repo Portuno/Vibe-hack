@@ -4,9 +4,11 @@ import Header from '@/components/Header'
 import SponsorCard from '@/components/SponsorCard'
 import { useSponsors } from '@/hooks/useSponsors'
 import { Trophy, Loader2, AlertCircle, Shield, ArrowRight } from 'lucide-react'
+import { useI18n } from '@/components/i18n/LanguageProvider'
 
 export default function SponsorsPage() {
   const { principalSponsors, coSponsors, loading, error } = useSponsors()
+  const { t } = useI18n()
 
   if (loading) {
     return (
@@ -15,7 +17,7 @@ export default function SponsorsPage() {
         <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto text-center">
             <Loader2 className="h-12 w-12 text-purple-600 animate-spin mx-auto mb-4" />
-            <p className="text-gray-600">Cargando sponsors...</p>
+            <p className="text-gray-600">{t('labels.loading') ?? 'Loading...'}</p>
           </div>
         </div>
       </main>
@@ -29,7 +31,7 @@ export default function SponsorsPage() {
         <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto text-center">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <p className="text-red-600">Error al cargar los sponsors: {error}</p>
+            <p className="text-red-600">{t('labels.errorLoading') ?? 'Error loading sponsors'}: {error}</p>
           </div>
         </div>
       </main>
@@ -45,11 +47,11 @@ export default function SponsorsPage() {
           {/* Hero Section */}
           <div className="text-center mb-20">
             <h1 className="text-5xl font-bold mb-6">
-              <span className="text-gray-900">Nuestros</span>{' '}
-              <span className="text-teal-600">Sponsors</span>
+              <span className="text-gray-900">{t('pages.sponsors.title1')}</span>{' '}
+              <span className="text-teal-600">{t('pages.sponsors.title2')}</span>
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Agradecemos a las empresas que hacen posible este evento y apoyan la innovación.
+              {t('pages.sponsors.description')}
             </p>
           </div>
 
@@ -57,7 +59,7 @@ export default function SponsorsPage() {
           {principalSponsors.length > 0 && (
             <div className="mb-20">
               <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-                Main Sponsors
+                {t('pages.sponsors.main')}
               </h2>
               
               {/* Grid responsive para main sponsors */}
@@ -78,7 +80,7 @@ export default function SponsorsPage() {
           {coSponsors.length > 0 && (
             <div className="mb-20">
               <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-                Co-Sponsors
+                {t('pages.sponsors.co')}
               </h2>
               
               {/* Grid responsive para co-sponsors */}
@@ -100,10 +102,10 @@ export default function SponsorsPage() {
             <div className="text-center py-16">
               <Trophy className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                No hay sponsors disponibles
+                {t('pages.sponsors.emptyTitle')}
               </h3>
               <p className="text-gray-500">
-                Los sponsors aparecerán aquí cuando se agreguen a la base de datos.
+                {t('pages.sponsors.emptyDesc')}
               </p>
             </div>
           )}
@@ -115,16 +117,16 @@ export default function SponsorsPage() {
                 <Shield className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-2">
-                ¿Quieres apoyar la innovación?
+                {t('pages.sponsors.ctaTitle')}
               </h3>
               <p className="text-lg mb-6 opacity-90">
-                Conviértete en sponsor y conecta con el talento del futuro.
+                {t('pages.sponsors.ctaDesc')}
               </p>
               <a
                 href="/contacto"
                 className="bg-white text-gray-900 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-200 inline-flex items-center space-x-2"
               >
-                <span>Quiero ser sponsor</span>
+                <span>{t('pages.sponsors.ctaButton')}</span>
                 <ArrowRight className="h-5 w-5" />
               </a>
             </div>

@@ -4,9 +4,11 @@ import { useState } from 'react'
 import Header from '@/components/Header'
 import { Send, Mail, Phone, User, MessageSquare, ArrowRight, CheckCircle } from 'lucide-react'
 import { useContacts, ContactData } from '@/hooks/useContacts'
+import { useI18n } from '@/components/i18n/LanguageProvider'
 
 export default function ContactPage() {
   const { submitContact, resetContact, isLoading, error, success } = useContacts()
+  const { t } = useI18n()
   
   const [formData, setFormData] = useState<ContactData>({
     name: '',
@@ -51,16 +53,16 @@ export default function ContactPage() {
                 <CheckCircle className="h-8 w-8 text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-3">
-                ¡Mensaje Enviado! 🎉
+                {t('pages.contact.successTitle')}
               </h1>
               <p className="text-gray-600 mb-4">
-                Te responderemos en las próximas 24-48 horas.
+                {t('pages.contact.successDesc')}
               </p>
               <button
                 onClick={() => resetContact()}
                 className="bg-green-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-600 transition-all duration-200"
               >
-                Enviar otro mensaje
+                {t('pages.contact.successButton')}
               </button>
             </div>
           </div>
@@ -78,10 +80,10 @@ export default function ContactPage() {
           {/* Hero Section - Más compacto */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-3">
-              Contáctanos
+              {t('pages.contact.title')}
             </h1>
             <p className="text-lg text-gray-600">
-              ¿Tienes dudas o quieres ser sponsor? Envíanos un mensaje.
+              {t('pages.contact.subtitle')}
             </p>
           </div>
 
@@ -92,7 +94,7 @@ export default function ContactPage() {
                 <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-teal-500 rounded-xl flex items-center justify-center mr-3">
                   <Send className="h-5 w-5 text-white" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Envíanos un mensaje</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('pages.contact.formTitle')}</h2>
               </div>
 
               {/* Error Message */}
@@ -107,7 +109,7 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Nombre *
+                      {t('pages.contact.name')}
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -117,7 +119,7 @@ export default function ContactPage() {
                         type="text"
                         value={formData.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
-                        placeholder="Tu nombre"
+                        placeholder={t('pages.contact.name')}
                         required
                         className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                       />
@@ -126,7 +128,7 @@ export default function ContactPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email *
+                      {t('pages.contact.email')}
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -136,7 +138,7 @@ export default function ContactPage() {
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
-                        placeholder="tu@email.com"
+                        placeholder={t('pages.contact.email')}
                         required
                         className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                       />
@@ -148,7 +150,7 @@ export default function ContactPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Teléfono
+                      {t('pages.contact.phone')}
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -166,7 +168,7 @@ export default function ContactPage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Motivo *
+                      {t('pages.contact.reason')}
                     </label>
                     <select
                       value={formData.reason}
@@ -174,10 +176,10 @@ export default function ContactPage() {
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                     >
-                      <option value="sponsorship">Sponsorship</option>
-                      <option value="mentoria">Mentoría</option>
-                      <option value="consultas">Consultas</option>
-                      <option value="otro">Otro</option>
+                      <option value="sponsorship">{t('pages.contact.reasons.sponsorship')}</option>
+                      <option value="mentoria">{t('pages.contact.reasons.mentoria')}</option>
+                      <option value="consultas">{t('pages.contact.reasons.consultas')}</option>
+                      <option value="otro">{t('pages.contact.reasons.otro')}</option>
                     </select>
                   </div>
                 </div>
@@ -185,7 +187,7 @@ export default function ContactPage() {
                 {/* Descripción */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Mensaje *
+                    {t('pages.contact.message')}
                   </label>
                   <div className="relative">
                     <div className="absolute top-2 left-3 flex items-start pointer-events-none">
@@ -194,7 +196,7 @@ export default function ContactPage() {
                     <textarea
                       value={formData.description}
                       onChange={(e) => handleInputChange('description', e.target.value)}
-                      placeholder="Cuéntanos más detalles..."
+                      placeholder={t('pages.contact.messagePlaceholder')}
                       required
                       rows={3}
                       className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 resize-none"
@@ -211,11 +213,11 @@ export default function ContactPage() {
                   {isLoading ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Enviando...</span>
+                      <span>{t('pages.contact.sending')}</span>
                     </>
                   ) : (
                     <>
-                      <span>Enviar mensaje</span>
+                      <span>{t('pages.contact.send')}</span>
                       <ArrowRight className="h-4 w-4" />
                     </>
                   )}
@@ -228,30 +230,30 @@ export default function ContactPage() {
               {/* Sponsorship */}
               <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-4 border border-purple-200">
                 <h3 className="text-lg font-bold text-purple-900 mb-2">
-                  ¿Quieres ser Sponsor? 🚀
+                  {t('pages.contact.promoSponsorTitle')}
                 </h3>
                 <p className="text-purple-700 text-sm">
-                  Únete a VibeHack y conecta con el talento del futuro.
+                  {t('pages.contact.promoSponsorDesc')}
                 </p>
               </div>
 
               {/* Mentoría */}
               <div className="bg-gradient-to-r from-teal-50 to-teal-100 rounded-xl p-4 border border-teal-200">
                 <h3 className="text-lg font-bold text-teal-900 mb-2">
-                  ¿Quieres ser Mentor? 🎓
+                  {t('pages.contact.promoMentorTitle')}
                 </h3>
                 <p className="text-teal-700 text-sm">
-                  Comparte tu experiencia y guía a nuevos innovadores.
+                  {t('pages.contact.promoMentorDesc')}
                 </p>
               </div>
 
               {/* Telegram */}
               <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
                 <h3 className="text-lg font-bold text-blue-900 mb-2">
-                  Telegram oficial 📱
+                  {t('pages.contact.telegramTitle')}
                 </h3>
                 <p className="text-blue-700 text-sm mb-3">
-                  Para dudas rápidas y conexión con la comunidad
+                  {t('pages.contact.telegramDesc')}
                 </p>
                 <a
                   href="https://t.me/+Qp73D_rzUmo2ODNk"
@@ -259,7 +261,7 @@ export default function ContactPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-200 hover:scale-105 w-full sm:w-auto"
                 >
-                  <span>Unirse al Telegram</span>
+                  <span>{t('pages.contact.telegramButton')}</span>
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

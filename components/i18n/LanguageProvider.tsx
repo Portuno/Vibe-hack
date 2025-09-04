@@ -77,6 +77,79 @@ const ES_DICTIONARY = flatten({
         joinTelegram: 'Únete a Telegram'
       }
     }
+    ,
+    sponsors: {
+      title1: 'Our',
+      title2: 'Sponsors',
+      description: 'We are grateful to the companies that make this event possible and support innovation.',
+      main: 'Main Sponsors',
+      co: 'Co-Sponsors',
+      emptyTitle: 'No sponsors available',
+      emptyDesc: 'Sponsors will appear here when added to the database.',
+      ctaTitle: 'Want to support innovation?',
+      ctaDesc: 'Become a sponsor and connect with future talent.',
+      ctaButton: 'I want to sponsor'
+    },
+    contact: {
+      successTitle: 'Message Sent! 🎉',
+      successDesc: 'We will get back to you within 24-48 hours.',
+      successButton: 'Send another message',
+      title: 'Contact Us',
+      subtitle: 'Have questions or want to sponsor? Send us a message.',
+      formTitle: 'Send us a message',
+      name: 'Name *',
+      email: 'Email *',
+      phone: 'Phone',
+      reason: 'Reason *',
+      reasons: { sponsorship: 'Sponsorship', mentoria: 'Mentorship', consultas: 'Inquiries', otro: 'Other' },
+      message: 'Message *',
+      messagePlaceholder: 'Tell us more details...',
+      sending: 'Sending...',
+      send: 'Send message',
+      promoSponsorTitle: 'Want to be a Sponsor? 🚀',
+      promoSponsorDesc: 'Join VibeHack and connect with future talent.',
+      promoMentorTitle: 'Want to be a Mentor? 🎓',
+      promoMentorDesc: 'Share your experience and guide new innovators.',
+      telegramTitle: 'Official Telegram 📱',
+      telegramDesc: 'For quick questions and community connection',
+      telegramButton: 'Join Telegram'
+    }
+    sponsors: {
+      title1: 'Nuestros',
+      title2: 'Sponsors',
+      description: 'Agradecemos a las empresas que hacen posible este evento y apoyan la innovación.',
+      main: 'Main Sponsors',
+      co: 'Co-Sponsors',
+      emptyTitle: 'No hay sponsors disponibles',
+      emptyDesc: 'Los sponsors aparecerán aquí cuando se agreguen a la base de datos.',
+      ctaTitle: '¿Quieres apoyar la innovación?',
+      ctaDesc: 'Conviértete en sponsor y conecta con el talento del futuro.',
+      ctaButton: 'Quiero ser sponsor'
+    },
+    contact: {
+      successTitle: '¡Mensaje Enviado! 🎉',
+      successDesc: 'Te responderemos en las próximas 24-48 horas.',
+      successButton: 'Enviar otro mensaje',
+      title: 'Contáctanos',
+      subtitle: '¿Tienes dudas o quieres ser sponsor? Envíanos un mensaje.',
+      formTitle: 'Envíanos un mensaje',
+      name: 'Nombre *',
+      email: 'Email *',
+      phone: 'Teléfono',
+      reason: 'Motivo *',
+      reasons: { sponsorship: 'Sponsorship', mentoria: 'Mentoría', consultas: 'Consultas', otro: 'Otro' },
+      message: 'Mensaje *',
+      messagePlaceholder: 'Cuéntanos más detalles...',
+      sending: 'Enviando...',
+      send: 'Enviar mensaje',
+      promoSponsorTitle: '¿Quieres ser Sponsor? 🚀',
+      promoSponsorDesc: 'Únete a VibeHack y conecta con el talento del futuro.',
+      promoMentorTitle: '¿Quieres ser Mentor? 🎓',
+      promoMentorDesc: 'Comparte tu experiencia y guía a nuevos innovadores.',
+      telegramTitle: 'Telegram oficial 📱',
+      telegramDesc: 'Para dudas rápidas y conexión con la comunidad',
+      telegramButton: 'Unirse al Telegram'
+    }
   },
   a11y: {
     toggleMenu: 'Alternar menú'
