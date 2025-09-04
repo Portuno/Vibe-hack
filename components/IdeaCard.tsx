@@ -28,12 +28,7 @@ export const IdeaCard = ({ idea, onClick }: IdeaCardProps) => {
     categories,
     problem,
     solution,
-    mvp_features,
-    technologies,
-    audience,
-    business_model,
     image_url,
-    demo_url,
     created_at
   } = idea
 
