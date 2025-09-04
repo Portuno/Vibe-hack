@@ -1,7 +1,9 @@
 import Header from '@/components/Header'
 import { Send, Users, Heart, ArrowRight } from 'lucide-react'
+import { useI18n } from '@/components/i18n/LanguageProvider'
 
 export default function ComunidadPage() {
+  const { t } = useI18n()
   return (
     <main className="min-h-screen bg-white">
       <Header />
@@ -11,13 +13,13 @@ export default function ComunidadPage() {
           {/* Hero Section */}
           <div className="text-center mb-16">
             <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Únete a nuestra{' '}
+              {t('pages.community.title1')}{' '}
               <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                Comunidad
+                {t('pages.community.title2')}
               </span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              VibeHack es más que un evento; es un movimiento. Conecta, colabora y crece con innovadores de toda la región.
+              {t('pages.community.heroDesc')}
             </p>
           </div>
 
@@ -30,10 +32,10 @@ export default function ComunidadPage() {
                   <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mr-4">
                     <Send className="h-8 w-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900">Telegram Oficial</h3>
+                  <h3 className="text-2xl font-bold text-gray-900">{t('pages.community.telegramTitle')}</h3>
                 </div>
                 <p className="text-gray-600 text-lg mb-8 flex-grow">
-                  El punto de encuentro para todos los participantes. Resuelve dudas, encuentra equipo y comparte tu progreso.
+                  {t('pages.community.telegramDesc')}
                 </p>
                 <a
                   href="https://t.me/+Qp73D_rzUmo2ODNk"
@@ -41,7 +43,7 @@ export default function ComunidadPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-xl font-medium hover:shadow-lg transition-all duration-200 hover:scale-105 w-fit"
                 >
-                  <span>Unirme al grupo</span>
+                  <span>{t('pages.community.joinGroup')}</span>
                   <ArrowRight className="h-5 w-5" />
                 </a>
               </div>
@@ -55,10 +57,10 @@ export default function ComunidadPage() {
                   <div className="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center mr-3">
                     <Users className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900">Futuros eventos</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{t('pages.community.upcomingTitle')}</h3>
                 </div>
                 <p className="text-gray-600 text-sm">
-                  Únete para saber más sobre la Hackathon y futuros eventos.
+                  {t('pages.community.upcomingDesc')}
                 </p>
               </div>
 
@@ -68,10 +70,10 @@ export default function ComunidadPage() {
                   <div className="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center mr-3">
                     <Heart className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900">Síguenos en redes</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{t('pages.community.followTitle')}</h3>
                 </div>
                 <p className="text-gray-600 text-sm">
-                  para no perderte ninguna novedad
+                  {t('pages.community.followDesc')}
                 </p>
               </div>
 
@@ -81,16 +83,16 @@ export default function ComunidadPage() {
                   <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center mr-3">
                     <Send className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900">Contacto</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{t('pages.community.contactTitle')}</h3>
                 </div>
                 <p className="text-gray-600 text-sm mb-4">
-                  ¿Tienes dudas o quieres ser sponsor?
+                  {t('pages.community.contactDesc')}
                 </p>
                 <a
                   href="/contacto"
                   className="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-green-500 to-teal-500 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-200 hover:scale-105 text-sm"
                 >
-                  <span>Contactar</span>
+                  <span>{t('pages.community.contactButton')}</span>
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

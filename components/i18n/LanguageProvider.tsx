@@ -206,6 +206,22 @@ const ES_DICTIONARY = flatten({
       telegramDesc: 'Para dudas rápidas y conexión con la comunidad',
       telegramButton: 'Unirse al Telegram'
     }
+    ,
+    community: {
+      title1: 'Únete a nuestra',
+      title2: 'Comunidad',
+      heroDesc: 'VibeHack es más que un evento; es un movimiento. Conecta, colabora y crece con innovadores de toda la región.',
+      telegramTitle: 'Telegram Oficial',
+      telegramDesc: 'El punto de encuentro para todos los participantes. Resuelve dudas, encuentra equipo y comparte tu progreso.',
+      joinGroup: 'Unirme al grupo',
+      upcomingTitle: 'Futuros eventos',
+      upcomingDesc: 'Únete para saber más sobre la Hackathon y futuros eventos.',
+      followTitle: 'Síguenos en redes',
+      followDesc: 'para no perderte ninguna novedad',
+      contactTitle: 'Contacto',
+      contactDesc: '¿Tienes dudas o quieres ser sponsor?',
+      contactButton: 'Contactar'
+    }
   },
   a11y: {
     toggleMenu: 'Alternar menú'
@@ -396,6 +412,21 @@ const EN_DICTIONARY = flatten({
       telegramDesc: 'For quick questions and community connection',
       telegramButton: 'Join Telegram'
     }
+  },
+  community: {
+    title1: 'Join our',
+    title2: 'Community',
+    heroDesc: 'VibeHack is more than an event; it is a movement. Connect, collaborate, and grow with innovators across the region.',
+    telegramTitle: 'Official Telegram',
+    telegramDesc: 'The meeting point for all participants. Get help, find a team, and share your progress.',
+    joinGroup: 'Join the group',
+    upcomingTitle: 'Upcoming events',
+    upcomingDesc: 'Join to learn more about the Hackathon and future events.',
+    followTitle: 'Follow us on social media',
+    followDesc: "so you don't miss any updates",
+    contactTitle: 'Contact',
+    contactDesc: 'Do you have questions or want to sponsor?',
+    contactButton: 'Contact'
   },
   onboarding: EN_ONBOARDING,
   a11y: {
