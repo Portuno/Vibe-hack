@@ -137,8 +137,20 @@ export default function IdeatorioPage() {
       const audience = String(formData.get('audience') || '')
       const business = String(formData.get('business') || '')
       const image_url = String(formData.get('image_url') || '')
-      const demo_url = String(formData.get('demo_url') || '')
+      const demo_url_raw = String(formData.get('demo_url') || '')
+      
+      // Normalizar demo_url para asegurar que tenga protocolo
+      let demo_url = demo_url_raw.trim()
+      if (demo_url && !demo_url.startsWith('http://') && !demo_url.startsWith('https://')) {
+        demo_url = `https://${demo_url}`
+      }
 
+      console.log('URLs procesadas:', {
+        demo_url_raw,
+        demo_url_final: demo_url,
+        image_url
+      })
+      
       console.log('Intentando crear idea con datos:', {
         title,
         categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
@@ -272,7 +284,12 @@ export default function IdeatorioPage() {
                   <input name="audience" placeholder={t('pages.ideatorio.add.fields.audience')} className="w-full px-3 py-2 border rounded-lg" />
                   <input name="business" placeholder={t('pages.ideatorio.add.fields.business')} className="w-full px-3 py-2 border rounded-lg" />
                   <input name="image_url" placeholder={t('pages.ideatorio.add.fields.image')} className="w-full px-3 py-2 border rounded-lg" />
-                  <input name="demo_url" placeholder={t('pages.ideatorio.add.fields.demo')} className="w-full px-3 py-2 border rounded-lg" />
+                  <input 
+                    name="demo_url" 
+                    placeholder="https://ejemplo.com o ejemplo.com" 
+                    className="w-full px-3 py-2 border rounded-lg" 
+                    type="url"
+                  />
                   <button type="submit" disabled={submitLoading} className="px-4 py-2 rounded-lg gradient-bg text-white font-semibold">
                     {submitLoading ? '...' : t('pages.ideatorio.add.submit')}
                   </button>
