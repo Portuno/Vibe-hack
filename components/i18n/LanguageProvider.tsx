@@ -185,44 +185,7 @@ const ES_DICTIONARY = flatten({
         successDesc: 'Mientras tanto, únete a nuestra comunidad en Telegram para estar al tanto de todas las novedades y conectar con otros innovadores.',
         joinTelegram: 'Únete a Telegram'
       }
-    }
-    ,
-    sponsors: {
-      title1: 'Our',
-      title2: 'Sponsors',
-      description: 'We are grateful to the companies that make this event possible and support innovation.',
-      main: 'Main Sponsors',
-      co: 'Co-Sponsors',
-      emptyTitle: 'No sponsors available',
-      emptyDesc: 'Sponsors will appear here when added to the database.',
-      ctaTitle: 'Want to support innovation?',
-      ctaDesc: 'Become a sponsor and connect with future talent.',
-      ctaButton: 'I want to sponsor'
     },
-    contact: {
-      successTitle: 'Message Sent! 🎉',
-      successDesc: 'We will get back to you within 24-48 hours.',
-      successButton: 'Send another message',
-      title: 'Contact Us',
-      subtitle: 'Have questions or want to sponsor? Send us a message.',
-      formTitle: 'Send us a message',
-      name: 'Name *',
-      email: 'Email *',
-      phone: 'Phone',
-      reason: 'Reason *',
-      reasons: { sponsorship: 'Sponsorship', mentoria: 'Mentorship', consultas: 'Inquiries', otro: 'Other' },
-      message: 'Message *',
-      messagePlaceholder: 'Tell us more details...',
-      sending: 'Sending...',
-      send: 'Send message',
-      promoSponsorTitle: 'Want to be a Sponsor? 🚀',
-      promoSponsorDesc: 'Join VibeHack and connect with future talent.',
-      promoMentorTitle: 'Want to be a Mentor? 🎓',
-      promoMentorDesc: 'Share your experience and guide new innovators.',
-      telegramTitle: 'Official Telegram 📱',
-      telegramDesc: 'For quick questions and community connection',
-      telegramButton: 'Join Telegram'
-    }
     sponsors: {
       title1: 'Nuestros',
       title2: 'Sponsors',
@@ -265,82 +228,7 @@ const ES_DICTIONARY = flatten({
   }
 })
 
-const EN_DICTIONARY = flatten({
-  nav: {
-    hackathon: 'Hackathon',
-    sponsors: 'Sponsors',
-    agenda: 'Agenda',
-    ideatorio: 'Idea Lab',
-    community: 'Community',
-    resources: 'Resources',
-  },
-  labels: {
-    soon: 'Soon',
-    moreInfoSoon: 'More information soon!',
-    loading: 'Loading...',
-    errorLoading: 'Error loading'
-  },
-  cta: {
-    registerNow: 'Register Now!',
-    signupHackathon: 'Sign up for the Hackathon'
-  },
-  pages: {
-    ideatorio: {
-      title: 'Idea Lab',
-      intro: 'A space with actionable ideas to build in 72 hours.'
-    },
-    home: {
-      dateLocation: 'October 2025 • Valencia',
-      headline1: 'Build, Launch',
-      headline2: 'and Validate in 72h',
-      tagline: 'Innovation without limits',
-      description: 'An intensive weekend to invent the new era of product creation. Join an experimental group of innovative minds and test disruptive production and distribution techniques with the support of new tools.',
-      communityTitle: 'Innovative Community',
-      communitySubtitle: '+200 creative minds',
-      stats: {
-        hours: 'Hours'
-      },
-      timeline: {
-        friday: 'Friday: Ideation and Team Building',
-        saturday: 'Saturday: Development and Testing',
-        sunday: 'Sunday: Demo and Awards'
-      },
-      newsletter: {
-        stayConnectedTitle: 'Stay Connected',
-        stayConnectedSubtitle: 'Join our community and receive the latest news',
-        formTitle: 'Stay Informed',
-        formSubtitle: 'Receive the latest news from the innovative ecosystem of Valencia',
-        placeholderEmail: 'your@email.com',
-        consentText: 'I agree to receive news and announcements from Terreta Hub, including information about events, resources and opportunities from the innovative community of Valencia. I can cancel my subscription at any time.',
-        sending: 'Sending...',
-        notifyMe: 'Notify me!',
-        privacy: 'We will not share your email with anyone. You will only receive relevant updates.',
-        successTitle: 'Thank you for subscribing!',
-        successDesc: 'Meanwhile, join our community on Telegram to stay up to date on all the news and connect with other innovators.',
-        joinTelegram: 'Join Telegram'
-      }
-    },
-    sponsors: {
-      title1: 'Our',
-      title2: 'Sponsors',
-      description: 'We are grateful to the companies that make this event possible and support innovation.',
-      main: 'Main Sponsors',
-      co: 'Co-Sponsors',
-      emptyTitle: 'No sponsors available',
-      emptyDesc: 'Sponsors will appear here when added to the database.',
-      ctaTitle: 'Want to support innovation?',
-      ctaDesc: 'Become a sponsor and connect with future talent.',
-      ctaButton: 'I want to sponsor'
-    },
-    contact: EN_ONBOARDING ? {} : {}
-  },
-  onboarding: EN_ONBOARDING,
-  a11y: {
-    toggleMenu: 'Toggle menu'
-  }
-})
-
-// English onboarding
+// English onboarding object (placed before EN dictionary to avoid TDZ)
 const EN_ONBOARDING = {
   header: {
     step1: 'Basic identity',
@@ -448,6 +336,104 @@ const EN_ONBOARDING = {
     ]
   }
 }
+
+const EN_DICTIONARY = flatten({
+  nav: {
+    hackathon: 'Hackathon',
+    sponsors: 'Sponsors',
+    agenda: 'Agenda',
+    ideatorio: 'Idea Lab',
+    community: 'Community',
+    resources: 'Resources',
+  },
+  labels: {
+    soon: 'Soon',
+    moreInfoSoon: 'More information soon!',
+    loading: 'Loading...',
+    errorLoading: 'Error loading'
+  },
+  cta: {
+    registerNow: 'Register Now!',
+    signupHackathon: 'Sign up for the Hackathon'
+  },
+  pages: {
+    ideatorio: {
+      title: 'Idea Lab',
+      intro: 'A space with actionable ideas to build in 72 hours.'
+    },
+    home: {
+      dateLocation: 'October 2025 • Valencia',
+      headline1: 'Build, Launch',
+      headline2: 'and Validate in 72h',
+      tagline: 'Innovation without limits',
+      description: 'An intensive weekend to invent the new era of product creation. Join an experimental group of innovative minds and test disruptive production and distribution techniques with the support of new tools.',
+      communityTitle: 'Innovative Community',
+      communitySubtitle: '+200 creative minds',
+      stats: {
+        hours: 'Hours'
+      },
+      timeline: {
+        friday: 'Friday: Ideation and Team Building',
+        saturday: 'Saturday: Development and Testing',
+        sunday: 'Sunday: Demo and Awards'
+      },
+      newsletter: {
+        stayConnectedTitle: 'Stay Connected',
+        stayConnectedSubtitle: 'Join our community and receive the latest news',
+        formTitle: 'Stay Informed',
+        formSubtitle: 'Receive the latest news from the innovative ecosystem of Valencia',
+        placeholderEmail: 'your@email.com',
+        consentText: 'I agree to receive news and announcements from Terreta Hub, including information about events, resources and opportunities from the innovative community of Valencia. I can cancel my subscription at any time.',
+        sending: 'Sending...',
+        notifyMe: 'Notify me!',
+        privacy: 'We will not share your email with anyone. You will only receive relevant updates.',
+        successTitle: 'Thank you for subscribing!',
+        successDesc: 'Meanwhile, join our community on Telegram to stay up to date on all the news and connect with other innovators.',
+        joinTelegram: 'Join Telegram'
+      }
+    },
+    sponsors: {
+      title1: 'Our',
+      title2: 'Sponsors',
+      description: 'We are grateful to the companies that make this event possible and support innovation.',
+      main: 'Main Sponsors',
+      co: 'Co-Sponsors',
+      emptyTitle: 'No sponsors available',
+      emptyDesc: 'Sponsors will appear here when added to the database.',
+      ctaTitle: 'Want to support innovation?',
+      ctaDesc: 'Become a sponsor and connect with future talent.',
+      ctaButton: 'I want to sponsor'
+    },
+    contact: {
+      successTitle: 'Message Sent! 🎉',
+      successDesc: 'We will get back to you within 24-48 hours.',
+      successButton: 'Send another message',
+      title: 'Contact Us',
+      subtitle: 'Have questions or want to sponsor? Send us a message.',
+      formTitle: 'Send us a message',
+      name: 'Name *',
+      email: 'Email *',
+      phone: 'Phone',
+      reason: 'Reason *',
+      reasons: { sponsorship: 'Sponsorship', mentoria: 'Mentorship', consultas: 'Inquiries', otro: 'Other' },
+      message: 'Message *',
+      messagePlaceholder: 'Tell us more details...',
+      sending: 'Sending...',
+      send: 'Send message',
+      promoSponsorTitle: 'Want to be a Sponsor? 🚀',
+      promoSponsorDesc: 'Join VibeHack and connect with future talent.',
+      promoMentorTitle: 'Want to be a Mentor? 🎓',
+      promoMentorDesc: 'Share your experience and guide new innovators.',
+      telegramTitle: 'Official Telegram 📱',
+      telegramDesc: 'For quick questions and community connection',
+      telegramButton: 'Join Telegram'
+    }
+  },
+  onboarding: EN_ONBOARDING,
+  a11y: {
+    toggleMenu: 'Toggle menu'
+  }
+})
 
 
 const LOCALES: Record<SupportedLocale, Dictionary> = {
