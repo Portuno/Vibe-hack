@@ -99,6 +99,22 @@ export default function IdeatorioPage() {
     setSelectedIdea(null)
   }
 
+  // Función para procesar texto separado por comas y convertirlo en chips
+  const processCommaText = (text: string, setChips: (chips: string[]) => void, currentChips: string[]) => {
+    if (!text.trim()) return
+    
+    const items = text
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean)
+      .filter((item, index, arr) => arr.indexOf(item) === index) // Remove duplicates
+    
+    if (items.length > 0) {
+      const newChips = [...currentChips, ...items].filter((item, index, arr) => arr.indexOf(item) === index)
+      setChips(newChips)
+    }
+  }
+
   const handleOpenAdd = () => setShowPassword(true)
 
   const handleCheckPassword = () => {
@@ -132,8 +148,19 @@ export default function IdeatorioPage() {
       const categories = categoriesChips.join(',')
       const problem = String(formData.get('problem') || '')
       const solution = String(formData.get('solution') || '')
-      const mvp = mvpChips.join(',')
-      const technologies = techChips.join(',')
+      
+      // Procesar MVP: combinar chips existentes con input de texto
+      const mvpInput = String(formData.get('mvp_input') || '')
+      const mvpFromChips = mvpChips.join(',')
+      const mvpCombined = [mvpFromChips, mvpInput].filter(Boolean).join(',')
+      const mvp = mvpCombined
+      
+      // Procesar tecnologías: combinar chips existentes con input de texto
+      const techInput = String(formData.get('tech_input') || '')
+      const techFromChips = techChips.join(',')
+      const techCombined = [techFromChips, techInput].filter(Boolean).join(',')
+      const technologies = techCombined
+      
       const audience = String(formData.get('audience') || '')
       const business = String(formData.get('business') || '')
       const image_url = String(formData.get('image_url') || '')
@@ -151,13 +178,33 @@ export default function IdeatorioPage() {
         image_url
       })
       
+      // Función helper para procesar elementos separados por comas
+      const processCommaSeparated = (input: string) => {
+        if (!input) return []
+        return input
+          .split(',')
+          .map(s => s.trim())
+          .filter(Boolean)
+          .filter((item, index, arr) => arr.indexOf(item) === index) // Remove duplicates
+      }
+
+      const processedCategories = processCommaSeparated(categories)
+      const processedMvp = processCommaSeparated(mvp)
+      const processedTechnologies = processCommaSeparated(technologies)
+
+      console.log('Elementos procesados:', {
+        categories: processedCategories,
+        mvp: processedMvp,
+        technologies: processedTechnologies
+      })
+
       console.log('Intentando crear idea con datos:', {
         title,
-        categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
+        categories: processedCategories,
         problem,
         solution,
-        mvp: mvp ? mvp.split(',').map(s => s.trim()).filter(Boolean) : [],
-        technologies: technologies ? technologies.split(',').map(s => s.trim()).filter(Boolean) : [],
+        mvp: processedMvp,
+        technologies: processedTechnologies,
         audience: audience || null,
         business: business || null,
         image_url: image_url || null,
@@ -167,11 +214,11 @@ export default function IdeatorioPage() {
       const { data, error: rpcError } = await supabase.rpc('create_idea_with_password', {
         p_password: 'Robable',
         p_title: title,
-        p_categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
+        p_categories: processedCategories,
         p_problem: problem,
         p_solution: solution,
-        p_mvp_features: mvp ? mvp.split(',').map(s => s.trim()).filter(Boolean) : [],
-        p_technologies: technologies ? technologies.split(',').map(s => s.trim()).filter(Boolean) : [],
+        p_mvp_features: processedMvp,
+        p_technologies: processedTechnologies,
         p_audience: audience || null,
         p_business_model: business || null,
         p_image_url: image_url || null,
@@ -268,24 +315,73 @@ export default function IdeatorioPage() {
                   />
                   <textarea name="problem" placeholder={t('pages.ideatorio.add.fields.problem')} required className="w-full px-3 py-2 border rounded-lg" rows={2} />
                   <textarea name="solution" placeholder={t('pages.ideatorio.add.fields.solution')} required className="w-full px-3 py-2 border rounded-lg" rows={2} />
-                  <Tags
-                    label={t('pages.ideatorio.add.fields.mvp')}
-                    inputValue={mvpInput}
-                    setInputValue={setMvpInput}
-                    chips={mvpChips}
-                    setChips={setMvpChips}
-                    addChip={addChip}
-                    removeChip={removeChip}
-                  />
-                  <Tags
-                    label={t('pages.ideatorio.add.fields.technologies')}
-                    inputValue={techInput}
-                    setInputValue={setTechInput}
-                    chips={techChips}
-                    setChips={setTechChips}
-                    addChip={addChip}
-                    removeChip={removeChip}
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t('pages.ideatorio.add.fields.mvp')}
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {mvpChips.map((chip) => (
+                        <span key={chip} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-primary-50 text-primary-700 border border-primary-200">
+                          {chip}
+                          <button type="button" onClick={() => removeChip(chip, setMvpChips, mvpChips)} className="text-primary-600 hover:text-primary-800">×</button>
+                        </span>
+                      ))}
+                    </div>
+                    <input
+                      name="mvp_input"
+                      value={mvpInput}
+                      onChange={(e) => setMvpInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          processCommaText(mvpInput, setMvpChips, mvpChips)
+                          setMvpInput('')
+                        }
+                      }}
+                      onBlur={() => {
+                        if (mvpInput.includes(',')) {
+                          processCommaText(mvpInput, setMvpChips, mvpChips)
+                          setMvpInput('')
+                        }
+                      }}
+                      placeholder="ejemplo1, ejemplo2, ejemplo3 (separados por comas)"
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      {t('pages.ideatorio.add.fields.technologies')}
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {techChips.map((chip) => (
+                        <span key={chip} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-primary-50 text-primary-700 border border-primary-200">
+                          {chip}
+                          <button type="button" onClick={() => removeChip(chip, setTechChips, techChips)} className="text-primary-600 hover:text-primary-800">×</button>
+                        </span>
+                      ))}
+                    </div>
+                    <input
+                      name="tech_input"
+                      value={techInput}
+                      onChange={(e) => setTechInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          processCommaText(techInput, setTechChips, techChips)
+                          setTechInput('')
+                        }
+                      }}
+                      onBlur={() => {
+                        if (techInput.includes(',')) {
+                          processCommaText(techInput, setTechChips, techChips)
+                          setTechInput('')
+                        }
+                      }}
+                      placeholder="React, Node.js, MongoDB (separados por comas)"
+                      className="w-full px-3 py-2 border rounded-lg"
+                    />
+                  </div>
                   <input name="audience" placeholder={t('pages.ideatorio.add.fields.audience')} className="w-full px-3 py-2 border rounded-lg" />
                   <input name="business" placeholder={t('pages.ideatorio.add.fields.business')} className="w-full px-3 py-2 border rounded-lg" />
                   <input name="image_url" placeholder={t('pages.ideatorio.add.fields.image')} className="w-full px-3 py-2 border rounded-lg" />
