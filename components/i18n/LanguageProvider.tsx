@@ -6,7 +6,9 @@ type SupportedLocale = AppLocale.SupportedLocale
 
 type Dictionary = Record<string, string>
 
-type NestedDictionary = Record<string, Dictionary | NestedDictionary | string>
+interface NestedDictionary {
+  [key: string]: string | Dictionary | NestedDictionary
+}
 
 const flatten = (obj: NestedDictionary, prefix = ''): Dictionary => {
   const entries: Dictionary = {}
