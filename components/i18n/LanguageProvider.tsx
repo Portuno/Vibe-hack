@@ -164,7 +164,8 @@ const ES_DICTIONARY = flatten({
           technologies: 'Tecnologías / Herramientas (coma separadas)',
           audience: 'Público Objetivo',
           business: 'Modelo de Negocio (Hipótesis)',
-          image: 'Imagen Representativa (URL)'
+          image: 'Imagen Representativa (URL)',
+          demo: 'Demo / Ejemplo (URL)'
         },
         submit: 'Publicar idea',
         success: 'Idea publicada correctamente'
@@ -401,7 +402,8 @@ const EN_DICTIONARY = flatten({
           technologies: 'Technologies / Tools (comma separated)',
           audience: 'Target Audience',
           business: 'Business Model (Hypothesis)',
-          image: 'Representative Image (URL)'
+          image: 'Representative Image (URL)',
+          demo: 'Demo / Example (URL)'
         },
         submit: 'Publish idea',
         success: 'Idea published successfully'

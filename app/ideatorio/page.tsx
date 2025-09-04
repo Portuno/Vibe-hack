@@ -2,8 +2,45 @@
 import IdeaCard from '@/components/IdeaCard'
 import useIdeas from '@/hooks/useIdeas'
 import { useI18n } from '@/components/i18n/LanguageProvider'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+
+function Tags({ label, inputValue, setInputValue, chips, setChips, addChip, removeChip }: {
+  label: string
+  inputValue: string
+  setInputValue: (v: string) => void
+  chips: string[]
+  setChips: (v: string[]) => void
+  addChip: (v: string, setter: (v: string[]) => void, current: string[]) => void
+  removeChip: (v: string, setter: (v: string[]) => void, current: string[]) => void
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <div className="flex flex-wrap gap-2 mb-2">
+        {chips.map((chip) => (
+          <span key={chip} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-primary-50 text-primary-700 border border-primary-200">
+            {chip}
+            <button type="button" onClick={() => removeChip(chip, setChips, chips)} className="text-primary-600 hover:text-primary-800">×</button>
+          </span>
+        ))}
+      </div>
+      <input
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault()
+            addChip(inputValue, setChips, chips)
+            setInputValue('')
+          }
+        }}
+        placeholder={label}
+        className="w-full px-3 py-2 border rounded-lg"
+      />
+    </div>
+  )
+}
 
 export default function IdeatorioPage() {
   const { ideas, loading, error } = useIdeas()
@@ -15,6 +52,23 @@ export default function IdeatorioPage() {
   const [notifySent, setNotifySent] = useState(false)
   const [submitLoading, setSubmitLoading] = useState(false)
   const [submitMsg, setSubmitMsg] = useState('')
+  const [categoryInput, setCategoryInput] = useState('')
+  const [categoriesChips, setCategoriesChips] = useState<string[]>([])
+  const [mvpInput, setMvpInput] = useState('')
+  const [mvpChips, setMvpChips] = useState<string[]>([])
+  const [techInput, setTechInput] = useState('')
+  const [techChips, setTechChips] = useState<string[]>([])
+
+  const addChip = useCallback((value: string, setter: (v: string[]) => void, current: string[]) => {
+    const v = value.trim()
+    if (!v) return
+    if (current.includes(v)) return
+    setter([...current, v])
+  }, [])
+
+  const removeChip = useCallback((value: string, setter: (v: string[]) => void, current: string[]) => {
+    setter(current.filter(c => c !== value))
+  }, [])
 
   const handleOpenAdd = () => setShowPassword(true)
 
@@ -43,14 +97,15 @@ export default function IdeatorioPage() {
       setSubmitMsg('')
       const formData = new FormData(e.currentTarget)
       const title = String(formData.get('title') || '')
-      const categories = String(formData.get('categories') || '')
+      const categories = categoriesChips.join(',')
       const problem = String(formData.get('problem') || '')
       const solution = String(formData.get('solution') || '')
-      const mvp = String(formData.get('mvp') || '')
-      const technologies = String(formData.get('technologies') || '')
+      const mvp = mvpChips.join(',')
+      const technologies = techChips.join(',')
       const audience = String(formData.get('audience') || '')
       const business = String(formData.get('business') || '')
       const image_url = String(formData.get('image_url') || '')
+      const demo_url = String(formData.get('demo_url') || '')
 
       const { data, error: rpcError } = await supabase.rpc('create_idea_with_password', {
         p_password: 'Robable',
@@ -62,7 +117,8 @@ export default function IdeatorioPage() {
         p_technologies: technologies ? technologies.split(',').map(s => s.trim()).filter(Boolean) : [],
         p_audience: audience || null,
         p_business_model: business || null,
-        p_image_url: image_url || null
+        p_image_url: image_url || null,
+        p_demo_url: demo_url || null
       })
 
       if (rpcError) throw rpcError
@@ -127,14 +183,39 @@ export default function IdeatorioPage() {
                 <h4 className="font-semibold text-gray-800 mb-3">{t('pages.ideatorio.add.formTitle')}</h4>
                 <form onSubmit={handleSubmitIdea} className="space-y-3">
                   <input name="title" placeholder={t('pages.ideatorio.add.fields.title')} required className="w-full px-3 py-2 border rounded-lg" />
-                  <input name="categories" placeholder={t('pages.ideatorio.add.fields.categories')} className="w-full px-3 py-2 border rounded-lg" />
+                  <Tags
+                    label={t('pages.ideatorio.add.fields.categories')}
+                    inputValue={categoryInput}
+                    setInputValue={setCategoryInput}
+                    chips={categoriesChips}
+                    setChips={setCategoriesChips}
+                    addChip={addChip}
+                    removeChip={removeChip}
+                  />
                   <textarea name="problem" placeholder={t('pages.ideatorio.add.fields.problem')} required className="w-full px-3 py-2 border rounded-lg" rows={2} />
                   <textarea name="solution" placeholder={t('pages.ideatorio.add.fields.solution')} required className="w-full px-3 py-2 border rounded-lg" rows={2} />
-                  <input name="mvp" placeholder={t('pages.ideatorio.add.fields.mvp')} className="w-full px-3 py-2 border rounded-lg" />
-                  <input name="technologies" placeholder={t('pages.ideatorio.add.fields.technologies')} className="w-full px-3 py-2 border rounded-lg" />
+                  <Tags
+                    label={t('pages.ideatorio.add.fields.mvp')}
+                    inputValue={mvpInput}
+                    setInputValue={setMvpInput}
+                    chips={mvpChips}
+                    setChips={setMvpChips}
+                    addChip={addChip}
+                    removeChip={removeChip}
+                  />
+                  <Tags
+                    label={t('pages.ideatorio.add.fields.technologies')}
+                    inputValue={techInput}
+                    setInputValue={setTechInput}
+                    chips={techChips}
+                    setChips={setTechChips}
+                    addChip={addChip}
+                    removeChip={removeChip}
+                  />
                   <input name="audience" placeholder={t('pages.ideatorio.add.fields.audience')} className="w-full px-3 py-2 border rounded-lg" />
                   <input name="business" placeholder={t('pages.ideatorio.add.fields.business')} className="w-full px-3 py-2 border rounded-lg" />
                   <input name="image_url" placeholder={t('pages.ideatorio.add.fields.image')} className="w-full px-3 py-2 border rounded-lg" />
+                  <input name="demo_url" placeholder={t('pages.ideatorio.add.fields.demo')} className="w-full px-3 py-2 border rounded-lg" />
                   <button type="submit" disabled={submitLoading} className="px-4 py-2 rounded-lg gradient-bg text-white font-semibold">
                     {submitLoading ? '...' : t('pages.ideatorio.add.submit')}
                   </button>
