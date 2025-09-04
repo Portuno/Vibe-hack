@@ -143,6 +143,31 @@ const ES_DICTIONARY = flatten({
       filters: {
         all: 'Todas',
         categories: 'Categorías'
+      },
+      add: {
+        button: 'Agregar idea',
+        passwordTitle: 'Introduce la contraseña para continuar',
+        passwordPlaceholder: 'Contraseña',
+        confirm: 'Continuar',
+        deniedTitle: 'Solo usuarios autorizados pueden subir ideas',
+        deniedDesc: 'Pon tu email aquí y serás notificado sobre los avances de Terreta Hub',
+        emailPlaceholder: 'tu@email.com',
+        notifyMe: 'Notificarme',
+        thanks: '¡Gracias! Te avisaremos pronto.',
+        formTitle: 'Nueva idea',
+        fields: {
+          title: 'Título de la Idea',
+          categories: 'Categorías (separadas por coma)',
+          problem: 'El Problema',
+          solution: 'Solución Propuesta',
+          mvp: 'Funcionalidades del MVP (coma separadas)',
+          technologies: 'Tecnologías / Herramientas (coma separadas)',
+          audience: 'Público Objetivo',
+          business: 'Modelo de Negocio (Hipótesis)',
+          image: 'Imagen Representativa (URL)'
+        },
+        submit: 'Publicar idea',
+        success: 'Idea publicada correctamente'
       }
     },
     home: {
@@ -355,6 +380,31 @@ const EN_DICTIONARY = flatten({
       filters: {
         all: 'All',
         categories: 'Categories'
+      },
+      add: {
+        button: 'Add idea',
+        passwordTitle: 'Enter the password to continue',
+        passwordPlaceholder: 'Password',
+        confirm: 'Continue',
+        deniedTitle: 'Only authorized users can submit ideas',
+        deniedDesc: 'Leave your email and you will be notified about Terreta Hub updates',
+        emailPlaceholder: 'your@email.com',
+        notifyMe: 'Notify me',
+        thanks: 'Thanks! We will keep you posted.',
+        formTitle: 'New idea',
+        fields: {
+          title: 'Idea Title',
+          categories: 'Categories (comma separated)',
+          problem: 'The Problem',
+          solution: 'Proposed Solution',
+          mvp: 'MVP Features (comma separated)',
+          technologies: 'Technologies / Tools (comma separated)',
+          audience: 'Target Audience',
+          business: 'Business Model (Hypothesis)',
+          image: 'Representative Image (URL)'
+        },
+        submit: 'Publish idea',
+        success: 'Idea published successfully'
       }
     },
     home: {
