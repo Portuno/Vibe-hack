@@ -1,3 +1,4 @@
+"use client"
 import Header from '@/components/Header'
 import { Send, Users, Heart, ArrowRight } from 'lucide-react'
 import { useI18n } from '@/components/i18n/LanguageProvider'
