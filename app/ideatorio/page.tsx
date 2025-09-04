@@ -93,7 +93,10 @@ export default function IdeatorioPage() {
   const handleSubmitIdea = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      if (!supabase) return
+      if (!supabase) {
+        setSubmitMsg('Error: No se pudo conectar con la base de datos')
+        return
+      }
       setSubmitLoading(true)
       setSubmitMsg('')
       const formData = new FormData(e.currentTarget)
@@ -108,7 +111,20 @@ export default function IdeatorioPage() {
       const image_url = String(formData.get('image_url') || '')
       const demo_url = String(formData.get('demo_url') || '')
 
-      const { error: rpcError } = await supabase.rpc('create_idea_with_password', {
+      console.log('Intentando crear idea con datos:', {
+        title,
+        categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
+        problem,
+        solution,
+        mvp: mvp ? mvp.split(',').map(s => s.trim()).filter(Boolean) : [],
+        technologies: technologies ? technologies.split(',').map(s => s.trim()).filter(Boolean) : [],
+        audience: audience || null,
+        business: business || null,
+        image_url: image_url || null,
+        demo_url: demo_url || null
+      })
+
+      const { data, error: rpcError } = await supabase.rpc('create_idea_with_password', {
         p_password: 'Robable',
         p_title: title,
         p_categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
@@ -122,11 +138,21 @@ export default function IdeatorioPage() {
         p_demo_url: demo_url || null
       })
 
-      if (rpcError) throw rpcError
+      console.log('Respuesta RPC:', { data, rpcError })
+
+      if (rpcError) {
+        console.error('Error RPC:', rpcError)
+        throw rpcError
+      }
+      
       setSubmitMsg(t('pages.ideatorio.add.success'))
       ;(e.currentTarget as HTMLFormElement).reset()
-    } catch (err) {
-      setSubmitMsg('Error')
+      setCategoriesChips([])
+      setMvpChips([])
+      setTechChips([])
+    } catch (err: any) {
+      console.error('Error completo:', err)
+      setSubmitMsg(`Error: ${err.message || 'Error desconocido'}`)
     } finally {
       setSubmitLoading(false)
     }
