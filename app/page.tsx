@@ -1,3 +1,4 @@
+"use client"
 import Header from '@/components/Header'
 import NewsletterForm from '@/components/NewsletterForm'
 import OnboardingTrigger from '@/components/OnboardingTrigger'
