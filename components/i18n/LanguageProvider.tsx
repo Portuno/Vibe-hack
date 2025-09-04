@@ -45,6 +45,37 @@ const ES_DICTIONARY = flatten({
     ideatorio: {
       title: 'Ideatorio',
       intro: 'Un espacio con ideas accionables para construir en 72 horas.'
+    },
+    home: {
+      dateLocation: 'Octubre 2025 • Valencia',
+      headline1: 'Construye, Lanza',
+      headline2: 'y Valida en 72hs',
+      tagline: 'Innovación sin límites',
+      description: 'Un fin de semana intensivo para inventar la nueva era de la creación de productos. Únete a un grupo experimental de mentes innovadoras y pon a prueba técnicas disruptivas de producción y distribución con el apoyo de nuevas herramientas.',
+      communityTitle: 'Comunidad Innovadora',
+      communitySubtitle: '+200 mentes creativas',
+      stats: {
+        hours: 'Horas'
+      },
+      timeline: {
+        friday: 'Viernes: Ideación y Formación',
+        saturday: 'Sábado: Desarrollo y Testing',
+        sunday: 'Domingo: Demo y Premios'
+      },
+      newsletter: {
+        stayConnectedTitle: 'Mantente Conectado',
+        stayConnectedSubtitle: 'Únete a nuestra comunidad y recibe las últimas novedades',
+        formTitle: 'Mantente Informado',
+        formSubtitle: 'Recibe las últimas novedades del ecosistema innovador de Valencia',
+        placeholderEmail: 'tu@email.com',
+        consentText: 'Acepto recibir novedades y anuncios de parte de Terreta Hub, incluyendo información sobre eventos, recursos y oportunidades de la comunidad innovadora de Valencia. Puedo cancelar mi suscripción en cualquier momento.',
+        sending: 'Enviando...',
+        notifyMe: '¡Notificarme!',
+        privacy: 'No compartiremos tu email con nadie. Solo recibirás actualizaciones relevantes.',
+        successTitle: '¡Gracias por suscribirte!',
+        successDesc: 'Mientras tanto, únete a nuestra comunidad en Telegram para estar al tanto de todas las novedades y conectar con otros innovadores.',
+        joinTelegram: 'Únete a Telegram'
+      }
     }
   },
   a11y: {
@@ -73,6 +104,37 @@ const EN_DICTIONARY = flatten({
     ideatorio: {
       title: 'Idea Lab',
       intro: 'A space with actionable ideas to build in 72 hours.'
+    },
+    home: {
+      dateLocation: 'October 2025 • Valencia',
+      headline1: 'Build, Launch',
+      headline2: 'and Validate in 72h',
+      tagline: 'Innovation without limits',
+      description: 'An intensive weekend to invent the new era of product creation. Join an experimental group of innovative minds and test disruptive production and distribution techniques with the support of new tools.',
+      communityTitle: 'Innovative Community',
+      communitySubtitle: '+200 creative minds',
+      stats: {
+        hours: 'Hours'
+      },
+      timeline: {
+        friday: 'Friday: Ideation and Team Building',
+        saturday: 'Saturday: Development and Testing',
+        sunday: 'Sunday: Demo and Awards'
+      },
+      newsletter: {
+        stayConnectedTitle: 'Stay Connected',
+        stayConnectedSubtitle: 'Join our community and receive the latest news',
+        formTitle: 'Stay Informed',
+        formSubtitle: 'Receive the latest news from the innovative ecosystem of Valencia',
+        placeholderEmail: 'your@email.com',
+        consentText: 'I agree to receive news and announcements from Terreta Hub, including information about events, resources and opportunities from the innovative community of Valencia. I can cancel my subscription at any time.',
+        sending: 'Sending...',
+        notifyMe: 'Notify me!',
+        privacy: 'We will not share your email with anyone. You will only receive relevant updates.',
+        successTitle: 'Thank you for subscribing!',
+        successDesc: 'Meanwhile, join our community on Telegram to stay up to date on all the news and connect with other innovators.',
+        joinTelegram: 'Join Telegram'
+      }
     }
   },
   a11y: {

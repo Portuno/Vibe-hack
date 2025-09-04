@@ -3,8 +3,10 @@
 import { useState } from 'react'
 import { Mail, Check, Send } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { useI18n } from './i18n/LanguageProvider'
 
 const NewsletterForm = () => {
+  const { t } = useI18n()
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -76,10 +78,10 @@ const NewsletterForm = () => {
             <Check className="h-8 w-8 text-white" />
           </div>
           <h3 className="text-2xl font-bold text-green-700 mb-4">
-            ¡Gracias por suscribirte!
+            {t('pages.home.newsletter.successTitle')}
           </h3>
           <p className="text-green-600 mb-6 text-base leading-relaxed max-w-md mx-auto">
-            Mientras tanto, únete a nuestra comunidad en Telegram para estar al tanto de todas las novedades y conectar con otros innovadores.
+            {t('pages.home.newsletter.successDesc')}
           </p>
           <a
             href="https://t.me/+Qp73D_rzUmo2ODNk"
@@ -87,7 +89,7 @@ const NewsletterForm = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-full font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105 text-lg"
           >
-            <span>Únete a Telegram</span>
+            <span>{t('pages.home.newsletter.joinTelegram')}</span>
             <span className="text-xl">→</span>
           </a>
         </div>
@@ -101,9 +103,9 @@ const NewsletterForm = () => {
         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-primary-500 to-teal-500 rounded-full mb-4">
           <Mail className="h-8 w-8 text-white" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">Mantente Informado</h3>
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('pages.home.newsletter.formTitle')}</h3>
         <p className="text-gray-600 text-lg">
-          Recibe las últimas novedades del ecosistema innovador de Valencia
+          {t('pages.home.newsletter.formSubtitle')}
         </p>
       </div>
       
@@ -113,7 +115,7 @@ const NewsletterForm = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="tu@email.com"
+            placeholder={t('pages.home.newsletter.placeholderEmail')}
             required
             className="w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500 text-lg transition-all duration-300 bg-white/50 backdrop-blur-sm"
           />
@@ -124,14 +126,15 @@ const NewsletterForm = () => {
         
         {/* Consentimiento para recibir novedades */}
         <div className="pt-2">
-          <label className="flex items-start space-x-3 cursor-pointer">
+          <label className="flex items-start space-x-3 cursor-pointer p-3 rounded-xl border-2 border-primary-200 bg-primary-50/50">
             <input
               type="checkbox"
+              defaultChecked
               required
-              className="mt-1 w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+              className="mt-1 w-5 h-5 text-primary-600 border-primary-300 rounded focus:ring-primary-500 focus:ring-2"
             />
-            <div className="text-sm text-gray-600 leading-relaxed">
-              <span className="font-medium">Acepto recibir novedades y anuncios</span> de parte de Terreta Hub, incluyendo información sobre eventos, recursos y oportunidades de la comunidad innovadora de Valencia. Puedo cancelar mi suscripción en cualquier momento.
+            <div className="text-sm text-gray-700 leading-relaxed">
+              {t('pages.home.newsletter.consentText')}
             </div>
           </label>
         </div>
@@ -144,11 +147,11 @@ const NewsletterForm = () => {
           {isSubmitting ? (
             <>
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-              <span>Enviando...</span>
+              <span>{t('pages.home.newsletter.sending')}</span>
             </>
           ) : (
             <>
-              <span>¡Notificarme!</span>
+              <span>{t('pages.home.newsletter.notifyMe')}</span>
               <Send className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
             </>
           )}
@@ -161,7 +164,7 @@ const NewsletterForm = () => {
         )}
         
         <p className="text-xs text-gray-500 text-center">
-          No compartiremos tu email con nadie. Solo recibirás actualizaciones relevantes.
+          {t('pages.home.newsletter.privacy')}
         </p>
       </form>
     </div>
