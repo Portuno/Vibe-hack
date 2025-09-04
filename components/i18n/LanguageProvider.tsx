@@ -74,12 +74,7 @@ const ES_DICTIONARY = flatten({
       membersPh: 'Juan Pérez, María García...'
     },
     step3: {
-      options: [
-        'Tengo un proyecto iniciado',
-        'Tengo problemas concretos que quiero resolver',
-        'Tengo ideas que me gustaría empezar',
-        'Quiero construir algo pero no tengo ideas todavía'
-      ],
+      options: 'Tengo un proyecto iniciado|Tengo problemas concretos que quiero resolver|Tengo ideas que me gustaría empezar|Quiero construir algo pero no tengo ideas todavía',
       more: 'Cuéntanos más (opcional)',
       morePh: 'Describe tu proyecto, idea o problema...'
     },
@@ -113,14 +108,7 @@ const ES_DICTIONARY = flatten({
       othersPh: '¿Usas alguna otra herramienta de IA?'
     },
     step8: {
-      options: [
-        'Conocer gente con intereses similares',
-        'Aprender sobre IA y nuevas tecnologías',
-        'Lanzar un proyecto real',
-        'Validar una idea',
-        'Experimentar y jugar',
-        'Ganar 😎'
-      ],
+      options: 'Conocer gente con intereses similares|Aprender sobre IA y nuevas tecnologías|Lanzar un proyecto real|Validar una idea|Experimentar y jugar|Ganar 😎',
       other: 'Otras expectativas',
       otherPh: '¿Algo más que esperas de la hackathon?'
     },
@@ -133,11 +121,7 @@ const ES_DICTIONARY = flatten({
       teamValues: { solo: 'Solo', buscando: 'Buscando', equipo: 'Tengo equipo' },
       focus: 'Enfoque',
       accept: 'Al confirmar, acepto que:',
-      acceptLines: [
-        '• Pueden contactarme por email para temas del evento.',
-        '• Habrá fotos y videos durante la hackathon.',
-        '• El envío no garantiza una plaza.'
-      ]
+      acceptLines: '• Pueden contactarme por email para temas del evento.|• Habrá fotos y videos durante la hackathon.|• El envío no garantiza una plaza.'
     }
   },
   labels: {
@@ -270,12 +254,7 @@ const EN_ONBOARDING = {
     membersPh: 'John Smith, Jane Doe...'
   },
   step3: {
-    options: [
-      'I have a project started',
-      'I have concrete problems I want to solve',
-      'I have ideas I would like to start',
-      "I want to build something but I don't have ideas yet"
-    ],
+    options: 'I have a project started|I have concrete problems I want to solve|I have ideas I would like to start|I want to build something but I\'t have ideas yet',
     more: 'Tell us more (optional)',
     morePh: 'Describe your project, idea or problem...'
   },
@@ -309,14 +288,7 @@ const EN_ONBOARDING = {
     othersPh: 'Do you use any other AI tool?'
   },
   step8: {
-    options: [
-      'Meet people with similar interests',
-      'Learn about AI and new technologies',
-      'Launch a real project',
-      'Validate an idea',
-      'Experiment and play',
-      'Win 😎'
-    ],
+    options: 'Meet people with similar interests|Learn about AI and new technologies|Launch a real project|Validate an idea|Experiment and play|Win 😎',
     other: 'Other expectations',
     otherPh: 'Anything else you expect from the hackathon?'
   },
@@ -329,11 +301,7 @@ const EN_ONBOARDING = {
     teamValues: { solo: 'Solo', buscando: 'Looking', equipo: 'Have team' },
     focus: 'Focus',
     accept: 'By confirming, I accept that:',
-    acceptLines: [
-      '• You can contact me by email about the event.',
-      '• There will be photos and videos during the hackathon.',
-      '• Submission does not guarantee a spot.'
-    ]
+    acceptLines: '• You can contact me by email about the event.|• There will be photos and videos during the hackathon.|• Submission does not guarantee a spot.'
   }
 }
 

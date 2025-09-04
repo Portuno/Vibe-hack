@@ -465,49 +465,50 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
 const Step3ProjectStatus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
   const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
   const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
-  const options: string[] = (translate('onboarding.step3.options') as unknown as string[]) || []
+  const raw = translate('onboarding.step3.options') as unknown as string
+  const options: string[] = raw && typeof raw === 'string' ? raw.split('|').filter(Boolean) : []
   const list = options.length ? options : [
-        'Tengo un proyecto iniciado',
-        'Tengo problemas concretos que quiero resolver',
-        'Tengo ideas que me gustaría empezar',
-        'Quiero construir algo pero no tengo ideas todavía'
+    'Tengo un proyecto iniciado',
+    'Tengo problemas concretos que quiero resolver',
+    'Tengo ideas que me gustaría empezar',
+    'Quiero construir algo pero no tengo ideas todavía'
   ]
   return (
     <div className="space-y-6 sm:space-y-4">
       <div className="space-y-4 sm:space-y-2">
         {list.map((option) => (
-        <label key={option} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
-          <input
-            type="checkbox"
-            checked={data.project_status.includes(option)}
-            onChange={(e) => {
-              if (e.target.checked) {
-                updateData('project_status', [...data.project_status, option])
-              } else {
-                updateData('project_status', data.project_status.filter(item => item !== option))
-              }
-            }}
-            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-0.5 flex-shrink-0"
-          />
-          <span className="text-base sm:text-sm text-gray-700 leading-relaxed">{option}</span>
-        </label>
-      ))}
-    </div>
+          <label key={option} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
+            <input
+              type="checkbox"
+              checked={data.project_status.includes(option)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  updateData('project_status', [...data.project_status, option])
+                } else {
+                  updateData('project_status', data.project_status.filter(item => item !== option))
+                }
+              }}
+              className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-0.5 flex-shrink-0"
+            />
+            <span className="text-base sm:text-sm text-gray-700 leading-relaxed">{option}</span>
+          </label>
+        ))}
+      </div>
 
-    <div>
-      <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
+      <div>
+        <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
           {translate('onboarding.step3.more')}
-      </label>
-      <textarea
-        value={data.project_status.join(', ')}
-        onChange={(e) => updateData('project_status', e.target.value.split(', ').filter(Boolean))}
+        </label>
+        <textarea
+          value={data.project_status.join(', ')}
+          onChange={(e) => updateData('project_status', e.target.value.split(', ').filter(Boolean))}
           placeholder={translate('onboarding.step3.morePh')}
-        rows={4}
-        className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
-      />
+          rows={4}
+          className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
+        />
+      </div>
     </div>
-  </div>
-)
+  )
 }
 
 const Step4ProjectFocus = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
@@ -720,55 +721,57 @@ const Step7AITools = ({ data, updateData }: { data: OnboardingData; updateData: 
 const Step8Expectations = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
   const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
   const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
-  const options: string[] = (translate('onboarding.step8.options') as unknown as string[]) || []
+  const raw = translate('onboarding.step8.options') as unknown as string
+  const options: string[] = raw && typeof raw === 'string' ? raw.split('|').filter(Boolean) : []
   const list = options.length ? options : [
-        'Conocer gente con intereses similares',
-        'Aprender sobre IA y nuevas tecnologías',
-        'Lanzar un proyecto real',
-        'Validar una idea',
-        'Experimentar y jugar',
-        'Ganar 😎'
+    'Conocer gente con intereses similares',
+    'Aprender sobre IA y nuevas tecnologías',
+    'Lanzar un proyecto real',
+    'Validar una idea',
+    'Experimentar y jugar',
+    'Ganar 😎'
   ]
   return (
     <div className="space-y-6 sm:space-y-4">
       <div className="space-y-4 sm:space-y-2">
         {list.map((expectation) => (
-        <label key={expectation} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
-          <input
-            type="checkbox"
-            checked={data.expectations.includes(expectation)}
-            onChange={(e) => {
-              if (e.target.checked) {
-                updateData('expectations', [...data.expectations, expectation])
-              } else {
-                updateData('expectations', data.expectations.filter(item => item !== expectation))
-              }
-            }}
-            className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-0.5 flex-shrink-0"
-          />
-          <span className="text-base sm:text-sm text-gray-700 leading-relaxed">{expectation}</span>
-        </label>
-      ))}
-    </div>
+          <label key={expectation} className="flex items-start space-x-4 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
+            <input
+              type="checkbox"
+              checked={data.expectations.includes(expectation)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  updateData('expectations', [...data.expectations, expectation])
+                } else {
+                  updateData('expectations', data.expectations.filter(item => item !== expectation))
+                }
+              }}
+              className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500 mt-0.5 flex-shrink-0"
+            />
+            <span className="text-base sm:text-sm text-gray-700 leading-relaxed">{expectation}</span>
+          </label>
+        ))}
+      </div>
 
-    <div>
-      <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
+      <div>
+        <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3 sm:mb-1">
           {translate('onboarding.step8.other')}
-      </label>
-      <textarea
+        </label>
+        <textarea
           placeholder={translate('onboarding.step8.otherPh')}
-        rows={3}
-        className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
-      />
+          rows={3}
+          className="w-full px-4 py-3 sm:px-3 sm:py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-base"
+        />
+      </div>
     </div>
-  </div>
-)
+  )
 }
 
 const Step9Confirmation = ({ data }: { data: OnboardingData }) => {
   const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
   const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
-  const lines: string[] = (translate('onboarding.step9.acceptLines') as unknown as string[]) || []
+  const raw = translate('onboarding.step9.acceptLines') as unknown as string
+  const lines: string[] = raw && typeof raw === 'string' ? raw.split('|').filter(Boolean) : []
   return (
   <div className="space-y-4">
     <div className="bg-blue-50 rounded-xl p-4">
