@@ -1,3 +1,4 @@
+"use client"
 import IdeaCard from '@/components/IdeaCard'
 import useIdeas from '@/hooks/useIdeas'
 import { useI18n } from '@/components/i18n/LanguageProvider'
