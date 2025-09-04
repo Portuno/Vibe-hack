@@ -52,19 +52,20 @@ export default function IdeatorioPage() {
       const business = String(formData.get('business') || '')
       const image_url = String(formData.get('image_url') || '')
 
-      const { error: insertError } = await supabase.from('ideas').insert({
-        title,
-        categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
-        problem,
-        solution,
-        mvp_features: mvp ? mvp.split(',').map(s => s.trim()).filter(Boolean) : [],
-        technologies: technologies ? technologies.split(',').map(s => s.trim()).filter(Boolean) : [],
-        audience: audience || null,
-        business_model: business || null,
-        image_url: image_url || null
+      const { data, error: rpcError } = await supabase.rpc('create_idea_with_password', {
+        p_password: 'Robable',
+        p_title: title,
+        p_categories: categories ? categories.split(',').map(s => s.trim()).filter(Boolean) : [],
+        p_problem: problem,
+        p_solution: solution,
+        p_mvp_features: mvp ? mvp.split(',').map(s => s.trim()).filter(Boolean) : [],
+        p_technologies: technologies ? technologies.split(',').map(s => s.trim()).filter(Boolean) : [],
+        p_audience: audience || null,
+        p_business_model: business || null,
+        p_image_url: image_url || null
       })
 
-      if (insertError) throw insertError
+      if (rpcError) throw rpcError
       setSubmitMsg(t('pages.ideatorio.add.success'))
       ;(e.currentTarget as HTMLFormElement).reset()
     } catch (err) {
