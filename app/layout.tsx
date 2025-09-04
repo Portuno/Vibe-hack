@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { LanguageProvider } from '../components/i18n/LanguageProvider'
 
 export const metadata: Metadata = {
   title: 'VibeHack - Construye, Lanza y Valida en 72hs',
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="antialiased">
-        {children}
+        <LanguageProvider>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   )

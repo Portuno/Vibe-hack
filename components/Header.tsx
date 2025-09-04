@@ -4,17 +4,21 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Zap, Rocket, Users, Calendar, Heart, Book, Menu, X } from 'lucide-react'
 import OnboardingTrigger from './OnboardingTrigger'
+import { LanguageSelector } from './i18n/LanguageSelector'
+import { useI18n } from './i18n/LanguageProvider'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showAgendaTooltip, setShowAgendaTooltip] = useState(false)
 
+  const { t } = useI18n()
+
   const navigationItems = [
-    { name: 'Hackathon', href: '/hackathon', icon: Rocket },
-    { name: 'Sponsors', href: '/sponsors', icon: Users },
-    { name: 'Agenda', href: '/agenda', icon: Calendar, isComingSoon: true },
-    { name: 'Comunidad', href: '/comunidad', icon: Heart },
-    { name: 'Recursos', href: '/recursos', icon: Book },
+    { name: t('nav.hackathon'), href: '/hackathon', icon: Rocket },
+    { name: t('nav.sponsors'), href: '/sponsors', icon: Users },
+    { name: t('nav.agenda'), href: '/agenda', icon: Calendar, isComingSoon: true },
+    { name: t('nav.community'), href: '/comunidad', icon: Heart },
+    { name: t('nav.resources'), href: '/recursos', icon: Book },
   ]
 
   const handleToggleMenu = () => {
@@ -61,7 +65,7 @@ const Header = () => {
                     {/* Tooltip */}
                     {showAgendaTooltip && (
                       <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg whitespace-nowrap z-50">
-                        ¡Más información pronto!
+                        {t('labels.moreInfoSoon')}
                         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-1 w-2 h-2 bg-gray-800 rotate-45"></div>
                       </div>
                     )}
@@ -82,10 +86,11 @@ const Header = () => {
             })}
           </nav>
 
-          {/* Desktop CTA Button */}
-          <div className="hidden md:block">
+          {/* Desktop Right Section: Language + CTA */}
+          <div className="hidden md:flex items-center space-x-3">
+            <LanguageSelector />
             <OnboardingTrigger size="lg">
-              ¡Inscríbete Ahora!
+              {t('cta.registerNow')}
             </OnboardingTrigger>
           </div>
 
@@ -93,13 +98,14 @@ const Header = () => {
           <button
             onClick={handleToggleMenu}
             className="md:hidden p-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
-            aria-label="Toggle menu"
+            aria-label={t('a11y.toggleMenu')}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation */
+        }
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-md">
             <nav className="py-4 space-y-2">
@@ -121,7 +127,7 @@ const Header = () => {
                       <Icon className="h-5 w-5" />
                       <span className="font-medium">{item.name}</span>
                       <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                        Pronto
+                        {t('labels.soon')}
                       </span>
                     </div>
                   )
@@ -143,8 +149,12 @@ const Header = () => {
               {/* Mobile CTA Button */}
               <div className="px-4 pt-4">
                 <OnboardingTrigger size="lg" className="w-full">
-                  ¡Inscríbete Ahora!
+                  {t('cta.registerNow')}
                 </OnboardingTrigger>
+              </div>
+              {/* Mobile Language Selector */}
+              <div className="px-4 pt-2 pb-4 flex justify-end">
+                <LanguageSelector compact />
               </div>
             </nav>
           </div>

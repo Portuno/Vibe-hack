@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import OnboardingModal from './OnboardingModal'
+import { useI18n } from './i18n/LanguageProvider'
 
 interface OnboardingTriggerProps {
   variant?: 'primary' | 'secondary' | 'outline'
@@ -14,10 +15,11 @@ interface OnboardingTriggerProps {
 const OnboardingTrigger = ({ 
   variant = 'primary', 
   size = 'md', 
-  children = 'Inscribirse en la Hackathon',
+  children,
   className = ''
 }: OnboardingTriggerProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { t } = useI18n()
 
   const handleOpenModal = () => {
     setIsModalOpen(true)
@@ -45,7 +47,7 @@ const OnboardingTrigger = ({
         onClick={handleOpenModal}
         className={`${classes} group`}
       >
-        <span>{children}</span>
+        <span>{children ?? t('cta.signupHackathon')}</span>
         <ArrowRight className={`h-5 w-5 transition-transform duration-200 group-hover:translate-x-1 ${size === 'lg' ? 'h-6 w-6' : 'h-4 w-4'}`} />
       </button>
 

@@ -9,3 +9,9 @@ declare global {
 }
 
 export {} 
+
+declare global {
+  namespace AppLocale {
+    type SupportedLocale = 'es' | 'en'
+  }
+}
