@@ -29,13 +29,6 @@ export default function IdeatorioPage() {
   const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const addChip = useCallback((value: string, setter: (v: string[]) => void, current: string[]) => {
-    const v = value.trim()
-    if (!v) return
-    if (current.includes(v)) return
-    setter([...current, v])
-  }, [])
-
   const removeChip = useCallback((value: string, setter: (v: string[]) => void, current: string[]) => {
     setter(current.filter(c => c !== value))
   }, [])
