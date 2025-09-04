@@ -186,7 +186,12 @@ export default function IdeatorioPage() {
       }
       
       setSubmitMsg(t('pages.ideatorio.add.success'))
-      ;(e.currentTarget as HTMLFormElement).reset()
+      
+      // Reset form and chips
+      const form = e.currentTarget as HTMLFormElement
+      if (form) {
+        form.reset()
+      }
       setCategoriesChips([])
       setMvpChips([])
       setTechChips([])
