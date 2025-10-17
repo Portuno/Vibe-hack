@@ -9,7 +9,6 @@ import { useI18n } from './i18n/LanguageProvider'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [showAgendaTooltip, setShowAgendaTooltip] = useState(false)
 
   const { t } = useI18n()
 
