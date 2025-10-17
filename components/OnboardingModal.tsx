@@ -1,3 +1,53 @@
+const Step2UPV = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
+  const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
+  const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
+  return (
+  <div className="space-y-3">
+    <div className="p-3 border border-gray-200 rounded-xl">
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        {translate('onboarding.step2.upv.question')}
+      </label>
+      <div className="flex items-center gap-3" role="radiogroup" aria-label={translate('onboarding.step2.upv.question')}>
+        <label className={`px-3 py-2 rounded-lg border cursor-pointer text-sm ${data.is_upv_student ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700'}`}
+          tabIndex={0}
+          aria-label={translate('onboarding.step2.upv.yes')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') updateData('is_upv_student', true) }}
+        >
+          <input type="radio" name="is_upv_student" className="sr-only" checked={data.is_upv_student === true} onChange={() => updateData('is_upv_student', true)} />
+          {translate('onboarding.step2.upv.yes')}
+        </label>
+        <label className={`px-3 py-2 rounded-lg border cursor-pointer text-sm ${!data.is_upv_student ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700'}`}
+          tabIndex={0}
+          aria-label={translate('onboarding.step2.upv.no')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') updateData('is_upv_student', false) }}
+        >
+          <input type="radio" name="is_upv_student" className="sr-only" checked={data.is_upv_student === false} onChange={() => updateData('is_upv_student', false)} />
+          {translate('onboarding.step2.upv.no')}
+        </label>
+      </div>
+
+      {data.is_upv_student && (
+        <div className="mt-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {translate('onboarding.step2.upv.schoolLabel')}
+          </label>
+          <select
+            value={data.upv_school}
+            onChange={(e) => updateData('upv_school', e.target.value)}
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+            aria-label={translate('onboarding.step2.upv.schoolLabel')}
+          >
+            <option value="">{translate('onboarding.step2.upv.placeholder')}</option>
+            {(String(translate('onboarding.step2.upv.schools')) || '').split('|').map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
 'use client'
 
 import { useState } from 'react'
@@ -43,7 +93,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
     consent_newsletter: false
   })
 
-  const totalSteps = 9
+  const totalSteps = 10
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
@@ -162,13 +212,14 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-primary-500 to-teal-500 flex items-center justify-center">
                 {currentStep === 1 && <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
                 {currentStep === 2 && <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
-                {currentStep === 3 && <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
-                {currentStep === 4 && <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
-                {currentStep === 5 && <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
-                {currentStep === 6 && <Star className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
-                {currentStep === 7 && <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
-                {currentStep === 8 && <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
-                {currentStep === 9 && <Check className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 3 && <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 4 && <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 5 && <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 6 && <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 7 && <Star className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 8 && <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 9 && <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
+                {currentStep === 10 && <Check className="h-4 w-4 sm:h-5 sm:w-5 text-white" />}
               </div>
               
               <div className="flex-1 min-w-0">
@@ -182,6 +233,7 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
                   {currentStep === 7 && t('onboarding.header.step7')}
                   {currentStep === 8 && t('onboarding.header.step8')}
                   {currentStep === 9 && t('onboarding.header.step9')}
+                  {currentStep === 10 && t('onboarding.header.step10')}
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600 truncate">
                   {t('onboarding.header.stepOf')
@@ -224,34 +276,38 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           )}
           
           {currentStep === 2 && (
-            <Step2TeamPreference data={data} updateData={updateData} />
+            <Step2UPV data={data} updateData={updateData} />
           )}
           
           {currentStep === 3 && (
-            <Step3ProjectStatus data={data} updateData={updateData} />
+            <Step2TeamPreference data={data} updateData={updateData} />
           )}
           
           {currentStep === 4 && (
-            <Step4ProjectFocus data={data} updateData={updateData} />
+            <Step3ProjectStatus data={data} updateData={updateData} />
           )}
           
           {currentStep === 5 && (
-            <Step5Skills data={data} updateSkills={updateSkills} />
+            <Step4ProjectFocus data={data} updateData={updateData} />
           )}
           
           {currentStep === 6 && (
-            <Step6Astrology data={data} updateAstrology={updateAstrology} />
+            <Step5Skills data={data} updateSkills={updateSkills} />
           )}
           
           {currentStep === 7 && (
-            <Step7AITools data={data} updateData={updateData} />
+            <Step6Astrology data={data} updateAstrology={updateAstrology} />
           )}
           
           {currentStep === 8 && (
-            <Step8Expectations data={data} updateData={updateData} />
+            <Step7AITools data={data} updateData={updateData} />
           )}
           
           {currentStep === 9 && (
+            <Step8Expectations data={data} updateData={updateData} />
+          )}
+          
+          {currentStep === 10 && (
             <Step9Confirmation data={data} />
           )}
         </div>
@@ -434,50 +490,6 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
         </div>
       </label>
     ))}
-
-    {/* UPV question */}
-    <div className="mt-4 p-3 border border-gray-200 rounded-xl">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        {translate('onboarding.step2.upv.question')}
-      </label>
-      <div className="flex items-center gap-3" role="radiogroup" aria-label={translate('onboarding.step2.upv.question')}>
-        <label className={`px-3 py-2 rounded-lg border cursor-pointer text-sm ${data.is_upv_student ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700'}`}
-          tabIndex={0}
-          aria-label={translate('onboarding.step2.upv.yes')}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') updateData('is_upv_student', true) }}
-        >
-          <input type="radio" name="is_upv_student" className="sr-only" checked={data.is_upv_student === true} onChange={() => updateData('is_upv_student', true)} />
-          {translate('onboarding.step2.upv.yes')}
-        </label>
-        <label className={`px-3 py-2 rounded-lg border cursor-pointer text-sm ${!data.is_upv_student ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700'}`}
-          tabIndex={0}
-          aria-label={translate('onboarding.step2.upv.no')}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') updateData('is_upv_student', false) }}
-        >
-          <input type="radio" name="is_upv_student" className="sr-only" checked={data.is_upv_student === false} onChange={() => updateData('is_upv_student', false)} />
-          {translate('onboarding.step2.upv.no')}
-        </label>
-      </div>
-
-      {data.is_upv_student && (
-        <div className="mt-3">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {translate('onboarding.step2.upv.schoolLabel')}
-          </label>
-          <select
-            value={data.upv_school}
-            onChange={(e) => updateData('upv_school', e.target.value)}
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
-            aria-label={translate('onboarding.step2.upv.schoolLabel')}
-          >
-            <option value="">{translate('onboarding.step2.upv.placeholder')}</option>
-            {(String(translate('onboarding.step2.upv.schools')) || '').split('|').map((s) => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-        </div>
-      )}
-    </div>
 
     {data.team_preference === 'equipo' && (
       <div className="space-y-3 mt-3 p-3 bg-gray-50 rounded-xl">

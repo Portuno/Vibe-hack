@@ -44,6 +44,7 @@ const ES_DICTIONARY = flatten({
       step7: 'IA Tools',
       step8: 'Expectativas',
       step9: 'Confirmar',
+      step10: 'Confirmar',
       stepOf: 'Paso {current} de {total}'
     },
     success: {
@@ -279,7 +280,8 @@ const EN_ONBOARDING = {
     step6: 'Astrology',
     step7: 'AI Tools',
     step8: 'Expectations',
-    step9: 'Confirm',
+      step9: 'Confirm',
+      step10: 'Confirm',
     stepOf: 'Step {current} of {total}'
   },
   success: {
@@ -492,21 +494,22 @@ const EN_DICTIONARY = flatten({
       telegramDesc: 'For quick questions and community connection',
       telegramButton: 'Join Telegram'
     }
-  },
-  community: {
-    title1: 'Join our',
-    title2: 'Community',
-    heroDesc: 'VibeHack is more than an event; it is a movement. Connect, collaborate, and grow with innovators across the region.',
-    telegramTitle: 'Official Telegram',
-    telegramDesc: 'The meeting point for all participants. Get help, find a team, and share your progress.',
-    joinGroup: 'Join the group',
-    upcomingTitle: 'Upcoming events',
-    upcomingDesc: 'Join to learn more about the Hackathon and future events.',
-    followTitle: 'Follow us on social media',
-    followDesc: "so you don't miss any updates",
-    contactTitle: 'Contact',
-    contactDesc: 'Do you have questions or want to sponsor?',
-    contactButton: 'Contact'
+    ,
+    community: {
+      title1: 'Join our',
+      title2: 'Community',
+      heroDesc: "VibeHack is more than an event; it's a movement. Connect, collaborate, and grow with innovators across the region.",
+      telegramTitle: 'Official Telegram',
+      telegramDesc: 'The meeting point for all participants. Get help, find a team, and share your progress.',
+      joinGroup: 'Join the group',
+      upcomingTitle: 'Upcoming events',
+      upcomingDesc: 'Join to learn more about the Hackathon and future events.',
+      followTitle: 'Follow us on social media',
+      followDesc: "so you don't miss any updates",
+      contactTitle: 'Contact',
+      contactDesc: 'Do you have questions or want to sponsor?',
+      contactButton: 'Contact'
+    }
   },
   onboarding: EN_ONBOARDING,
   a11y: {
