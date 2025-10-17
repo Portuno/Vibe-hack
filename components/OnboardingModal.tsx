@@ -20,6 +20,8 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
     team_preference: 'solo',
     team_name: '',
     team_members: '',
+    is_upv_student: false,
+    upv_school: '',
     project_status: [],
     project_focus: '',
     skills: {
@@ -71,6 +73,8 @@ const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
             team_preference: 'solo',
             team_name: '',
             team_members: '',
+            is_upv_student: false,
+            upv_school: '',
             project_status: [],
             project_focus: '',
             skills: {
@@ -430,6 +434,50 @@ const Step2TeamPreference = ({ data, updateData }: { data: OnboardingData; updat
         </div>
       </label>
     ))}
+
+    {/* UPV question */}
+    <div className="mt-4 p-3 border border-gray-200 rounded-xl">
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        {translate('onboarding.step2.upv.question')}
+      </label>
+      <div className="flex items-center gap-3" role="radiogroup" aria-label={translate('onboarding.step2.upv.question')}>
+        <label className={`px-3 py-2 rounded-lg border cursor-pointer text-sm ${data.is_upv_student ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700'}`}
+          tabIndex={0}
+          aria-label={translate('onboarding.step2.upv.yes')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') updateData('is_upv_student', true) }}
+        >
+          <input type="radio" name="is_upv_student" className="sr-only" checked={data.is_upv_student === true} onChange={() => updateData('is_upv_student', true)} />
+          {translate('onboarding.step2.upv.yes')}
+        </label>
+        <label className={`px-3 py-2 rounded-lg border cursor-pointer text-sm ${!data.is_upv_student ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-gray-300 text-gray-700'}`}
+          tabIndex={0}
+          aria-label={translate('onboarding.step2.upv.no')}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') updateData('is_upv_student', false) }}
+        >
+          <input type="radio" name="is_upv_student" className="sr-only" checked={data.is_upv_student === false} onChange={() => updateData('is_upv_student', false)} />
+          {translate('onboarding.step2.upv.no')}
+        </label>
+      </div>
+
+      {data.is_upv_student && (
+        <div className="mt-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {translate('onboarding.step2.upv.schoolLabel')}
+          </label>
+          <select
+            value={data.upv_school}
+            onChange={(e) => updateData('upv_school', e.target.value)}
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+            aria-label={translate('onboarding.step2.upv.schoolLabel')}
+          >
+            <option value="">{translate('onboarding.step2.upv.placeholder')}</option>
+            {(String(translate('onboarding.step2.upv.schools')) || '').split('|').map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+      )}
+    </div>
 
     {data.team_preference === 'equipo' && (
       <div className="space-y-3 mt-3 p-3 bg-gray-50 rounded-xl">

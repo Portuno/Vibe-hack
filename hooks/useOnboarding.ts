@@ -10,6 +10,8 @@ export interface OnboardingData {
   team_preference: 'solo' | 'buscando' | 'equipo'
   team_name: string
   team_members: string
+  is_upv_student: boolean
+  upv_school: string
   project_status: string[]
   project_focus: string
   skills: {
@@ -58,6 +60,8 @@ export const useOnboarding = () => {
         team_preference: data.team_preference,
         team_name: data.team_name,
         team_members: data.team_members,
+        is_upv_student: data.is_upv_student,
+        upv_school: data.upv_school,
         project_status: data.project_status, // Mantener como array
         project_focus: [data.project_focus], // Convertir a array
         skills: data.skills, // Mantener como objeto

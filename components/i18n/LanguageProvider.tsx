@@ -71,7 +71,15 @@ const ES_DICTIONARY = flatten({
       teamName: 'Nombre del equipo',
       teamNamePh: 'Nombre de tu equipo',
       members: 'Nombres de los miembros',
-      membersPh: 'Juan Pérez, María García...'
+      membersPh: 'Juan Pérez, María García...',
+      upv: {
+        question: '¿Eres estudiante de la UPV?',
+        yes: 'Sí',
+        no: 'No',
+        schoolLabel: '¿A qué escuela o facultad perteneces?',
+        placeholder: 'Selecciona una escuela o facultad',
+        schools: 'Escuela Técnica Superior de Arquitectura|Escuela Técnica Superior de Ingeniería Agronómica y del Medio Natural|Escuela Técnica Superior de Ingeniería Aeroespacial y Diseño Industrial|Escuela Técnica Superior de Ingeniería de Edificación|Escuela Técnica Superior de Ingeniería Geodésica, Cartográfica y Topográfica|Escuela Técnica Superior de Ingeniería Informática|Escuela Técnica Superior de Ingeniería de Caminos, Canales y Puertos|Escuela Técnica Superior de Ingeniería Industrial|Escuela Técnica Superior de Ingeniería de Telecomunicación|Facultad de Administración y Dirección de Empresas|Facultad de Bellas Artes|Escuela de Doctorado|Otro'
+      }
     },
     step3: {
       options: 'Tengo un proyecto iniciado|Tengo problemas concretos que quiero resolver|Tengo ideas que me gustaría empezar|Quiero construir algo pero no tengo ideas todavía',
@@ -299,7 +307,15 @@ const EN_ONBOARDING = {
     teamName: 'Team name',
     teamNamePh: 'Your team name',
     members: 'Team members',
-    membersPh: 'John Smith, Jane Doe...'
+    membersPh: 'John Smith, Jane Doe...',
+    upv: {
+      question: 'Are you a UPV student?',
+      yes: 'Yes',
+      no: 'No',
+      schoolLabel: 'Which school or faculty do you belong to?',
+      placeholder: 'Select a school or faculty',
+      schools: 'Escuela Técnica Superior de Arquitectura|Escuela Técnica Superior de Ingeniería Agronómica y del Medio Natural|Escuela Técnica Superior de Ingeniería Aeroespacial y Diseño Industrial|Escuela Técnica Superior de Ingeniería de Edificación|Escuela Técnica Superior de Ingeniería Geodésica, Cartográfica y Topográfica|Escuela Técnica Superior de Ingeniería Informática|Escuela Técnica Superior de Ingeniería de Caminos, Canales y Puertos|Escuela Técnica Superior de Ingeniería Industrial|Escuela Técnica Superior de Ingeniería de Telecomunicación|Facultad de Administración y Dirección de Empresas|Facultad de Bellas Artes|Escuela de Doctorado|Otro'
+    }
   },
   step3: {
     options: 'I have a project started|I have concrete problems I want to solve|I have ideas I would like to start|I want to build something but I\'t have ideas yet',
