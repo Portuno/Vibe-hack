@@ -223,6 +223,18 @@ const ES_DICTIONARY = flatten({
       ctaDesc: 'Conviértete en sponsor y conecta con el talento del futuro.',
       ctaButton: 'Quiero ser sponsor'
     },
+      agenda: {
+        title: 'Agenda',
+        intro: 'Cronograma oficial del evento.',
+        scheduleTitle: 'El horario será:',
+        day7: 'Día 7',
+        day8: 'Día 8',
+        day9: 'Día 9',
+        hours7: 'de 15 a 21 h',
+        hours8: 'de 9 a 18 h',
+        hours9: 'de 9 a 14 h',
+        backHome: '← Volver al inicio'
+      },
     contact: {
       successTitle: '¡Mensaje Enviado! 🎉',
       successDesc: 'Te responderemos en las próximas 24-48 horas.',
@@ -469,6 +481,18 @@ const EN_DICTIONARY = flatten({
       ctaTitle: 'Want to support innovation?',
       ctaDesc: 'Become a sponsor and connect with future talent.',
       ctaButton: 'I want to sponsor'
+    },
+    agenda: {
+      title: 'Agenda',
+      intro: 'Official event schedule.',
+      scheduleTitle: 'Schedule:',
+      day7: 'Day 7',
+      day8: 'Day 8',
+      day9: 'Day 9',
+      hours7: '15:00 – 21:00',
+      hours8: '09:00 – 18:00',
+      hours9: '09:00 – 14:00',
+      backHome: '← Back to home'
     },
     contact: {
       successTitle: 'Message Sent! 🎉',

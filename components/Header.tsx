@@ -15,7 +15,7 @@ const Header = () => {
 
   const navigationItems = [
     { name: t('nav.sponsors'), href: '/sponsors', icon: Users },
-    { name: t('nav.agenda'), href: '/agenda', icon: Calendar, isComingSoon: true },
+    { name: t('nav.agenda'), href: '/agenda', icon: Calendar },
     { name: t('nav.ideatorio'), href: '/ideatorio', icon: Rocket },
     { name: t('nav.community'), href: '/comunidad', icon: Heart },
     { name: t('nav.resources'), href: '/recursos', icon: Book },
@@ -45,33 +45,7 @@ const Header = () => {
               
               const Icon = item.icon
               
-              // Renderizado especial para Agenda
-              if (item.isComingSoon) {
-                return (
-                  <div
-                    key={item.name}
-                    className="relative"
-                    onMouseEnter={() => setShowAgendaTooltip(true)}
-                    onMouseLeave={() => setShowAgendaTooltip(false)}
-                  >
-                    <Link
-                      href={item.href}
-                      className="flex items-center space-x-1 text-gray-400 hover:text-gray-500 transition-colors duration-200 cursor-not-allowed"
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span>{item.name}</span>
-                    </Link>
-                    
-                    {/* Tooltip */}
-                    {showAgendaTooltip && (
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-gray-800 text-white text-sm rounded-lg whitespace-nowrap z-50">
-                        {t('labels.moreInfoSoon')}
-                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-1 w-2 h-2 bg-gray-800 rotate-45"></div>
-                      </div>
-                    )}
-                  </div>
-                )
-              }
+              // Agenda ya disponible: render estándar
               
               return (
                 <Link

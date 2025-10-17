@@ -1,7 +1,9 @@
 import Header from '@/components/Header'
-import { Calendar, MessageCircle } from 'lucide-react'
+import { Calendar } from 'lucide-react'
+import { useI18n } from '@/components/i18n/LanguageProvider'
 
 export default function AgendaPage() {
+  const { t } = useI18n()
   return (
     <main className="min-h-screen bg-gradient-to-b from-primary-50 to-white">
       <Header />
@@ -15,37 +17,25 @@ export default function AgendaPage() {
             </div>
             
             <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              <span className="gradient-text">Agenda</span>
+              <span className="gradient-text">{t('pages.agenda.title')}</span>
             </h1>
             
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                ¡Más información pronto!
-              </h2>
-              
-              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                Estamos preparando una agenda increíble para VibeHack 2025. 
-                Mantente atento a las novedades en nuestro canal de comunicación oficial.
-              </p>
-              
-              <div className="flex items-center justify-center space-x-3 mb-8">
-                <MessageCircle className="h-6 w-6 text-blue-500" />
-                <span className="text-gray-700 font-medium">Canal oficial de Telegram</span>
-              </div>
-              
-              <a
-                href="https://t.me/+Qp73D_rzUmo2ODNk"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-200 hover:shadow-lg"
-              >
-                <MessageCircle className="h-5 w-5" />
-                <span>Unirse al Canal</span>
-              </a>
-              
-              <p className="text-sm text-gray-500 mt-6">
-                Recibirás notificaciones sobre fechas, horarios y actividades del evento
-              </p>
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-left max-w-xl mx-auto">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">{t('pages.agenda.scheduleTitle')}</h2>
+              <ul className="space-y-3 text-gray-700">
+                <li className="flex items-center justify-between">
+                  <span className="font-medium">{t('pages.agenda.day7')}</span>
+                  <span>{t('pages.agenda.hours7')}</span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span className="font-medium">{t('pages.agenda.day8')}</span>
+                  <span>{t('pages.agenda.hours8')}</span>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span className="font-medium">{t('pages.agenda.day9')}</span>
+                  <span>{t('pages.agenda.hours9')}</span>
+                </li>
+              </ul>
             </div>
           </div>
           
@@ -55,7 +45,7 @@ export default function AgendaPage() {
               href="/"
               className="inline-flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-medium transition-colors duration-200"
             >
-              <span>← Volver al inicio</span>
+              <span>{t('pages.agenda.backHome')}</span>
             </a>
           </div>
         </div>
