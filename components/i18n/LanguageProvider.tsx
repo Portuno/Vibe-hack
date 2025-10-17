@@ -180,7 +180,7 @@ const ES_DICTIONARY = flatten({
       }
     },
     home: {
-      dateLocation: 'Octubre 2025 • Valencia',
+      dateLocation: '7, 8 y 9 de noviembre',
       headline1: 'Construye, Lanza',
       headline2: 'y Valida en 72hs',
       tagline: 'Innovación sin límites',
