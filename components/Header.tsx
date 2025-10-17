@@ -90,21 +90,7 @@ const Header = () => {
                 
                 const Icon = item.icon
                 
-                // Renderizado especial para Agenda en mobile
-                if (item.isComingSoon) {
-                  return (
-                    <div
-                      key={item.name}
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-400 cursor-not-allowed"
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span className="font-medium">{item.name}</span>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                        {t('labels.soon')}
-                      </span>
-                    </div>
-                  )
-                }
+                // Agenda disponible: render estándar en mobile
                 
                 return (
                   <Link
