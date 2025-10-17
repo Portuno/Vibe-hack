@@ -1,3 +1,5 @@
+"use client"
+
 import Header from '@/components/Header'
 import { Calendar } from 'lucide-react'
 import { useI18n } from '@/components/i18n/LanguageProvider'
