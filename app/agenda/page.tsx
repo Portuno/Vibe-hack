@@ -22,22 +22,26 @@ export default function AgendaPage() {
               <span className="gradient-text">{t('pages.agenda.title')}</span>
             </h1>
             
-            <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-left max-w-xl mx-auto">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">{t('pages.agenda.scheduleTitle')}</h2>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex items-center justify-between">
-                  <span className="font-medium">{t('pages.agenda.day7')}</span>
-                  <span>{t('pages.agenda.hours7')}</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="font-medium">{t('pages.agenda.day8')}</span>
-                  <span>{t('pages.agenda.hours8')}</span>
-                </li>
-                <li className="flex items-center justify-between">
-                  <span className="font-medium">{t('pages.agenda.day9')}</span>
-                  <span>{t('pages.agenda.hours9')}</span>
-                </li>
-              </ul>
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100 max-w-3xl mx-auto">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 text-left">{t('pages.agenda.scheduleTitle')}</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="rounded-2xl border border-primary-100 bg-primary-50/40 p-4 text-left">
+                  <div className="text-xs uppercase tracking-wide text-primary-600 mb-2">{t('pages.agenda.day7')}</div>
+                  <div className="text-2xl font-extrabold text-primary-700">{t('pages.agenda.hours7')}</div>
+                </div>
+                <div className="rounded-2xl border border-teal-100 bg-teal-50/40 p-4 text-left">
+                  <div className="text-xs uppercase tracking-wide text-teal-600 mb-2">{t('pages.agenda.day8')}</div>
+                  <div className="text-2xl font-extrabold text-teal-700">{t('pages.agenda.hours8')}</div>
+                </div>
+                <div className="rounded-2xl border border-orange-100 bg-orange-50/40 p-4 text-left">
+                  <div className="text-xs uppercase tracking-wide text-orange-600 mb-2">{t('pages.agenda.day9')}</div>
+                  <div className="text-2xl font-extrabold text-orange-700">{t('pages.agenda.hours9')}</div>
+                </div>
+              </div>
+
+              <div className="mt-6 h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-gradient-to-r from-primary-500 via-teal-500 to-orange-500 w-full" />
+              </div>
             </div>
           </div>
           
