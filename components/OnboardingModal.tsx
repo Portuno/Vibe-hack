@@ -1,3 +1,11 @@
+'use client'
+
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
+import { X, ArrowLeft, ArrowRight, Check, User, Users, Lightbulb, Target, Brain, Star, Zap, Heart } from 'lucide-react'
+import { useOnboarding, OnboardingData } from '@/hooks/useOnboarding'
+import { useI18n } from './i18n/LanguageProvider'
+
 const Step2UPV = ({ data, updateData }: { data: OnboardingData; updateData: (field: keyof OnboardingData, value: any) => void }) => {
   const { useI18n } = require('./i18n/LanguageProvider') as typeof import('./i18n/LanguageProvider')
   const { t: translate } = useI18n ? useI18n() : { t: (k: string) => k }
@@ -47,14 +55,6 @@ const Step2UPV = ({ data, updateData }: { data: OnboardingData; updateData: (fie
     </div>
   </div>
 )}
-
-'use client'
-
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
-import { X, ArrowLeft, ArrowRight, Check, User, Users, Lightbulb, Target, Brain, Star, Zap, Heart } from 'lucide-react'
-import { useOnboarding, OnboardingData } from '@/hooks/useOnboarding'
-import { useI18n } from './i18n/LanguageProvider'
 
 const OnboardingModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const [currentStep, setCurrentStep] = useState(1)
