@@ -44,6 +44,58 @@ export default function AgendaPage() {
               </div>
             </div>
           </div>
+
+          {/* Pre-Hackathon Event */}
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg border border-purple-100 mt-12">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mb-6">
+                <Calendar className="h-8 w-8 text-white" />
+              </div>
+              
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  ¡Prepárate para la Victoria!
+                </span>
+              </h2>
+              
+              <h3 className="text-xl font-semibold text-gray-800 mb-6">
+                Sesión Informativa y de Preguntas y Respuestas (Q&A)
+              </h3>
+              
+              <p className="text-lg text-gray-700 mb-6 max-w-3xl mx-auto leading-relaxed">
+                <span className="font-semibold text-purple-700">¡No empieces a ciegas!</span> Únete a esta sesión esencial antes de que comience el hackathon. 
+                Revisaremos los desafíos, las reglas clave y te daremos consejos de expertos para maximizar tus 48 horas de codificación. 
+                Es tu oportunidad de resolver todas tus dudas directamente con el equipo organizador.
+              </p>
+              
+              <div className="bg-white rounded-xl p-6 mb-8 shadow-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="text-center">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-2">📅 Día</h4>
+                    <p className="text-gray-600">Martes, 28 de Octubre</p>
+                  </div>
+                  <div className="text-center">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-2">🕐 Horario</h4>
+                    <p className="text-gray-600">España (CEST): 20:00</p>
+                  </div>
+                </div>
+              </div>
+              
+              <a
+                href="https://wix.zoom.us/webinar/register/WN_SnswuCGiQfWOiVmYcD0M7Q#/registration"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-200 hover:shadow-xl hover:scale-105"
+              >
+                <Calendar className="h-6 w-6" />
+                <span>Regístrate aquí</span>
+              </a>
+              
+              <p className="text-sm text-gray-500 mt-4">
+                ✨ Sesión gratuita • Cupos limitados • ¡No te la pierdas!
+              </p>
+            </div>
+          </div>
           
           {/* CTA de regreso */}
           <div className="mt-12">
