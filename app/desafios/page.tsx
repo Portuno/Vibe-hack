@@ -112,22 +112,6 @@ export default function DesafiosPage() {
             })}
           </div>
 
-          {/* Base44 Higher Ed Section */}
-          <div className="mt-16 bg-gradient-to-r from-primary-50 to-teal-50 rounded-2xl p-8 border border-primary-100">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Base44 Higher Ed
-              </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Una plataforma especializada para desafíos educativos y soluciones estudiantiles.
-              </p>
-              <div className="inline-flex items-center space-x-2 bg-primary-600 text-white px-6 py-3 rounded-full font-semibold">
-                <Zap className="h-5 w-5" />
-                <span>Herramienta recomendada para Desafío 1</span>
-              </div>
-            </div>
-          </div>
-
           {/* CTA de regreso */}
           <div className="mt-12 text-center">
             <a

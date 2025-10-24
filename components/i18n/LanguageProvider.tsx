@@ -562,12 +562,13 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
 
   useEffect(() => {
     const stored = typeof window !== 'undefined' ? (localStorage.getItem(STORAGE_KEY) as SupportedLocale | null) : null
-    if (stored && (stored === 'es' || stored === 'en')) {
-      setLocaleState(stored)
+    // Always default to Spanish unless user explicitly set English
+    if (stored === 'en') {
+      setLocaleState('en')
       return
     }
-    const initial: SupportedLocale = 'es'
-    setLocaleState(initial)
+    // Default to Spanish for any other case (null, 'es', or invalid values)
+    setLocaleState('es')
   }, [])
 
   useEffect(() => {
