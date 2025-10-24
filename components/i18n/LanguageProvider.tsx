@@ -440,7 +440,7 @@ const EN_DICTIONARY = flatten({
       }
     },
     home: {
-      dateLocation: 'October 2025 • Valencia',
+      dateLocation: '7, 8 y 9 de noviembre 2025 - Valencia',
       headline1: 'Build, Launch',
       headline2: 'and Validate in 72h',
       tagline: 'Innovation without limits',
@@ -567,7 +567,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       return
     }
     const browser = typeof navigator !== 'undefined' ? navigator.language.toLowerCase() : 'es'
-    const initial: SupportedLocale = browser.startsWith('en') ? 'en' : 'es'
+    const initial: SupportedLocale = 'es'
     setLocaleState(initial)
   }, [])
 
