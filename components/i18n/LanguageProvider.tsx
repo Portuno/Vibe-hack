@@ -566,7 +566,6 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
       setLocaleState(stored)
       return
     }
-    const browser = typeof navigator !== 'undefined' ? navigator.language.toLowerCase() : 'es'
     const initial: SupportedLocale = 'es'
     setLocaleState(initial)
   }, [])
