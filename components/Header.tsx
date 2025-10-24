@@ -17,7 +17,7 @@ const Header = () => {
     { name: t('nav.agenda'), href: '/agenda', icon: Calendar },
     { name: t('nav.ideatorio'), href: '/ideatorio', icon: Rocket },
     { name: t('nav.community'), href: '/comunidad', icon: Heart },
-    { name: t('nav.resources'), href: '/recursos', icon: Book },
+    { name: t('nav.challenges'), href: '/desafios', icon: Book },
   ]
 
   const handleToggleMenu = () => {

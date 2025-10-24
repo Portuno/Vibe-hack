@@ -31,7 +31,7 @@ const ES_DICTIONARY = flatten({
     agenda: 'Agenda',
     ideatorio: 'Ideatorio',
     community: 'Comunidad',
-    resources: 'Recursos',
+    challenges: 'Desafíos',
   },
   onboarding: {
     header: {
@@ -390,7 +390,7 @@ const EN_DICTIONARY = flatten({
     agenda: 'Agenda',
     ideatorio: 'Idea Lab',
     community: 'Community',
-    resources: 'Resources',
+    challenges: 'Challenges',
   },
   labels: {
     soon: 'Soon',
