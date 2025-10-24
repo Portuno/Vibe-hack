@@ -2,10 +2,8 @@
 
 import Header from '@/components/Header'
 import { Target, Users, Heart, Zap, Globe } from 'lucide-react'
-import { useI18n } from '@/components/i18n/LanguageProvider'
 
 export default function DesafiosPage() {
-  const { t } = useI18n()
 
   const challenges = [
     {
