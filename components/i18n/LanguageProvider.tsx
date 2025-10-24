@@ -440,7 +440,7 @@ const EN_DICTIONARY = flatten({
       }
     },
     home: {
-      dateLocation: '7, 8 y 9 de noviembre 2025 - Valencia',
+      dateLocation: 'November 7, 8 and 9, 2025 - Valencia',
       headline1: 'Build, Launch',
       headline2: 'and Validate in 72h',
       tagline: 'Innovation without limits',
