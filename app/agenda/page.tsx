@@ -58,25 +58,67 @@ export default function AgendaPage() {
                 </span>
               </h2>
               
-              <h3 className="text-xl font-semibold text-gray-800 mb-6">
-                Sesión Informativa y de Preguntas y Respuestas (Q&A)
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                Desarrolla tu Negocio con IA: Usando Studio y Base44
               </h3>
               
-              <p className="text-lg text-gray-700 mb-6 max-w-3xl mx-auto leading-relaxed">
-                <span className="font-semibold text-purple-700">¡No empieces a ciegas!</span> Únete a esta sesión esencial antes de que comience el hackathon. 
-                Revisaremos los desafíos, las reglas clave y te daremos consejos de expertos para maximizar tus 48 horas de codificación. 
-                Es tu oportunidad de resolver todas tus dudas directamente con el equipo organizador.
-              </p>
+              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl p-4 mb-6">
+                <p className="text-lg font-semibold text-orange-800">
+                  ⚠️ ¡Nota! Esta sesión se impartirá completamente en <span className="underline">INGLÉS</span>.
+                </p>
+              </div>
+              
+              <div className="text-left max-w-4xl mx-auto">
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  Únete al equipo de <span className="font-semibold text-purple-700">Wix University</span> para descubrir cómo construir un sitio web impresionante y responsivo utilizando <span className="font-semibold">Wix Studio</span> —nuestra plataforma de creación avanzada para el diseño web moderno— y obtén una visión exclusiva de <span className="font-semibold">Base44</span>, la tecnología de IA recientemente adquirida por Wix que está remodelando el futuro de la creación web.
+                </p>
+                
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  En esta sesión, aprenderás a diseñar, personalizar y lanzar un sitio profesional con las herramientas de diseño flexibles de Studio y sus potentes funciones. Luego, verás cómo Base44 acelera el desarrollo de IA a través de una sólida biblioteca de modelos y una infraestructura intuitiva, abriendo nuevas posibilidades para la automatización, el diseño inteligente y experiencias digitales más sofisticadas.
+                </p>
+                
+                <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                  Tanto si estás creando un portafolio, un sitio de negocios o un proyecto creativo, esta sesión te dará las herramientas y la inspiración para darle vida a tu visión.
+                </p>
+                
+                <div className="bg-gradient-to-r from-green-50 to-teal-50 border border-green-200 rounded-xl p-6 mb-8">
+                  <h4 className="text-xl font-bold text-green-800 mb-4">🎁 Beneficios Clave:</h4>
+                  <ul className="space-y-3 text-gray-700">
+                    <li className="flex items-start">
+                      <span className="text-green-600 font-bold mr-2">•</span>
+                      <span><span className="font-semibold">GRATIS:</span> Todos los asistentes recibirán un plan Wix Premium de un año para apoyar su proyecto.</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-green-600 font-bold mr-2">•</span>
+                      <span>Los estudiantes son elegibles para la <span className="font-semibold">Certificación #WixStudio</span> —una credencial reconocida en la industria del diseño web responsivo.</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
               
               <div className="bg-white rounded-xl p-6 mb-8 shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="text-center">
                     <h4 className="text-lg font-semibold text-gray-800 mb-2">📅 Día</h4>
-                    <p className="text-gray-600">Martes, 28 de Octubre</p>
+                    <p className="text-gray-600">Martes, 28 de Octubre de 2025</p>
                   </div>
                   <div className="text-center">
-                    <h4 className="text-lg font-semibold text-gray-800 mb-2">🕐 Horario</h4>
-                    <p className="text-gray-600">España (CEST): 20:00</p>
+                    <h4 className="text-lg font-semibold text-gray-800 mb-2">🕐 Horarios Globales</h4>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p>🇪🇸 España (CEST): 19:00</p>
+                      <p>🇺🇸 Costa Este (EST): 14:00</p>
+                      <p>🇺🇸 Costa Oeste (PST): 11:00</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <div className="text-center">
+                    <h4 className="text-lg font-semibold text-gray-800 mb-2">📧 Requisito de Registro</h4>
+                    <p className="text-gray-600 text-sm">
+                      Por favor, regístrate con una dirección de correo electrónico válida 
+                      (terminada en .edu o de tu institución educativa) para poder asistir.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -111,3 +153,4 @@ export default function AgendaPage() {
     </main>
   )
 }
+
